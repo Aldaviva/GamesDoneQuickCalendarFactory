@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <Version>1.0.0</Version>
+        <Product>Games Done Quick Calendar Factory</Product>
+        <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
+        <Company>Ben Hutchison</Company>
+        <Copyright>© 2022 Ben Hutchison</Copyright>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RollForward>major</RollForward>
+        <LangVersion>latest</LangVersion>
+        <ApplicationIcon>gdq.ico</ApplicationIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="gdq.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AngleSharp" Version="0.17.1" />
+      <PackageReference Include="Ical.Net" Version="4.2.0" />
+    </ItemGroup>
+
+</Project>
