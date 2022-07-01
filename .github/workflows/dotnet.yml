@@ -1,0 +1,27 @@
+name: .NET
+
+on:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    env:
+      ProjectName: GamesDoneQuickCalendarFactory
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Clone
+      uses: actions/checkout@v3
+        
+    - name: Publish
+      run: dotnet publish --configuration Release -p:PublishSingleFile=true --runtime win-x64 --self-contained false
+      
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.ProjectName }}.exe
+        path: ${{ env.ProjectName }}\bin\Release\**\publish\*.exe
