@@ -8,14 +8,14 @@ public static class Extensions {
 
     public static IDateTime toIDateTime(this DateTimeOffset dateTimeOffset) => new CalDateTime(dateTimeOffset.DateTime, dateTimeOffset.ToZonedDateTime().Zone.Id);
 
-    public static string joinHumanized(this IEnumerable<string> enumerable, string comma = ",", string conjunction = "and", bool oxfordComma = true) {
-        List<string> elements = enumerable.ToList();
+    public static string joinHumanized(this IEnumerable<object> enumerable, string comma = ",", string conjunction = "and", bool oxfordComma = true) {
+        List<object> elements = enumerable.ToList();
 
         switch (elements.Count) {
             case 0:
                 return string.Empty;
             case 1:
-                return elements[0];
+                return elements[0].ToString() ?? string.Empty;
             case 2:
                 return $"{elements[0]} {conjunction} {elements[1]}";
             default:

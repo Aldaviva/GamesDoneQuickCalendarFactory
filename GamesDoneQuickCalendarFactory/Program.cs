@@ -14,17 +14,17 @@ Url          scheduleUrl       = Url.Create("https://gamesdonequick.com/schedule
 using IBrowsingContext browser = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
 using IDocument        doc     = await browser.OpenAsync(scheduleUrl);
 
-IEnumerable<GameRun> runs = doc.QuerySelectorAll("tbody tr:not([class])").Select(firstRow => {
+IEnumerable<GameRun> runs = doc.QuerySelectorAll("tbody tr:not(.second-row, .day-split)").Select(firstRow => {
     IElement secondRow = firstRow.NextElementSibling!;
 
     return new GameRun(
         start: DateTimeOffset.Parse(firstRow.QuerySelector(".start-time")!.TextContent),
-        duration: TimeSpan.Parse(secondRow.QuerySelector(".text-right")!.TextContent),
+        duration: secondRow.QuerySelector(".text-right")!.TextContent is var duration && !string.IsNullOrWhiteSpace(duration) ? TimeSpan.Parse(duration) : TimeSpan.Zero,
         name: firstRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
         description: secondRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
         runners: firstRow.QuerySelector("td:nth-child(3)")!.TextContent.Split(", "),
         host: secondRow.QuerySelector("td:nth-child(3)")!.TextContent.Trim(),
-        setupDuration: firstRow.QuerySelector("td.visible-lg")!.TextContent is var duration && !string.IsNullOrWhiteSpace(duration) ? TimeSpan.Parse(duration) : null
+        setupDuration: firstRow.QuerySelector("td.visible-lg")!.TextContent is var setupDuration && !string.IsNullOrWhiteSpace(setupDuration) ? TimeSpan.Parse(setupDuration) : null
     );
 });
 
