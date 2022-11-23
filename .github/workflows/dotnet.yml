@@ -48,7 +48,7 @@ jobs:
     - name: Prepare Pages files
       run: |
         mkdir pages
-        cp ${{ env.ProjectName }}\bin\Release\net6.0\win-x64\publish\gdq.ics pages
+        cp gdq.ics pages
 
     - name: Upload pages
       uses: actions/upload-pages-artifact@v1
