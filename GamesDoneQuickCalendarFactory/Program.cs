@@ -41,5 +41,5 @@ calendar.Events.AddRange(runs.Select(run => new CalendarEvent {
 }));
 
 await using FileStream fileStream = File.Create(OUTPUT_FILENAME);
-new CalendarSerializer().Serialize(calendar, fileStream, new UTF8Encoding(false)); //BOM will mess up Google Calendar's URL subscription feature, but not the upload import feature
+new CalendarSerializer().Serialize(calendar, fileStream, new UTF8Encoding(false, true)); //BOM will mess up Google Calendar's URL subscription feature, but not the upload import feature
 Console.WriteLine($"Wrote iCalendar to file {Path.GetFullPath(OUTPUT_FILENAME)}");
