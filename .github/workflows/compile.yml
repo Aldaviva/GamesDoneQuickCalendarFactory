@@ -28,13 +28,13 @@ jobs:
         run: dotnet publish --configuration Release -p:PublishSingleFile=true --runtime ${{ matrix.targetPlatform }} --self-contained false --verbosity normal
 
       - name: Generate test calendar (discarded)
-        run: .\${{ env.ProjectName }}\bin\Release\net6.0\${{ matrix.targetPlatform }}\publish\${{ env.ProjectName }}.exe
+        run: ${{ env.ProjectName }}/bin/Release/net6.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}
         
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ProjectName }}-${{ matrix.targetPlatform }}
           path: |
-            ${{ env.ProjectName }}\bin\Release\net6.0\${{ matrix.targetPlatform }}\publish\${{ env.ProjectName }}.exe
-            ${{ env.ProjectName }}\bin\Release\net6.0\${{ matrix.targetPlatform }}\publish\${{ env.ProjectName }}
+            ${{ env.ProjectName }}/bin/Release/net6.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}.exe
+            ${{ env.ProjectName }}/bin/Release/net6.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}
           if-no-files-found: error

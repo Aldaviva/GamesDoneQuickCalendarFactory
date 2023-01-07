@@ -1,7 +1,7 @@
 GamesDoneQuickCalendarFactory
 ===
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Aldaviva/GamesDoneQuickCalendarFactory/.NET?logo=github)](https://github.com/Aldaviva/GamesDoneQuickCalendarFactory/actions/workflows/dotnet.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Aldaviva/GamesDoneQuickCalendarFactory/compile.yml?branch=master&logo=github)](https://github.com/Aldaviva/GamesDoneQuickCalendarFactory/actions/workflows/dotnet.yml)
 
 Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) into an [ICS file](https://aldaviva.com/docs/gdq.ics), which your calendar program can import or subscribe to.
 
