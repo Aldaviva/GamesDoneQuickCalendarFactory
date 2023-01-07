@@ -39,6 +39,13 @@ jobs:
       - name: Generate calendar
         run: ./GamesDoneQuickCalendarFactory
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: gdq.ics
+          path: gdq.ics
+          if-no-files-found: error
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v2
 

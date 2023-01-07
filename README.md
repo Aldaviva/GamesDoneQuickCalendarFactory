@@ -1,4 +1,4 @@
-GamesDoneQuickCalendarFactory
+<img src="https://raw.githubusercontent.com/Aldaviva/GamesDoneQuickCalendarFactory/master/GamesDoneQuickCalendarFactory/gdq.ico" height="23" alt="GamesDoneQuick logo" /> GamesDoneQuickCalendarFactory
 ===
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Aldaviva/GamesDoneQuickCalendarFactory/compile.yml?branch=master&logo=github)](https://github.com/Aldaviva/GamesDoneQuickCalendarFactory/actions/workflows/dotnet.yml)
