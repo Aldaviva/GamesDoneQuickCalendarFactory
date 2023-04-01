@@ -6,8 +6,11 @@ on:
     types: [ published ]
   schedule:
     - cron: '37 * 1-15 1 *'  # AGDQ - January
+    - cron: '37 * 19-29 2 *' # Frost Fatales - February
+    - cron: '37 * 1-7 3 *'   # Frost Fatales - March
     - cron: '37 * 19-30 6 *' # SGDQ - June
     - cron: '37 * 1-3 7 *'   # SGDQ - July
+    - cron: '37 * 7-22 8 *'  # Flame Fatales - August
 
 permissions:
   contents: read
