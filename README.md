@@ -5,11 +5,35 @@
 
 Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) into an [ICS file](https://aldaviva.com/docs/gdq.ics), which your calendar program can import or subscribe to.
 
+<!-- MarkdownTOC autolink="true" bracket="round" autoanchor="false" levels="1,2,3,4" bullets="-" -->
+
+- [Subscribing](#subscribing)
+    - [Any iCalendar client](#any-icalendar-client)
+    - [Vivaldi](#vivaldi)
+    - [Google Calendar](#google-calendar)
+    - [Outlook](#outlook)
+        - [Outlook on the web](#outlook-on-the-web)
+        - [Outlook for Windows](#outlook-for-windows)
+        - [Outlook for Mac](#outlook-for-mac)
+        - [Outlook for Android](#outlook-for-android)
+
+<!-- /MarkdownTOC -->
+
 ## Subscribing
 
 ### Any iCalendar client
 
 1. Subscribe to the iCalendar URL [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
+
+### Vivaldi
+1. Open Vivaldi Settings
+1. Go to the 📅 Calendar section
+1. In the Calendar Accounts section, click the `+` button
+1. Select **Web Calendar** and click Continue
+1. Choose a name, such as `Games Done Quick` or `GDQ`
+1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
+1. Click the **Add Account** button
+1. Click the **Save Account** button
 
 ### Google Calendar
 1. Sign in to [Google Calendar](https://calendar.google.com/)
