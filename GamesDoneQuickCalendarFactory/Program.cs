@@ -13,14 +13,17 @@ Encoding utf8 = new UTF8Encoding(false, true);
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options => options.AllowSynchronousIO = true);
-builder.Host.UseWindowsService();
+builder.Host
+    .UseWindowsService()
+    .UseSystemd();
 builder.Services
     .AddOutputCache()
     .AddResponseCaching()
     .AddSingleton<ICalendarGenerator, CalendarGenerator>();
 
-WebApplication app = builder.Build();
-app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
+WebApplication webApp = builder.Build();
+webApp
+    .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
     .UseOutputCache()
     .UseResponseCaching()
     .Use(async (context, next) => {
@@ -29,11 +32,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = Forward
         await next();
     });
 
-app.MapGet("/", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60)] async (request) => {
+webApp.MapGet("/", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60)] async (request) => {
     ICalendarGenerator calendarGenerator = request.RequestServices.GetRequiredService<ICalendarGenerator>();
     Calendar           calendar          = await calendarGenerator.generateCalendar();
     request.Response.ContentType = ICALENDAR_MIME_TYPE;
     new CalendarSerializer().Serialize(calendar, request.Response.Body, utf8);
 });
 
-app.Run();
+webApp.Run();

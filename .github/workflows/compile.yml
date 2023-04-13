@@ -37,4 +37,5 @@ jobs:
             ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/appsettings.json
             ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/web.config
             ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/Install service.ps1
+            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/gamesdonequickcalendarfactory.service
           if-no-files-found: error
