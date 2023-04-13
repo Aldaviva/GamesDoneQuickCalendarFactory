@@ -26,10 +26,10 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 1. Subscribe to the iCalendar URL [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 
 ### Vivaldi
-1. Open Vivaldi Settings
+1. Open [Vivaldi Settings](https://help.vivaldi.com/article/settings/)
 1. Go to the 📅 Calendar section
 1. In the Calendar Accounts section, click the `+` button
-1. Select **Web Calendar** and click Continue
+1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts) and click Continue
 1. Choose a name, such as `Games Done Quick` or `GDQ`
 1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Click the **Add Account** button
