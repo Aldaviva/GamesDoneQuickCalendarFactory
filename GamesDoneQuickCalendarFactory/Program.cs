@@ -1,45 +1,39 @@
 ﻿using System.Text;
-using AngleSharp;
-using AngleSharp.Dom;
 using GamesDoneQuickCalendarFactory;
 using Ical.Net;
-using Ical.Net.CalendarComponents;
-using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Net.Http.Headers;
 
-const string OUTPUT_FILENAME   = "gdq.ics";
-const string TWITCH_STREAM_URL = "https://www.twitch.tv/gamesdonequick";
-Url          scheduleUrl       = Url.Create("https://gamesdonequick.com/schedule");
+const string ICALENDAR_MIME_TYPE    = "text/calendar;charset=UTF-8";
+const int    CACHE_DURATION_MINUTES = 5;
 
-using IBrowsingContext browser = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
-using IDocument        doc     = await browser.OpenAsync(scheduleUrl);
+Encoding utf8 = new UTF8Encoding(false, true);
 
-IEnumerable<GameRun> runs = doc.QuerySelectorAll("tbody tr:not(.second-row, .day-split)").Select(firstRow => {
-    IElement secondRow = firstRow.NextElementSibling!;
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options => options.AllowSynchronousIO = true);
+builder.Host.UseWindowsService();
+builder.Services
+    .AddOutputCache()
+    .AddResponseCaching()
+    .AddSingleton<ICalendarGenerator, CalendarGenerator>();
 
-    return new GameRun(
-        start: DateTimeOffset.Parse(firstRow.QuerySelector(".start-time")!.TextContent),
-        duration: secondRow.QuerySelector(".text-right")!.TextContent is var duration && !string.IsNullOrWhiteSpace(duration) ? TimeSpan.Parse(duration) : TimeSpan.Zero,
-        name: firstRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
-        description: secondRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
-        runners: firstRow.QuerySelector("td:nth-child(3)")!.TextContent.Split(", "),
-        host: secondRow.QuerySelector("td:nth-child(3)")!.TextContent.Trim(),
-        setupDuration: firstRow.QuerySelector("td.visible-lg")!.TextContent is var setupDuration && !string.IsNullOrWhiteSpace(setupDuration) ? TimeSpan.Parse(setupDuration) : null
-    );
+WebApplication app = builder.Build();
+app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
+    .UseOutputCache()
+    .UseResponseCaching()
+    .Use(async (context, next) => {
+        context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue { Public = true, MaxAge = TimeSpan.FromMinutes(CACHE_DURATION_MINUTES) };
+        context.Response.Headers[HeaderNames.Vary]      = new[] { "Accept-Encoding" };
+        await next();
+    });
+
+app.MapGet("/", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60)] async (request) => {
+    ICalendarGenerator calendarGenerator = request.RequestServices.GetRequiredService<ICalendarGenerator>();
+    Calendar           calendar          = await calendarGenerator.generateCalendar();
+    request.Response.ContentType = ICALENDAR_MIME_TYPE;
+    new CalendarSerializer().Serialize(calendar, request.Response.Body, utf8);
 });
 
-Calendar  calendar  = new() { Method     = CalendarMethods.Publish };
-Organizer organizer = new() { CommonName = "Games Done Quick" };
-calendar.Events.AddRange(runs.Select(run => new CalendarEvent {
-    Start       = run.start.toIDateTime(),
-    Duration    = run.duration,
-    IsAllDay    = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
-    Summary     = run.name,
-    Organizer   = organizer,
-    Description = $"{run.description}\n\nRun by {run.runners.joinHumanized()}\nHosted by {run.host}",
-    Location    = TWITCH_STREAM_URL
-}));
-
-await using FileStream fileStream = File.Create(OUTPUT_FILENAME);
-new CalendarSerializer().Serialize(calendar, fileStream, new UTF8Encoding(false, true)); //BOM will mess up Google Calendar's URL subscription feature, but not the upload import feature
-Console.WriteLine($"Wrote iCalendar to file {Path.GetFullPath(OUTPUT_FILENAME)}");
+app.Run();
