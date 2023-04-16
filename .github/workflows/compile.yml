@@ -33,12 +33,12 @@ jobs:
         run: dotnet restore --runtime ${{ matrix.targetPlatform }} --verbosity normal
 
       - name: Build
-        run: dotnet build GamesDoneQuickCalendarFactory --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release
+        run: dotnet build GamesDoneQuickCalendarFactory --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release --no-self-contained
 
       - name: Test
         shell: bash
         run: |
-          dotnet test --no-restore --runtime ${{ matrix.targetPlatform }} --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --settings Tests/Tests.runsettings --logger "trx;LogFileName=TestResults.xml"
+          dotnet test --no-restore --runtime ${{ matrix.targetPlatform }} --verbosity normal --configuration Release --no-self-contained --collect:"XPlat Code Coverage" --settings Tests/Tests.runsettings --logger "trx;LogFileName=TestResults.xml"
           echo "TEST_EXIT_CODE=$?" >> $GITHUB_ENV
           cp Tests/TestResults/*/coverage.info Tests/TestResults
           exit 0
