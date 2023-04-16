@@ -44,7 +44,7 @@ jobs:
           exit 0
 
       - name: Publish
-        run: dotnet publish ${{ env.ProjectName }} --runtime ${{ matrix.targetPlatform }} --no-build --configuration Release -p:PublishSingleFile=false --no-self-contained --verbosity normal
+        run: dotnet publish ${{ env.ProjectName }} --runtime ${{ matrix.targetPlatform }} --no-build --configuration Release -p:PublishSingleFile=true --no-self-contained --verbosity normal
 
       - name: Upload test report
         run: testspace Tests/TestResults/TestResults.xml

@@ -13,10 +13,10 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
     - [Mozilla Thunderbird](#mozilla-thunderbird)
     - [Google Calendar](#google-calendar)
     - [Outlook](#outlook)
-        - [Outlook on the web](#outlook-on-the-web)
         - [Outlook for Windows](#outlook-for-windows)
-        - [Outlook for Mac](#outlook-for-mac)
+        - [Outlook on the web](#outlook-on-the-web)
         - [Outlook for Android](#outlook-for-android)
+        - [Outlook for Mac](#outlook-for-mac)
     - [Apple Calendar](#apple-calendar)
 
 <!-- /MarkdownTOC -->
@@ -57,15 +57,6 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 
 ### Outlook
 
-#### Outlook on the web
-1. Sign in to [Outlook on the web](https://outlook.office.com/calendar)
-1. Go to the 📅 Calendar tab
-1. In the left pane, click [**+ Add calendar**](https://outlook.office.com/calendar/addcalendar)
-1. Go to the **⚇ Subscribe from web** navigation section
-1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Choose a calendar name, such as `Games Done Quick` or `GDQ`
-1. Click the **Import** button
-
 #### Outlook for Windows
 1. Open Outlook
 1. Go to the 📅 Calendar section
@@ -75,12 +66,21 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 1. Optionally, click Advanced and choose a Folder Name, such as `Games Done Quick` or `GDQ`, then click OK
 1. Click the **Yes** button
 
-#### Outlook for Mac
-1. Sign in to [Outlook on the web](https://outlook.office.com/calendar) with the same Office 365, Exchange, or Outlook.com&#47;Hotmail account with which you are signed into Outlook for Mac
-1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
+#### Outlook on the web
+1. Sign in to [Outlook on the web](https://outlook.office.com/calendar)
+1. Go to the 📅 Calendar tab
+1. In the left pane, click [**+ Add calendar**](https://outlook.office.com/calendar/addcalendar)
+1. Go to the **⚇ Subscribe from web** navigation section
+1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
+1. Choose a calendar name, such as `Games Done Quick` or `GDQ`
+1. Click the **Import** button
 
 #### Outlook for Android
 1. Sign in to [Outlook on the web](https://outlook.office.com/calendar) with the same Office 365, Exchange, or Outlook.com&#47;Hotmail account with which you are signed into Outlook for Android
+1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
+
+#### Outlook for Mac
+1. Sign in to [Outlook on the web](https://outlook.office.com/calendar) with the same Office 365, Exchange, or Outlook.com&#47;Hotmail account with which you are signed into Outlook for Mac
 1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
 
 ### Apple Calendar
