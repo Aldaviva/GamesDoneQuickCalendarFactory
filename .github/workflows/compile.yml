@@ -33,7 +33,7 @@ jobs:
         run: dotnet restore --runtime ${{ matrix.targetPlatform }} --verbosity normal
 
       - name: Build
-        run: dotnet build Test --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release --no-self-contained
+        run: dotnet build Tests --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release --no-self-contained
 
       - name: Test
         shell: bash
