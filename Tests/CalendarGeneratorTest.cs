@@ -33,7 +33,7 @@ public class CalendarGeneratorTest {
         actualEvent.Summary.Should().Be("Pre-Show");
         actualEvent.Description.Should().Be("before the marathon% — Live!\n\nRun by Interview Crew\nHosted by Interview team");
         actualEvent.IsAllDay.Should().BeFalse();
-        actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
+        actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().HaveCount(3);
         actualEvent.Alarms[0].Action.Should().Be("DISPLAY");
@@ -55,7 +55,7 @@ public class CalendarGeneratorTest {
         actualEvent.Summary.Should().Be("Sonic Frontiers");
         actualEvent.Description.Should().Be("Any% (No DLC) — PC\n\nRun by AlphaDolphin");
         actualEvent.IsAllDay.Should().BeFalse();
-        actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
+        actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().BeEmpty();
 
@@ -65,7 +65,7 @@ public class CalendarGeneratorTest {
         actualEvent.Summary.Should().Be("Bugsnax");
         actualEvent.Description.Should().Be("All Bosses Co-op — PlayStation 5\n\nRun by Konception and limy");
         actualEvent.IsAllDay.Should().BeFalse();
-        actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
+        actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().BeEmpty();
 
@@ -75,7 +75,7 @@ public class CalendarGeneratorTest {
         actualEvent.Summary.Should().Be("Mega Man Maker");
         actualEvent.Description.Should().Be("any% — PC\n\nRun by megamarino");
         actualEvent.IsAllDay.Should().BeFalse();
-        actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
+        actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().BeEmpty();
 
@@ -85,7 +85,7 @@ public class CalendarGeneratorTest {
         actualEvent.Summary.Should().Be("Finale!");
         actualEvent.Description.Should().Be("The End% — GDQ Stage\n\nRun by Tech Crew");
         actualEvent.IsAllDay.Should().BeFalse();
-        actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
+        actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().BeEmpty();
     }

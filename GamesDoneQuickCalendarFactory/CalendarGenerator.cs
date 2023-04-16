@@ -45,14 +45,13 @@ public sealed class CalendarGenerator: ICalendarGenerator {
             );
         });
 
-        Calendar  calendar  = new() { Method     = CalendarMethods.Publish };
-        Organizer organizer = new() { CommonName = "Games Done Quick" };
+        Calendar calendar = new() { Method = CalendarMethods.Publish };
         calendar.Events.AddRange(runs.Select((run, runIndex) => new CalendarEvent {
-            Start       = run.start.toIDateTime(),
-            Duration    = run.duration,
-            IsAllDay    = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
-            Summary     = run.name,
-            Organizer   = organizer,
+            Start    = run.start.toIDateTime(),
+            Duration = run.duration,
+            IsAllDay = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
+            Summary  = run.name,
+            // having an Organizer makes Outlook say "this event has not been accepted"
             Description = $"{run.description}\n\nRun by {run.runners.joinHumanized()}{(run.host is not null ? $"\nHosted by {run.host}" : string.Empty)}",
             Location    = TWITCH_STREAM_URL.ToString(),
             Alarms = {
