@@ -36,9 +36,10 @@ jobs:
         run: dotnet build --no-restore --configuration Release --verbosity normal
 
       - name: Test
+        shell: bash
         run: |
           dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --settings Tests/Tests.runsettings --logger "trx;LogFileName=TestResults.xml"
-          echo "TEST_EXIT_CODE=$LASTEXITCODE" >> ${{ env.GITHUB_ENV }}
+          echo "TEST_EXIT_CODE=$?" >> ${{ env.GITHUB_ENV }}
           cp Tests/TestResults/*/coverage.info Tests/TestResults
           exit 0
 
