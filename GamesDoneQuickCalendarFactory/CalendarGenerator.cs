@@ -12,7 +12,7 @@ public interface ICalendarGenerator: IDisposable {
 
 }
 
-public class CalendarGenerator: ICalendarGenerator {
+public sealed class CalendarGenerator: ICalendarGenerator {
 
     private static readonly Url TWITCH_STREAM_URL = Url.Create("https://www.twitch.tv/gamesdonequick");
     private static readonly Url SCHEDULE_URL      = Url.Create("https://gamesdonequick.com/schedule");
@@ -30,6 +30,7 @@ public class CalendarGenerator: ICalendarGenerator {
         logger.LogDebug("Downloading schedule from Games Done Quick website");
         using IDocument doc = await browser.OpenAsync(SCHEDULE_URL);
 
+        string eventTitle = doc.QuerySelector(".text-gdq-red")?.TextContent.Replace(" Schedule", "") ?? "Games Done Quick";
         IEnumerable<GameRun> runs = doc.QuerySelectorAll("tbody tr:not(.second-row, .day-split)").Select(firstRow => {
             IElement secondRow = firstRow.NextElementSibling!;
 
@@ -46,28 +47,38 @@ public class CalendarGenerator: ICalendarGenerator {
 
         Calendar  calendar  = new() { Method     = CalendarMethods.Publish };
         Organizer organizer = new() { CommonName = "Games Done Quick" };
-        calendar.Events.AddRange(runs.Select(run => new CalendarEvent {
+        calendar.Events.AddRange(runs.Select((run, runIndex) => new CalendarEvent {
             Start       = run.start.toIDateTime(),
             Duration    = run.duration,
             IsAllDay    = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
             Summary     = run.name,
             Organizer   = organizer,
             Description = $"{run.description}\n\nRun by {run.runners.joinHumanized()}{(run.host is not null ? $"\nHosted by {run.host}" : string.Empty)}",
-            Location    = TWITCH_STREAM_URL.ToString()
+            Location    = TWITCH_STREAM_URL.ToString(),
+            Alarms = {
+                runIndex == 0 ? new Alarm {
+                    Action      = AlarmAction.Display,
+                    Trigger     = new Trigger(TimeSpan.FromDays(7)),
+                    Description = $"{eventTitle} is coming up next week"
+                } : null,
+                runIndex == 0 ? new Alarm {
+                    Action      = AlarmAction.Display,
+                    Trigger     = new Trigger(TimeSpan.FromDays(1)),
+                    Description = $"{eventTitle} is starting tomorrow"
+                } : null,
+                runIndex == 0 ? new Alarm {
+                    Action      = AlarmAction.Display,
+                    Trigger     = new Trigger(TimeSpan.FromMinutes(15)),
+                    Description = $"{eventTitle} will be starting soon"
+                } : null
+            }
         }));
 
         return calendar;
     }
 
-    protected virtual void Dispose(bool disposing) {
-        if (disposing) {
-            browser.Dispose();
-        }
-    }
-
     public void Dispose() {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        browser.Dispose();
     }
 
 }

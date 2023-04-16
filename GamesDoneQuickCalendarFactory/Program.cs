@@ -13,7 +13,7 @@ const int    CACHE_DURATION_MINUTES = 5;
 Encoding utf8 = new UTF8Encoding(false, true);
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options => options.AllowSynchronousIO = true);
+builder.WebHost.ConfigureKestrel(options => options.AllowSynchronousIO = true); // Ical.Net's CalendarSerializer.Serialize calls a synchronous write on a Stream
 builder.Host
     .UseWindowsService()
     .UseSystemd();

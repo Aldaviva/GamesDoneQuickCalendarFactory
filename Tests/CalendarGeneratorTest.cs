@@ -35,6 +35,19 @@ public class CalendarGeneratorTest {
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Alarms.Should().HaveCount(3);
+        actualEvent.Alarms[0].Action.Should().Be("DISPLAY");
+        actualEvent.Alarms[0].Description.Should().Be("Summer Games Done Quick 2023 is coming up next week");
+        actualEvent.Alarms[0].Trigger.Duration.Should().Be(TimeSpan.FromDays(7));
+        actualEvent.Alarms[0].Trigger.IsRelative.Should().BeTrue();
+        actualEvent.Alarms[1].Action.Should().Be("DISPLAY");
+        actualEvent.Alarms[1].Description.Should().Be("Summer Games Done Quick 2023 is starting tomorrow");
+        actualEvent.Alarms[1].Trigger.Duration.Should().Be(TimeSpan.FromDays(1));
+        actualEvent.Alarms[1].Trigger.IsRelative.Should().BeTrue();
+        actualEvent.Alarms[2].Action.Should().Be("DISPLAY");
+        actualEvent.Alarms[2].Description.Should().Be("Summer Games Done Quick 2023 will be starting soon");
+        actualEvent.Alarms[2].Trigger.Duration.Should().Be(TimeSpan.FromMinutes(15));
+        actualEvent.Alarms[2].Trigger.IsRelative.Should().BeTrue();
 
         actualEvent = actual.Events[1];
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T17:00:00Z").toIDateTime());
@@ -44,6 +57,7 @@ public class CalendarGeneratorTest {
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[2];
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T18:37:00Z").toIDateTime());
@@ -53,6 +67,7 @@ public class CalendarGeneratorTest {
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[3];
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T19:37:00Z").toIDateTime());
@@ -62,6 +77,7 @@ public class CalendarGeneratorTest {
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[140];
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-06-04T05:29:00Z").toIDateTime());
@@ -71,6 +87,7 @@ public class CalendarGeneratorTest {
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Alarms.Should().BeEmpty();
     }
 
 }
