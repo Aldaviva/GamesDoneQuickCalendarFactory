@@ -17,12 +17,13 @@ public class CalendarGenerator: ICalendarGenerator {
     private static readonly Url TWITCH_STREAM_URL = Url.Create("https://www.twitch.tv/gamesdonequick");
     private static readonly Url SCHEDULE_URL      = Url.Create("https://gamesdonequick.com/schedule");
 
-    private readonly IBrowsingContext browser = BrowsingContext.New(Configuration.Default.WithDefaultLoader());
+    private readonly IBrowsingContext browser;
 
     private readonly ILogger<CalendarGenerator> logger;
 
-    public CalendarGenerator(ILogger<CalendarGenerator> logger) {
-        this.logger = logger;
+    public CalendarGenerator(IBrowsingContext browser, ILogger<CalendarGenerator> logger) {
+        this.browser = browser;
+        this.logger  = logger;
     }
 
     public async Task<Calendar> generateCalendar() {
@@ -38,7 +39,7 @@ public class CalendarGenerator: ICalendarGenerator {
                 name: firstRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
                 description: secondRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
                 runners: firstRow.QuerySelector("td:nth-child(3)")!.TextContent.Split(", "),
-                host: secondRow.QuerySelector("td:nth-child(3)")!.TextContent.Trim(),
+                host: secondRow.QuerySelector("td:nth-child(3)")!.TextContent.Trim() is var host && !string.IsNullOrWhiteSpace(host) ? host : null,
                 setupDuration: firstRow.QuerySelector("td.visible-lg")!.TextContent is var setupDuration && !string.IsNullOrWhiteSpace(setupDuration) ? TimeSpan.Parse(setupDuration) : null
             );
         });
@@ -51,7 +52,7 @@ public class CalendarGenerator: ICalendarGenerator {
             IsAllDay    = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
             Summary     = run.name,
             Organizer   = organizer,
-            Description = $"{run.description}\n\nRun by {run.runners.joinHumanized()}\nHosted by {run.host}",
+            Description = $"{run.description}\n\nRun by {run.runners.joinHumanized()}{(run.host is not null ? $"\nHosted by {run.host}" : string.Empty)}",
             Location    = TWITCH_STREAM_URL.ToString()
         }));
 

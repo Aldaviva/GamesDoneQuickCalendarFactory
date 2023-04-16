@@ -24,8 +24,38 @@ jobs:
       - name: Clone
         uses: actions/checkout@v3.5.1
           
+      - name: Initialize test reporting
+        uses: testspace-com/setup-testspace@v1
+        with:
+          domain: ${{github.repository_owner}}
+      
+      - name: Restore
+        run: dotnet restore --verbosity normal
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release --verbosity normal
+
+      - name: Test
+        run: |
+          dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage" --settings Tests/Tests.runsettings --logger "trx;LogFileName=TestResults.xml"
+          echo "TEST_EXIT_CODE=$LASTEXITCODE" >> ${{ env.GITHUB_ENV }}
+          cp Tests/TestResults/*/coverage.info Tests/TestResults
+          exit 0
+
       - name: Publish
-        run: dotnet publish --configuration Release -p:PublishSingleFile=true --runtime ${{ matrix.targetPlatform }} --self-contained false --verbosity normal
+        run: dotnet publish ${{ env.ProjectName }} --runtime ${{ matrix.targetPlatform }} --no-build --configuration Release -p:PublishSingleFile=false --no-self-contained --verbosity normal
+
+      - name: Upload test report
+        run: testspace Tests/TestResults/TestResults.xml
+
+      - name: Upload coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: Tests/TestResults/coverage.info
+
+      - name: Stop if tests failed
+        run: exit ${{ env.TEST_EXIT_CODE }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3.1.2
