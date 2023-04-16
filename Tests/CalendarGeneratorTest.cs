@@ -31,7 +31,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T16:30:00Z").toIDateTime());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(30));
         actualEvent.Summary.Should().Be("Pre-Show");
-        actualEvent.Description.Should().Be("before the marathon% — Live!\n\nRun by Interview Crew\nHosted by Interview team");
+        actualEvent.Description.Should().Be("before the marathon% â€” Live!\n\nRun by Interview Crew\nHosted by Interview team");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -40,7 +40,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T17:00:00Z").toIDateTime());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(77));
         actualEvent.Summary.Should().Be("Sonic Frontiers");
-        actualEvent.Description.Should().Be("Any% (No DLC) — PC\n\nRun by AlphaDolphin");
+        actualEvent.Description.Should().Be("Any% (No DLC) â€” PC\n\nRun by AlphaDolphin");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -49,7 +49,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T18:37:00Z").toIDateTime());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(45));
         actualEvent.Summary.Should().Be("Bugsnax");
-        actualEvent.Description.Should().Be("All Bosses Co-op — PlayStation 5\n\nRun by Konception and limy");
+        actualEvent.Description.Should().Be("All Bosses Co-op â€” PlayStation 5\n\nRun by Konception and limy");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -58,7 +58,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-05-28T19:37:00Z").toIDateTime());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(30));
         actualEvent.Summary.Should().Be("Mega Man Maker");
-        actualEvent.Description.Should().Be("any% — PC\n\nRun by megamarino");
+        actualEvent.Description.Should().Be("any% â€” PC\n\nRun by megamarino");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -67,7 +67,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(DateTimeOffset.Parse("2023-06-04T05:29:00Z").toIDateTime());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(20));
         actualEvent.Summary.Should().Be("Finale!");
-        actualEvent.Description.Should().Be("The End% — GDQ Stage\n\nRun by Tech Crew");
+        actualEvent.Description.Should().Be("The End% â€” GDQ Stage\n\nRun by Tech Crew");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.CommonName.Should().Be("Games Done Quick");
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
