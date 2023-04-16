@@ -30,10 +30,10 @@ jobs:
           domain: ${{github.repository_owner}}
       
       - name: Restore
-        run: dotnet restore --verbosity normal
+        run: dotnet restore --runtime ${{ matrix.targetPlatform }} --verbosity normal
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release --verbosity normal
+        run: dotnet build --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release
 
       - name: Test
         shell: bash
