@@ -10,12 +10,14 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 - [Subscribing](#subscribing)
     - [Any iCalendar client](#any-icalendar-client)
     - [Vivaldi](#vivaldi)
+    - [Mozilla Thunderbird](#mozilla-thunderbird)
     - [Google Calendar](#google-calendar)
     - [Outlook](#outlook)
         - [Outlook on the web](#outlook-on-the-web)
         - [Outlook for Windows](#outlook-for-windows)
         - [Outlook for Mac](#outlook-for-mac)
         - [Outlook for Android](#outlook-for-android)
+    - [Apple Calendar](#apple-calendar)
 
 <!-- /MarkdownTOC -->
 
@@ -34,6 +36,16 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Click the **Add Account** button
 1. Click the **Save Account** button
+
+### Mozilla Thunderbird
+1. Open Thunderbird
+1. Go to the 📅 Calendar space
+1. Click ≡ (Thunderbird Menu) › + New › Calendar…
+1. Choose **On the Network**, then click Next
+1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
+1. Check This location doesn't require credentials
+1. Click **Find Calendars**
+1. Click **Subscribe**
 
 ### Google Calendar
 1. Sign in to [Google Calendar](https://calendar.google.com/)
@@ -59,8 +71,7 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 1. Go to the 📅 Calendar section
 1. Open the **+ Add** or **+ Open Calendar** menu
 1. Select 🌐 **From Internet...**
-1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Click OK
+1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics) and click OK
 1. Optionally, click Advanced and choose a Folder Name, such as `Games Done Quick` or `GDQ`, then click OK
 1. Click the **Yes** button
 
@@ -71,3 +82,11 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 #### Outlook for Android
 1. Sign in to [Outlook on the web](https://outlook.office.com/calendar) with the same Office 365, Exchange, or Outlook.com&#47;Hotmail account with which you are signed into Outlook for Android
 1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
+
+### Apple Calendar
+1. Open 📅 Calendar
+1. Go to File › New Calendar Subscription…
+1. Set the Calendar URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics) and click Subscribe
+1. Choose a name, such as `Games Done Quick` or `GDQ`
+1. To optionally preserve the default reminders, uncheck Remove Alerts
+1. To change the update frequency, check Auto-refresh. GDQ schedules can shift during events.
