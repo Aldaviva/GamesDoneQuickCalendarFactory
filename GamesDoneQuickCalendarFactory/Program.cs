@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Net.Http.Headers;
 
 const string ICALENDAR_MIME_TYPE    = "text/calendar;charset=UTF-8";
-const int    CACHE_DURATION_MINUTES = 5;
+const int    CACHE_DURATION_MINUTES = 1;
 
 Encoding utf8 = new UTF8Encoding(false, true);
 
