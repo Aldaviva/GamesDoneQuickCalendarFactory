@@ -47,6 +47,7 @@ public sealed class CalendarGenerator: ICalendarGenerator {
 
         Calendar calendar = new() { Method = CalendarMethods.Publish };
         calendar.Events.AddRange(runs.Select((run, runIndex) => new CalendarEvent {
+            Uid      = $"aldaviva.com/{eventTitle}/{run.name}",
             Start    = run.start.toIDateTime(),
             Duration = run.duration,
             IsAllDay = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
