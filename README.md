@@ -34,7 +34,6 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts) and click Continue
 1. Choose a Name, such as `Games Done Quick` or `GDQ`
 1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Make up a non-empty Username and Password, such as `a`, to avoid the "Username or password missing" error
 1. Click the **Add Account** button
 1. Click the **Save Account** button
 
@@ -62,7 +61,7 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 1. Open Outlook
 1. Go to the 📅 Calendar section
 1. Open the **+ Add** or **+ Open Calendar** menu
-1. Select 🌐 **From Internet...**
+1. Select 🌐 **From Internet…**
 1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics) and click OK
 1. Optionally, click Advanced and choose a Folder Name, such as `Games Done Quick` or `GDQ`, then click OK
 1. Click the **Yes** button
