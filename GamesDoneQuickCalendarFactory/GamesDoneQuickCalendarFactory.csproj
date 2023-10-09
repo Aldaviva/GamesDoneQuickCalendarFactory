@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="AngleSharp" Version="1.0.4" />
+        <PackageReference Include="AngleSharp" Version="1.0.5" />
         <PackageReference Include="Ical.Net" Version="4.2.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="7.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="7.0.0" />
