@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Tests;
 
-public class CalendarGeneratorTest {
+public class CalendarGeneratorTest: IDisposable {
 
     private readonly IBrowsingContext   browser = A.Fake<IBrowsingContext>();
     private readonly CalendarGenerator  calendarGenerator;
@@ -20,6 +20,11 @@ public class CalendarGeneratorTest {
 
         A.CallTo(() => navigationHandler.SupportsProtocol(A<string>._)).Returns(true);
         A.CallTo(() => browser.GetServices<INavigationHandler>()).Returns(new[] { navigationHandler });
+    }
+
+    public void Dispose() {
+        browser.Dispose();
+        calendarGenerator.Dispose();
     }
 
     [Fact]
