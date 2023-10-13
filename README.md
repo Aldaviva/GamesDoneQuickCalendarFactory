@@ -7,7 +7,7 @@ Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) in
 
 Each run in the current GDQ event will appear as a calendar appointment, comprising the run's name, estimated start and end time, category, runners, host, and the URL of the [GDQ Twitch channel](https://www.twitch.tv/gamesdonequick).
 
-All types of GDQ events with a published run schedule are included: Awesome Games Done Quick, Summer Games Done Quick, Frost Fatales, and Flame Fatales. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded.
+All types of GDQ events with a published run schedule are included: Awesome Games Done Quick, Summer Games Done Quick, Frost Fatales, Flame Fatales, and Games Done Quick Express. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded.
 
 ![AGDQ 2023 schedule in Vivaldi](https://pbs.twimg.com/media/Fl2xjasaEAATpQC?format=jpg&name=large)
 
