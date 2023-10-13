@@ -11,17 +11,23 @@ namespace Tests;
 
 public class CalendarGeneratorTest {
 
-    [Fact]
-    public async Task generateCalendar() {
-        Stream                  htmlStream        = File.OpenRead("Data/schedule-2023-sgdq.html");
-        IBrowsingContext        browser           = A.Fake<IBrowsingContext>();
-        using CalendarGenerator calendarGenerator = new(browser, new NullLogger<CalendarGenerator>());
-        using IDocument         page              = await BrowsingContext.New().OpenAsync(response => response.Content(htmlStream).Address("https://gamesdonequick.com/schedule/43"));
-        INavigationHandler      navigationHandler = A.Fake<INavigationHandler>();
+    private readonly IBrowsingContext   browser = A.Fake<IBrowsingContext>();
+    private readonly CalendarGenerator  calendarGenerator;
+    private readonly INavigationHandler navigationHandler = A.Fake<INavigationHandler>();
+
+    public CalendarGeneratorTest() {
+        calendarGenerator = new CalendarGenerator(browser, new NullLogger<CalendarGenerator>());
 
         A.CallTo(() => navigationHandler.SupportsProtocol(A<string>._)).Returns(true);
-        A.CallTo(() => navigationHandler.NavigateAsync(A<DocumentRequest>._, A<CancellationToken>._)).Returns(page);
         A.CallTo(() => browser.GetServices<INavigationHandler>()).Returns(new[] { navigationHandler });
+    }
+
+    [Fact]
+    public async Task generateCalendar() {
+        await using Stream htmlStream = File.OpenRead("Data/schedule-2023-sgdq.html");
+        using IDocument    page       = await BrowsingContext.New().OpenAsync(response => response.Content(htmlStream).Address("https://gamesdonequick.com/schedule/43"));
+
+        A.CallTo(() => navigationHandler.NavigateAsync(A<DocumentRequest>._, A<CancellationToken>._)).Returns(page);
 
         Calendar actual = await calendarGenerator.generateCalendar();
 
@@ -93,6 +99,17 @@ public class CalendarGeneratorTest {
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task ignoreSleepRuns() {
+        await using Stream htmlStream = File.OpenRead("Data/schedule-sleep.html");
+        using IDocument    page       = await BrowsingContext.New().OpenAsync(response => response.Content(htmlStream).Address("https://gamesdonequick.com/schedule/45"));
+        A.CallTo(() => navigationHandler.NavigateAsync(A<DocumentRequest>._, A<CancellationToken>._)).Returns(page);
+
+        Calendar actual = await calendarGenerator.generateCalendar();
+
+        actual.Events.Should().BeEmpty();
     }
 
 }

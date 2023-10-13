@@ -14,11 +14,11 @@ public interface ICalendarGenerator: IDisposable {
 
 public sealed class CalendarGenerator: ICalendarGenerator {
 
-    private static readonly Url TWITCH_STREAM_URL = Url.Create("https://www.twitch.tv/gamesdonequick");
-    private static readonly Url SCHEDULE_URL      = Url.Create("https://gamesdonequick.com/schedule");
+    private static readonly Url      TWITCH_STREAM_URL = Url.Create("https://www.twitch.tv/gamesdonequick");
+    private static readonly Url      SCHEDULE_URL      = Url.Create("https://gamesdonequick.com/schedule");
+    private static readonly TimeSpan MAX_RUN_DURATION  = new(11, 0, 0);
 
-    private readonly IBrowsingContext browser;
-
+    private readonly IBrowsingContext           browser;
     private readonly ILogger<CalendarGenerator> logger;
 
     public CalendarGenerator(IBrowsingContext browser, ILogger<CalendarGenerator> logger) {
@@ -31,19 +31,22 @@ public sealed class CalendarGenerator: ICalendarGenerator {
         using IDocument doc = await browser.OpenAsync(SCHEDULE_URL);
 
         string eventTitle = doc.QuerySelector(".text-gdq-red")?.TextContent.Replace(" Schedule", "") ?? "Games Done Quick";
-        IEnumerable<GameRun> runs = doc.QuerySelectorAll("tbody tr:not(.second-row, .day-split)").Select(firstRow => {
-            IElement secondRow = firstRow.NextElementSibling!;
+        IEnumerable<GameRun> runs = doc.QuerySelectorAll("tbody tr:not(.second-row, .day-split)")
+            .Select(firstRow => {
+                IElement secondRow = firstRow.NextElementSibling!;
 
-            return new GameRun(
-                start: DateTimeOffset.Parse(firstRow.QuerySelector(".start-time")!.TextContent),
-                duration: secondRow.QuerySelector(".text-right")!.TextContent is var duration && !string.IsNullOrWhiteSpace(duration) ? TimeSpan.Parse(duration) : TimeSpan.Zero,
-                name: firstRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
-                description: secondRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
-                runners: firstRow.QuerySelector("td:nth-child(3)")!.TextContent.Split(", "),
-                host: secondRow.QuerySelector("td:nth-child(3)")!.TextContent.Trim() is var host && !string.IsNullOrWhiteSpace(host) ? host : null,
-                setupDuration: firstRow.QuerySelector("td.visible-lg")!.TextContent is var setupDuration && !string.IsNullOrWhiteSpace(setupDuration) ? TimeSpan.Parse(setupDuration) : null
-            );
-        });
+                return new GameRun(
+                    start: DateTimeOffset.Parse(firstRow.QuerySelector(".start-time")!.TextContent),
+                    duration: secondRow.QuerySelector(".text-right")!.TextContent is var duration && !string.IsNullOrWhiteSpace(duration) ? TimeSpan.Parse(duration) : TimeSpan.Zero,
+                    name: firstRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
+                    description: secondRow.QuerySelector("td:nth-child(2)")!.TextContent.Trim(),
+                    runners: firstRow.QuerySelector("td:nth-child(3)")!.TextContent.Split(", "),
+                    host: secondRow.QuerySelector("td:nth-child(3)")!.TextContent.Trim() is var host && !string.IsNullOrWhiteSpace(host) ? host : null,
+                    setupDuration: firstRow.QuerySelector("td.visible-lg")!.TextContent is var setupDuration && !string.IsNullOrWhiteSpace(setupDuration) ? TimeSpan.Parse(setupDuration) : null
+                );
+            })
+            // #8: exclude break or filler events like sleep and intermissions
+            .Where(run => run.name != "Sleep" && run.duration < MAX_RUN_DURATION);
 
         Calendar calendar = new() { Method = CalendarMethods.Publish };
         calendar.Events.AddRange(runs.Select((run, runIndex) => new CalendarEvent {
