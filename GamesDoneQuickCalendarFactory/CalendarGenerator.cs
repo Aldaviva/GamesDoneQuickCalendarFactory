@@ -56,7 +56,7 @@ public sealed class CalendarGenerator: ICalendarGenerator {
             IsAllDay = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
             Summary  = run.name,
             // having an Organizer makes Outlook say "this event has not been accepted"
-            Description = $"{run.description}\n\nRun by {run.runners.joinHumanized()}{(run.host is not null ? $"\nHosted by {run.host}" : string.Empty)}",
+            Description = $"{run.description}\nRun by {run.runners.joinHumanized()}{(run.host is not null ? $"\nHosted by {run.host}" : string.Empty)}",
             Location    = TWITCH_STREAM_URL.ToString(),
             Alarms = {
                 runIndex == 0 ? new Alarm {
