@@ -23,7 +23,6 @@ public class CalendarGeneratorTest: IDisposable {
     }
 
     public void Dispose() {
-        browser.Dispose();
         calendarGenerator.Dispose();
     }
 
@@ -43,7 +42,7 @@ public class CalendarGeneratorTest: IDisposable {
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(30));
         actualEvent.Summary.Should().Be("Pre-Show");
         actualEvent.Uid.Should().Be("aldaviva.com/Summer Games Done Quick 2023/Pre-Show");
-        actualEvent.Description.Should().Be("before the marathon% — Live!\n\nRun by Interview Crew\nHosted by Interview team");
+        actualEvent.Description.Should().Be("before the marathon% — Live!\nRun by Interview Crew\nHosted by Interview team");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -66,7 +65,7 @@ public class CalendarGeneratorTest: IDisposable {
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(77));
         actualEvent.Summary.Should().Be("Sonic Frontiers");
         actualEvent.Uid.Should().Be("aldaviva.com/Summer Games Done Quick 2023/Sonic Frontiers");
-        actualEvent.Description.Should().Be("Any% (No DLC) — PC\n\nRun by AlphaDolphin");
+        actualEvent.Description.Should().Be("Any% (No DLC) — PC\nRun by AlphaDolphin");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -77,7 +76,7 @@ public class CalendarGeneratorTest: IDisposable {
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(45));
         actualEvent.Summary.Should().Be("Bugsnax");
         actualEvent.Uid.Should().Be("aldaviva.com/Summer Games Done Quick 2023/Bugsnax");
-        actualEvent.Description.Should().Be("All Bosses Co-op — PlayStation 5\n\nRun by Konception and limy");
+        actualEvent.Description.Should().Be("All Bosses Co-op — PlayStation 5\nRun by Konception and limy");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -88,7 +87,7 @@ public class CalendarGeneratorTest: IDisposable {
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(30));
         actualEvent.Summary.Should().Be("Mega Man Maker");
         actualEvent.Uid.Should().Be("aldaviva.com/Summer Games Done Quick 2023/Mega Man Maker");
-        actualEvent.Description.Should().Be("any% — PC\n\nRun by megamarino");
+        actualEvent.Description.Should().Be("any% — PC\nRun by megamarino");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
@@ -99,7 +98,7 @@ public class CalendarGeneratorTest: IDisposable {
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(20));
         actualEvent.Summary.Should().Be("Finale!");
         actualEvent.Uid.Should().Be("aldaviva.com/Summer Games Done Quick 2023/Finale!");
-        actualEvent.Description.Should().Be("The End% — GDQ Stage\n\nRun by Tech Crew");
+        actualEvent.Description.Should().Be("The End% — GDQ Stage\nRun by Tech Crew");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
