@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
-using AngleSharp;
+﻿using AngleSharp;
 using AngleSharp.Io;
 using GamesDoneQuickCalendarFactory;
 using Ical.Net;
@@ -10,6 +7,9 @@ using Ical.Net.DataTypes;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 
 namespace Tests;
 
@@ -45,27 +45,27 @@ public class ServerTest: IDisposable {
 
         A.CallTo(() => calendarGenerator.generateCalendar()).Returns(calendar);
 
-        HttpResponseMessage response = await client.GetAsync("/");
+        using HttpResponseMessage response = await client.GetAsync("/");
 
         string responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Be(Regex.Replace("""
-            BEGIN:VCALENDAR
-            PRODID:-//github.com/rianjs/ical.net//NONSGML ical.net 4.0//EN
-            VERSION:2.0
-            BEGIN:VEVENT
-            DESCRIPTION:My description
-            DTEND;TZID=America/Los_Angeles:20230416T021800
-            DTSTAMP:20230416T082040Z
-            DTSTART;TZID=America/Los_Angeles:20230416T011800
-            LOCATION:My location
-            ORGANIZER;CN=Ben Hutchison:
-            SEQUENCE:0
-            SUMMARY:My Event
-            UID:c9e08bcf-773a-4291-b0a4-dd7459ed13ba
-            END:VEVENT
-            END:VCALENDAR
+                                               BEGIN:VCALENDAR
+                                               PRODID:-//github.com/rianjs/ical.net//NONSGML ical.net 4.0//EN
+                                               VERSION:2.0
+                                               BEGIN:VEVENT
+                                               DESCRIPTION:My description
+                                               DTEND;TZID=America/Los_Angeles:20230416T021800
+                                               DTSTAMP:20230416T082040Z
+                                               DTSTART;TZID=America/Los_Angeles:20230416T011800
+                                               LOCATION:My location
+                                               ORGANIZER;CN=Ben Hutchison:
+                                               SEQUENCE:0
+                                               SUMMARY:My Event
+                                               UID:c9e08bcf-773a-4291-b0a4-dd7459ed13ba
+                                               END:VEVENT
+                                               END:VCALENDAR
 
-            """, @"(?<!\r)\n", "\r\n"));
+                                               """, @"(?<!\r)\n", "\r\n"));
 
         MediaTypeHeaderValue? contentType = response.Content.Headers.ContentType;
         contentType.Should().NotBeNull();
@@ -85,6 +85,15 @@ public class ServerTest: IDisposable {
         browsingContext.Should().NotBeNull();
         browsingContext!.GetService<DefaultHttpRequester>().Should().NotBeNull();
         browsingContext.GetService<IDocumentLoader>().Should().NotBeNull();
+    }
+
+    [Fact]
+    public async Task noUtf8Bom() {
+        using HttpResponseMessage response = await client.GetAsync("/");
+
+        byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
+        responseBytes[..3].Should().NotEqual(new byte[] { 0xEF, 0xBB, 0xBF },
+            "ICS response bytes should not start with a UTF-8 BOM, since Google Calendar's URL subscription client cannot parse them and throws an error");
     }
 
     public void Dispose() {

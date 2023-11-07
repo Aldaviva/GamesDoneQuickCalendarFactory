@@ -39,9 +39,10 @@ public static class Extensions {
     }
 
     /// <summary>
-    /// Without this, you would have to manually configure your web server (Kestrel and IIS) to allow synchronous writes:
-    /// <code>
-    /// webappBuilder.WebHost.ConfigureKestrel(options =&gt; options.AllowSynchronousIO = true);
+    /// <para>Asynchronous version of <see cref="SerializerBase.Serialize" />.</para>
+    /// <para> </para>
+    /// <para>Alternatively, you can manually configure your web server (Kestrel or IIS) to allow synchronous writes:</para>
+    /// <code>webappBuilder.WebHost.ConfigureKestrel(options =&gt; options.AllowSynchronousIO = true);
     /// webappBuilder.Services.Configure&lt;IISServerOptions&gt;(options =&gt; options.AllowSynchronousIO = true);
     /// </code>
     /// </summary>

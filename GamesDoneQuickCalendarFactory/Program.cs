@@ -1,4 +1,5 @@
 ﻿using AngleSharp;
+using Bom.Squad;
 using GamesDoneQuickCalendarFactory;
 using Ical.Net;
 using Ical.Net.Serialization;
@@ -10,7 +11,7 @@ using System.Text;
 const string ICALENDAR_MIME_TYPE    = "text/calendar;charset=UTF-8";
 const int    CACHE_DURATION_MINUTES = 1;
 
-Encoding utf8 = new UTF8Encoding(false, true);
+BomSquad.DefuseUtf8Bom();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
@@ -37,7 +38,7 @@ webApp.MapGet("/", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60)] async (
     ICalendarGenerator calendarGenerator = request.RequestServices.GetRequiredService<ICalendarGenerator>();
     Calendar           calendar          = await calendarGenerator.generateCalendar();
     request.Response.ContentType = ICALENDAR_MIME_TYPE;
-    await new CalendarSerializer().serializeAsync(calendar, request.Response.Body, utf8);
+    await new CalendarSerializer().serializeAsync(calendar, request.Response.Body, Encoding.UTF8);
 });
 
 webApp.Run();
