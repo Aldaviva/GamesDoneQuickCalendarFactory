@@ -6,6 +6,6 @@ public record GameRun(
     string              name,
     string              description,
     IEnumerable<string> runners,
-    IEnumerable<string> hosts,
     IEnumerable<string> commentators,
+    IEnumerable<string> hosts,
     TimeSpan?           setupDuration);

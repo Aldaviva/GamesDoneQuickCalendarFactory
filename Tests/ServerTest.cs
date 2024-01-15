@@ -1,6 +1,4 @@
-﻿using AngleSharp;
-using AngleSharp.Io;
-using GamesDoneQuickCalendarFactory;
+﻿using GamesDoneQuickCalendarFactory;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
@@ -76,15 +74,6 @@ public class ServerTest: IDisposable {
 
         A.CallTo(() => calendarGenerator.generateCalendar()).MustHaveHappenedOnceExactly();
 
-    }
-
-    [Fact]
-    public void browsingContext() {
-        IBrowsingContext? browsingContext = webapp.Services.GetService<IBrowsingContext>();
-
-        browsingContext.Should().NotBeNull();
-        browsingContext!.GetService<DefaultHttpRequester>().Should().NotBeNull();
-        browsingContext.GetService<IDocumentLoader>().Should().NotBeNull();
     }
 
     [Fact]

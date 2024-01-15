@@ -1,1 +1,2 @@
 Tests/Data/**/*.html linguist-vendored
+Tests/Data/**/*.json linguist-vendored

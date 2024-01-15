@@ -20,7 +20,8 @@ builder.Services
     .AddOutputCache()
     .AddResponseCaching()
     .AddHttpClient()
-    .AddSingleton<ICalendarGenerator, CalendarGenerator>();
+    .AddSingleton<ICalendarGenerator, CalendarGenerator>()
+    .AddSingleton<IEventDownloader, EventDownloader>();
 
 WebApplication webApp = builder.Build();
 webApp
