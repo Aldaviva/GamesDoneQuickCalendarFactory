@@ -15,11 +15,11 @@ public class EventDownloaderTest {
         A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://gamesdonequick.com/schedule")))
             .Returns(new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://gamesdonequick.com/schedule/46") });
 
-        await using Stream eventStream = File.OpenRead(@"Data\event.json");
+        await using Stream eventStream = File.OpenRead("Data/event.json");
         A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46")))
             .Returns(new HttpResponseMessage { Content = new StreamContent(eventStream) });
 
-        await using Stream runsStream = File.OpenRead(@"Data\runs.json");
+        await using Stream runsStream = File.OpenRead("Data/runs.json");
         A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46/runs")))
             .Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
