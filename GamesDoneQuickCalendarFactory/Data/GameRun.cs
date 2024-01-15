@@ -1,4 +1,4 @@
-﻿namespace GamesDoneQuickCalendarFactory;
+﻿namespace GamesDoneQuickCalendarFactory.Data;
 
 public record GameRun(
     DateTimeOffset      start,

@@ -1,3 +1,4 @@
+using GamesDoneQuickCalendarFactory.Data;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,7 +17,7 @@ public class CalendarGeneratorTest {
 
     [Fact]
     public async Task generateCalendar() {
-        GdqEvent gdqEvent = new("Awesome Games Done Quick 2024", new[] {
+        Event @event = new("Awesome Games Done Quick 2024", new[] {
             new GameRun(
                 DateTimeOffset.Parse("2024-01-14T11:30:00-05:00"),
                 TimeSpan.FromMinutes(42),
@@ -68,7 +69,7 @@ public class CalendarGeneratorTest {
                 TimeSpan.Zero)
         });
 
-        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(gdqEvent);
+        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
 
         Calendar actual = await calendarGenerator.generateCalendar();
 
@@ -144,7 +145,7 @@ public class CalendarGeneratorTest {
 
     [Fact]
     public async Task ignoreSleepRuns() {
-        GdqEvent gdqEvent = new("test", new[] {
+        Event @event = new("test", new[] {
             // Sleep event
             new GameRun(
                 DateTimeOffset.Now,
@@ -176,7 +177,7 @@ public class CalendarGeneratorTest {
                 new[] { "Studio Workers" }, null)
         });
 
-        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(gdqEvent);
+        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
 
         Calendar actual = await calendarGenerator.generateCalendar();
 

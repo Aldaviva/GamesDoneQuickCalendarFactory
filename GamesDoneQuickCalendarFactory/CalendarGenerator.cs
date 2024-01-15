@@ -1,4 +1,5 @@
-﻿using Ical.Net;
+﻿using GamesDoneQuickCalendarFactory.Data;
+using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 
@@ -17,7 +18,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
 
     public async Task<Calendar> generateCalendar() {
         logger.LogDebug("Downloading schedule from Games Done Quick website");
-        GdqEvent gdqEvent = await eventDownloader.downloadSchedule();
+        Event gdqEvent = await eventDownloader.downloadSchedule();
 
         Calendar calendar = new() { Method = CalendarMethods.Publish };
         calendar.Events.AddRange(gdqEvent.runs

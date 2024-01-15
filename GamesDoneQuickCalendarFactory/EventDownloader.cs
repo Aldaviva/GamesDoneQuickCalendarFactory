@@ -1,11 +1,15 @@
-﻿using jaytwo.FluentUri;
-using System.Text.Json.Nodes;
+﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data.GDQ;
+using GamesDoneQuickCalendarFactory.Data.Marshal;
+using jaytwo.FluentUri;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GamesDoneQuickCalendarFactory;
 
 public interface IEventDownloader {
 
-    Task<GdqEvent> downloadSchedule();
+    Task<Event> downloadSchedule();
 
 }
 
@@ -14,27 +18,35 @@ public class EventDownloader(HttpClient httpClient): IEventDownloader {
     private static readonly Uri SCHEDULE_URL        = new("https://gamesdonequick.com/schedule");
     private static readonly Uri EVENTS_API_LOCATION = new("https://gamesdonequick.com/tracker/api/v2/events");
 
-    public async Task<GdqEvent> downloadSchedule() {
+    private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() {
+        Converters = {
+            ZeroTolerantTimeSpanConverter.INSTANCE,
+            new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseUpper)
+        }
+    };
+
+    public async Task<Event> downloadSchedule() {
         using HttpResponseMessage eventIdResponse = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, SCHEDULE_URL));
 
         int eventId       = Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.GetPathSegment(1));
         Uri eventLocation = EVENTS_API_LOCATION.WithPath(eventId.ToString());
 
-        JsonNode eventResponse = (await httpClient.GetFromJsonAsync<JsonNode>(eventLocation))!;
-        string   eventTitle    = eventResponse["name"]!.GetValue<string>();
+        GdqEvent eventResponse = (await httpClient.GetFromJsonAsync<GdqEvent>(eventLocation, JSON_SERIALIZER_OPTIONS))!;
+        GdqRuns  runResponse   = (await httpClient.GetFromJsonAsync<GdqRuns>(eventLocation.WithPath("runs"), JSON_SERIALIZER_OPTIONS))!;
 
-        JsonNode runResponse = (await httpClient.GetFromJsonAsync<JsonNode>(eventLocation.WithPath("runs")))!;
+        IEnumerable<GameRun> runs = runResponse.results.Select(run => new GameRun(
+            start: run.startTime,
+            duration: run.endTime - run.startTime,
+            name: run.name,
+            description: $"{run.category} \u2014 {run.console}",
+            runners: run.runners.Select(getName),
+            commentators: run.commentators.Select(getName),
+            hosts: run.hosts.Select(getName),
+            setupDuration: run.setupTime));
 
-        IEnumerable<GameRun> runs = runResponse["results"]!.AsArray().Select(result => new GameRun(
-            start: DateTimeOffset.Parse(result!["starttime"]!.GetValue<string>()),
-            duration: DateTimeOffset.Parse(result["endtime"]!.GetValue<string>()) - DateTimeOffset.Parse(result["starttime"]!.GetValue<string>()),
-            name: result["name"]!.GetValue<string>(),
-            description: result["category"]!.GetValue<string>() + " — " + result["console"]!.GetValue<string>(),
-            runners: result["runners"]!.AsArray().Select(person => person!["name"]!.GetValue<string>()),
-            commentators: result["commentators"]!.AsArray().Select(person => person!["name"]!.GetValue<string>()),
-            hosts: result["hosts"]!.AsArray().Select(person => person!["name"]!.GetValue<string>()), setupDuration: TimeSpan.Parse(result["setup_time"]!.GetValue<string>())));
+        return new Event(eventResponse.name, runs);
 
-        return new GdqEvent(eventTitle, runs);
+        static string getName(Person person) => person.name;
     }
 
 }

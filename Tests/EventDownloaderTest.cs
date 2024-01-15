@@ -1,4 +1,6 @@
-﻿namespace Tests;
+﻿using GamesDoneQuickCalendarFactory.Data;
+
+namespace Tests;
 
 public class EventDownloaderTest {
 
@@ -23,7 +25,7 @@ public class EventDownloaderTest {
         A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46/runs")))
             .Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
-        GdqEvent actual = await eventDownloader.downloadSchedule();
+        Event actual = await eventDownloader.downloadSchedule();
 
         actual.title.Should().Be("Awesome Games Done Quick 2024");
 
