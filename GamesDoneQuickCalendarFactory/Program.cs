@@ -1,5 +1,4 @@
-﻿using AngleSharp;
-using Bom.Squad;
+﻿using Bom.Squad;
 using GamesDoneQuickCalendarFactory;
 using Ical.Net;
 using Ical.Net.Serialization;
@@ -20,7 +19,7 @@ builder.Host
 builder.Services
     .AddOutputCache()
     .AddResponseCaching()
-    .AddSingleton(_ => BrowsingContext.New(Configuration.Default.WithDefaultLoader()))
+    .AddHttpClient()
     .AddSingleton<ICalendarGenerator, CalendarGenerator>();
 
 WebApplication webApp = builder.Build();
