@@ -1,4 +1,5 @@
 using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Services;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -8,8 +9,7 @@ namespace Tests;
 public class CalendarGeneratorTest {
 
     private readonly CalendarGenerator calendarGenerator;
-
-    private readonly IEventDownloader eventDownloader = A.Fake<IEventDownloader>();
+    private readonly IEventDownloader  eventDownloader = A.Fake<IEventDownloader>();
 
     public CalendarGeneratorTest() {
         calendarGenerator = new CalendarGenerator(eventDownloader, new NullLogger<CalendarGenerator>());
@@ -17,7 +17,7 @@ public class CalendarGeneratorTest {
 
     [Fact]
     public async Task generateCalendar() {
-        Event @event = new("Awesome Games Done Quick 2024", new[] {
+        Event @event = new("Awesome Games Done Quick 2024", "AGDQ2024", new[] {
             new GameRun(
                 DateTimeOffset.Parse("2024-01-14T11:30:00-05:00"),
                 TimeSpan.FromMinutes(42),
@@ -145,7 +145,7 @@ public class CalendarGeneratorTest {
 
     [Fact]
     public async Task ignoreSleepRuns() {
-        Event @event = new("test", new[] {
+        Event @event = new("test", "t", new[] {
             // Sleep event
             new GameRun(
                 DateTimeOffset.Now,

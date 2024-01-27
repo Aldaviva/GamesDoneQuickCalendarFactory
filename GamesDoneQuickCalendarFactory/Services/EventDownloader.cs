@@ -5,7 +5,7 @@ using jaytwo.FluentUri;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace GamesDoneQuickCalendarFactory;
+namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface IEventDownloader {
 
@@ -44,9 +44,10 @@ public class EventDownloader(HttpClient httpClient): IEventDownloader {
             hosts: run.hosts.Select(getName),
             setupDuration: run.setupTime));
 
-        return new Event(eventResponse.name, runs);
+        return new Event(eventResponse.name, eventResponse.@short, runs);
 
-        static string getName(Person person) => person.name;
     }
+
+    private static string getName(Person person) => person.name;
 
 }

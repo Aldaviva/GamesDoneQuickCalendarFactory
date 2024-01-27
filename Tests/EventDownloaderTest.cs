@@ -1,4 +1,5 @@
 ﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Services;
 
 namespace Tests;
 
@@ -14,20 +15,20 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task downloadSchedule() {
-        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://gamesdonequick.com/schedule")))
-            .Returns(new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://gamesdonequick.com/schedule/46") });
+        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://gamesdonequick.com/schedule"))).Returns(
+            new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://gamesdonequick.com/schedule/46") });
 
         await using Stream eventStream = File.OpenRead("Data/event.json");
-        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46")))
-            .Returns(new HttpResponseMessage { Content = new StreamContent(eventStream) });
+        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46"))).Returns(
+            new HttpResponseMessage { Content = new StreamContent(eventStream) });
 
         await using Stream runsStream = File.OpenRead("Data/runs.json");
-        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46/runs")))
-            .Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
+        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46/runs"))).Returns(
+            new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
         Event actual = await eventDownloader.downloadSchedule();
 
-        actual.title.Should().Be("Awesome Games Done Quick 2024");
+        actual.longTitle.Should().Be("Awesome Games Done Quick 2024");
 
         actual.runs.Should().HaveCount(140);
 

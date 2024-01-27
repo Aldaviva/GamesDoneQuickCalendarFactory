@@ -3,7 +3,7 @@ using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 
-namespace GamesDoneQuickCalendarFactory;
+namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface ICalendarGenerator {
 
@@ -25,7 +25,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
             // #8: exclude break or filler events like sleep and intermissions
             .Where(run => run.name != "Sleep" && run.duration < MAX_RUN_DURATION)
             .Select((run, runIndex) => new CalendarEvent {
-                Uid      = $"aldaviva.com/{gdqEvent.title}/{run.name}",
+                Uid      = $"aldaviva.com/{gdqEvent.longTitle}/{run.name}",
                 Start    = run.start.ToUniversalTime().toIDateTime(),
                 Duration = run.duration,
                 IsAllDay = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
@@ -38,17 +38,17 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
                     runIndex == 0 ? new Alarm {
                         Action      = AlarmAction.Display,
                         Trigger     = new Trigger(TimeSpan.FromDays(7)),
-                        Description = $"{gdqEvent.title} is coming up next week"
+                        Description = $"{gdqEvent.longTitle} is coming up next week"
                     } : null,
                     runIndex == 0 ? new Alarm {
                         Action      = AlarmAction.Display,
                         Trigger     = new Trigger(TimeSpan.FromDays(1)),
-                        Description = $"{gdqEvent.title} is starting tomorrow"
+                        Description = $"{gdqEvent.longTitle} is starting tomorrow"
                     } : null,
                     runIndex == 0 ? new Alarm {
                         Action      = AlarmAction.Display,
                         Trigger     = new Trigger(TimeSpan.FromMinutes(15)),
-                        Description = $"{gdqEvent.title} will be starting soon"
+                        Description = $"{gdqEvent.longTitle} will be starting soon"
                     } : null
                 }
             }));
