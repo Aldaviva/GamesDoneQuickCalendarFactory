@@ -82,6 +82,11 @@ public class DataTests {
     }
 
     [Fact]
+    public void runnerTest() {
+        _ = new Runner(8, "Ben", new Uri("https://twitch.tv/aldaviva"), "aldaviva", "aldaviva", StreamingPlatform.TWITCH, "he/him");
+    }
+
+    [Fact]
     public void valueHolderStruct() {
         var valueHolder = new ValueHolderStruct<int>();
         valueHolder.value.Should().BeNull();
