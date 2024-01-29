@@ -1,86 +1,62 @@
 ﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Services;
+using NodaTime;
 
 namespace Tests;
 
 public class EventDownloaderTest {
 
-    private readonly FakeHttpMessageHandler httpMessageHandler = A.Fake<FakeHttpMessageHandler>();
-
     private readonly EventDownloader eventDownloader;
 
+    private readonly IGdqClient gdq   = A.Fake<IGdqClient>();
+    private readonly IClock     clock = A.Fake<IClock>();
+
     public EventDownloaderTest() {
-        eventDownloader = new EventDownloader(new HttpClient(httpMessageHandler));
+        eventDownloader = new EventDownloader(gdq, clock);
     }
 
     [Fact]
     public async Task downloadSchedule() {
-        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://gamesdonequick.com/schedule"))).Returns(
-            new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://gamesdonequick.com/schedule/46") });
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", new DateTimeOffset(2024, 1, 14, 11, 30, 0, TimeSpan.FromHours(-5)), "US/Eastern", false);
+        A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
-        await using Stream eventStream = File.OpenRead("Data/event.json");
-        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46"))).Returns(
-            new HttpResponseMessage { Content = new StreamContent(eventStream) });
+        A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 14, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
 
-        await using Stream runsStream = File.OpenRead("Data/runs.json");
-        A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://gamesdonequick.com/tracker/api/v2/events/46/runs"))).Returns(
-            new HttpResponseMessage { Content = new StreamContent(runsStream) });
-
-        Event actual = await eventDownloader.downloadSchedule();
-
-        actual.longTitle.Should().Be("Awesome Games Done Quick 2024");
-
-        actual.runs.Should().HaveCount(140);
-
-        actual.runs.ElementAt(0).Should().BeEquivalentTo(new GameRun(
-            DateTimeOffset.Parse("2024-01-14T11:30:00-05:00"),
-            TimeSpan.FromMinutes(42),
-            "AGDQ 2024 Pre-Show",
-            "Pre-Show — GDQ",
-            new[] { "Interview Crew" },
-            Enumerable.Empty<string>(),
-            Enumerable.Empty<string>(),
-            TimeSpan.Zero));
-
-        actual.runs.ElementAt(1).Should().BeEquivalentTo(new GameRun(
-            DateTimeOffset.Parse("2024-01-14T12:12:00-05:00"),
-            TimeSpan.FromMinutes(36),
-            "TUNIC",
-            "Any% Unrestricted — PC",
+        GameRun tunic = new(new LocalDateTime(2024, 1, 14, 12, 12, 0).WithOffset(Offset.FromHours(-5)),
+            Duration.FromMinutes(36),
+            "TUNIC", "Any% Unrestricted — PC",
             new[] { "Radicoon" },
             new[] { "kevinregamey", "silentdestroyer" },
-            new[] { "AttyJoe" },
-            TimeSpan.Parse("0:14:18")));
+            new[] { "AttyJoe" });
+        A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
 
-        actual.runs.ElementAt(2).Should().BeEquivalentTo(new GameRun(
-            DateTimeOffset.Parse("2024-01-14T12:48:00-05:00"),
-            TimeSpan.FromMinutes(33),
-            "Super Monkey Ball",
-            "Master — Wii",
-            new[] { "Helix" },
-            new[] { "limy", "PeasSMB" },
-            new[] { "AttyJoe" },
-            TimeSpan.Parse("0:13:44")));
+        Event? actual = await eventDownloader.downloadSchedule();
 
-        actual.runs.ElementAt(3).Should().BeEquivalentTo(new GameRun(
-            DateTimeOffset.Parse("2024-01-14T13:21:00-05:00"),
-            TimeSpan.Parse("1:13:00"),
-            "Donkey Kong Country",
-            "101% — SNES",
-            new[] { "Tonkotsu" },
-            new[] { "Glan", "V0oid" },
-            new[] { "AttyJoe" },
-            TimeSpan.Parse("0:19:33")));
+        actual.Should().NotBeNull();
+        actual!.shortTitle.Should().Be("AGDQ2024");
+        actual.longTitle.Should().Be("Awesome Games Done Quick 2024");
+        actual.runs.Should().Equal(tunic);
+    }
 
-        actual.runs.Last().Should().BeEquivalentTo(new GameRun(
-            DateTimeOffset.Parse("2024-01-21T00:00:00-05:00"),
-            TimeSpan.FromMinutes(20),
-            "Finale!",
-            "The End% — Live",
-            new[] { "Tech Crew" },
-            Enumerable.Empty<string>(),
-            Enumerable.Empty<string>(),
-            TimeSpan.Zero));
+    [Fact]
+    public async Task downloadScheduleEmpty() {
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", new DateTimeOffset(2024, 1, 14, 11, 30, 0, TimeSpan.FromHours(-5)), "US/Eastern", false);
+        A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
+
+        A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 28, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
+
+        GameRun tunic = new(new LocalDateTime(2024, 1, 14, 12, 12, 0).WithOffset(Offset.FromHours(-5)),
+            Duration.FromMinutes(36),
+            "TUNIC", "Any% Unrestricted — PC",
+            new[] { "Radicoon" },
+            new[] { "kevinregamey", "silentdestroyer" },
+            new[] { "AttyJoe" });
+        A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
+
+        Event? actual = await eventDownloader.downloadSchedule();
+
+        actual.Should().BeNull();
     }
 
 }

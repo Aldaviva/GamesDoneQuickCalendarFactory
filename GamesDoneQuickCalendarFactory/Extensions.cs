@@ -1,16 +1,16 @@
 ﻿using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
-using NodaTime.Extensions;
+using NodaTime;
 using System.Text;
 
 namespace GamesDoneQuickCalendarFactory;
 
 public static class Extensions {
 
-    public static IDateTime toIDateTime(this DateTimeOffset dateTimeOffset) => new CalDateTime(dateTimeOffset.DateTime, dateTimeOffset.ToZonedDateTime().Zone.Id);
+    public static IDateTime toIDateTimeUtc(this OffsetDateTime input) => new CalDateTime(input.ToInstant().ToDateTimeUtc(), DateTimeZone.Utc.Id);
 
     public static string joinHumanized(this IEnumerable<object> enumerable, string comma = ",", string conjunction = "and", bool oxfordComma = true) {
-        List<object> elements = enumerable.ToList();
+        List<object> elements = enumerable.ToList(); // TODO this could be made single-pass/streaming by looking two elements ahead instead of one, I think
 
         switch (elements.Count) {
             case 0:

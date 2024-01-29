@@ -3,6 +3,8 @@ using GamesDoneQuickCalendarFactory.Services;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Logging.Abstractions;
+using NodaTime;
+using NodaTime.Text;
 
 namespace Tests;
 
@@ -19,54 +21,49 @@ public class CalendarGeneratorTest {
     public async Task generateCalendar() {
         Event @event = new("Awesome Games Done Quick 2024", "AGDQ2024", new[] {
             new GameRun(
-                DateTimeOffset.Parse("2024-01-14T11:30:00-05:00"),
-                TimeSpan.FromMinutes(42),
+                OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T11:30:00-05:00").GetValueOrThrow(),
+                Duration.FromMinutes(42),
                 "AGDQ 2024 Pre-Show",
                 "Pre-Show — GDQ",
                 new[] { "Interview Crew" },
                 Enumerable.Empty<string>(),
-                Enumerable.Empty<string>(),
-                TimeSpan.Zero),
+                Enumerable.Empty<string>()),
 
             new GameRun(
-                DateTimeOffset.Parse("2024-01-14T12:12:00-05:00"),
-                TimeSpan.FromMinutes(36),
+                OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
+                Duration.FromMinutes(36),
                 "TUNIC",
                 "Any% Unrestricted — PC",
                 new[] { "Radicoon" },
                 new[] { "kevinregamey", "silentdestroyer" },
-                new[] { "AttyJoe" },
-                TimeSpan.Parse("0:14:18")),
+                new[] { "AttyJoe" }),
 
             new GameRun(
-                DateTimeOffset.Parse("2024-01-14T12:48:00-05:00"),
-                TimeSpan.FromMinutes(33),
+                OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
+                Duration.FromMinutes(33),
                 "Super Monkey Ball",
                 "Master — Wii",
                 new[] { "Helix" },
                 new[] { "limy", "PeasSMB" },
-                new[] { "AttyJoe" },
-                TimeSpan.Parse("0:13:44")),
+                new[] { "AttyJoe" }),
 
             new GameRun(
-                DateTimeOffset.Parse("2024-01-14T13:21:00-05:00"),
-                TimeSpan.Parse("1:13:00"),
+                OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
+                Duration.FromHours(1) + Duration.FromMinutes(13),
                 "Donkey Kong Country",
                 "101% — SNES",
                 new[] { "Tonkotsu" },
                 new[] { "Glan", "V0oid" },
-                new[] { "AttyJoe" },
-                TimeSpan.Parse("0:19:33")),
+                new[] { "AttyJoe" }),
 
             new GameRun(
-                DateTimeOffset.Parse("2024-01-21T00:00:00-05:00"),
-                TimeSpan.FromMinutes(20),
+                OffsetDateTimePattern.GeneralIso.Parse("2024-01-21T00:00:00-05:00").GetValueOrThrow(),
+                Duration.FromMinutes(20),
                 "Finale!",
                 "The End% — Live",
                 new[] { "Tech Crew" },
                 Enumerable.Empty<string>(),
-                Enumerable.Empty<string>(),
-                TimeSpan.Zero)
+                Enumerable.Empty<string>())
         });
 
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
@@ -76,10 +73,10 @@ public class CalendarGeneratorTest {
         actual.Events.Should().HaveCount(5);
 
         CalendarEvent actualEvent = actual.Events[0];
-        actualEvent.Start.Should().Be(DateTimeOffset.Parse("2024-01-14T11:30:00-05:00").ToUniversalTime().toIDateTime());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T11:30:00-05:00").GetValueOrThrow().toIDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(42));
         actualEvent.Summary.Should().Be("AGDQ 2024 Pre-Show");
-        actualEvent.Uid.Should().Be("aldaviva.com/Awesome Games Done Quick 2024/AGDQ 2024 Pre-Show");
+        actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/AGDQ 2024 Pre-Show");
         actualEvent.Description.Should().Be("Pre-Show — GDQ\nRun by Interview Crew");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -99,10 +96,10 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms[2].Trigger.IsRelative.Should().BeTrue();
 
         actualEvent = actual.Events[1];
-        actualEvent.Start.Should().Be(DateTimeOffset.Parse("2024-01-14T12:12:00-05:00").ToUniversalTime().toIDateTime());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().toIDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(36));
         actualEvent.Summary.Should().Be("TUNIC");
-        actualEvent.Uid.Should().Be("aldaviva.com/Awesome Games Done Quick 2024/TUNIC");
+        actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/TUNIC");
         actualEvent.Description.Should().Be("Any% Unrestricted — PC\nRun by Radicoon\nCommentary by kevinregamey and silentdestroyer\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -110,10 +107,10 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[2];
-        actualEvent.Start.Should().Be(DateTimeOffset.Parse("2024-01-14T12:48:00-05:00").ToUniversalTime().toIDateTime());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().toIDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(33));
         actualEvent.Summary.Should().Be("Super Monkey Ball");
-        actualEvent.Uid.Should().Be("aldaviva.com/Awesome Games Done Quick 2024/Super Monkey Ball");
+        actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/Super Monkey Ball");
         actualEvent.Description.Should().Be("Master — Wii\nRun by Helix\nCommentary by limy and PeasSMB\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -121,10 +118,10 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[3];
-        actualEvent.Start.Should().Be(DateTimeOffset.Parse("2024-01-14T13:21:00-05:00").ToUniversalTime().toIDateTime());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().toIDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("1:13:00"));
         actualEvent.Summary.Should().Be("Donkey Kong Country");
-        actualEvent.Uid.Should().Be("aldaviva.com/Awesome Games Done Quick 2024/Donkey Kong Country");
+        actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/Donkey Kong Country");
         actualEvent.Description.Should().Be("101% — SNES\nRun by Tonkotsu\nCommentary by Glan and V0oid\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -132,10 +129,10 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[4];
-        actualEvent.Start.Should().Be(DateTimeOffset.Parse("2024-01-21T00:00:00-05:00").ToUniversalTime().toIDateTime());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-21T00:00:00-05:00").GetValueOrThrow().toIDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("0:20:00"));
         actualEvent.Summary.Should().Be("Finale!");
-        actualEvent.Uid.Should().Be("aldaviva.com/Awesome Games Done Quick 2024/Finale!");
+        actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/Finale!");
         actualEvent.Description.Should().Be("The End% — Live\nRun by Tech Crew");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -148,33 +145,33 @@ public class CalendarGeneratorTest {
         Event @event = new("test", "t", new[] {
             // Sleep event
             new GameRun(
-                DateTimeOffset.Now,
-                new TimeSpan(12, 53, 0),
+                SystemClock.Instance.GetCurrentInstant().WithOffset(Offset.Zero),
+                Duration.FromHours(12) + Duration.FromMinutes(53),
                 "Sleep",
                 "Pillow Fight Boss Rush — GDQ Studio",
                 new[] { "Faith" },
                 Enumerable.Empty<string>(),
-                new[] { "Velocity" }, null),
+                new[] { "Velocity" }),
 
             // Long event
             new GameRun(
-                DateTimeOffset.Now,
-                new TimeSpan(14, 48, 0),
+                SystemClock.Instance.GetCurrentInstant().WithOffset(Offset.Zero),
+                Duration.FromHours(14) + Duration.FromMinutes(48),
                 "Day 1 Intermission",
                 "Intermission — Offline",
                 new[] { "Twitchcon" },
                 Enumerable.Empty<string>(),
-                Enumerable.Empty<string>(), null),
+                Enumerable.Empty<string>()),
 
             // Short sleep
             new GameRun(
-                DateTimeOffset.Now,
-                TimeSpan.FromSeconds(15),
+                SystemClock.Instance.GetCurrentInstant().WithOffset(Offset.Zero),
+                Duration.FromSeconds(15),
                 "Sleep",
                 "get-some-rest-too%— GDQ Studio",
                 new[] { "GDQ Studio" },
                 Enumerable.Empty<string>(),
-                new[] { "Studio Workers" }, null)
+                new[] { "Studio Workers" })
         });
 
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);

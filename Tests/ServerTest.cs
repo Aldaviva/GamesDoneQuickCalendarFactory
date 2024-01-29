@@ -16,6 +16,9 @@ namespace Tests;
 
 public class ServerTest: IDisposable {
 
+    private const string EXPECTED_LOGO_SVG = // language=xml
+        """<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 62.2 54.3"><style>.s{fill:#fff}</style><path d="M62.2 19.6H49c-2.5 0-4.9.7-6.9 2.1l-7.5 5.4 6.1 7.6h13.5c2 0 3.9-1.3 4.4-3.1l3.6-12zM16.4 49.2l-1.3 5.1h12.2c4.8 0 4.7-2.9 5.4-4.8l3.8-12.8-14.1-17.1H8c-2 0-3.9 1.3-4.4 3.1L0 34.7h7.8c8.8 0 16.5-2 19.3-4.4-1.3 4.1-7.9 7.7-7.9 7.7l-2.8 11.2zM47.4 0H34.5c-2 0-3.8 1.3-4.3 3.2l-4 13.5 5.7 6.9L42.6 16l1.2-4 3.6-12z" class="s"/></svg>""";
+
     private readonly ICalendarGenerator             calendarGenerator = A.Fake<ICalendarGenerator>();
     private readonly IEventDownloader               eventDownloader   = A.Fake<IEventDownloader>();
     private readonly HttpClient                     client;
@@ -93,18 +96,31 @@ public class ServerTest: IDisposable {
 
     [Fact]
     public async Task badgeJson() {
-        const string EXPECTED_LOGO_SVG = // language=xml
-            """<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 62.2 54.3"><style>.s{fill:#fff}</style><path d="M62.2 19.6H49c-2.5 0-4.9.7-6.9 2.1l-7.5 5.4 6.1 7.6h13.5c2 0 3.9-1.3 4.4-3.1l3.6-12zM16.4 49.2l-1.3 5.1h12.2c4.8 0 4.7-2.9 5.4-4.8l3.8-12.8-14.1-17.1H8c-2 0-3.9 1.3-4.4 3.1L0 34.7h7.8c8.8 0 16.5-2 19.3-4.4-1.3 4.1-7.9 7.7-7.9 7.7l-2.8 11.2zM47.4 0H34.5c-2 0-3.8 1.3-4.3 3.2l-4 13.5 5.7 6.9L42.6 16l1.2-4 3.6-12z" class="s"/></svg>""";
-
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns(new Event("Awesome Games Done Quick 2024", "AGDQ2024", new GameRun[145]));
 
         JsonObject? response = await client.GetFromJsonAsync<JsonObject>("/badge.json");
 
         response.Should().NotBeNull();
         response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
-        response!["label"]!.GetValue<string>().Should().Be("AGDQ2024");
+        response["label"]!.GetValue<string>().Should().Be("AGDQ 2024");
         response["message"]!.GetValue<string>().Should().Be("145 runs");
         response["color"]!.GetValue<string>().Should().Be("success");
+        response["isError"]!.GetValue<bool>().Should().BeFalse();
+        response["logoSvg"]!.GetValue<string>().Should().Be(EXPECTED_LOGO_SVG);
+        response.Should().HaveCount(6);
+    }
+
+    [Fact]
+    public async Task badgeJsonEmpty() {
+        A.CallTo(() => eventDownloader.downloadSchedule()).Returns((Event?) null);
+
+        JsonObject? response = await client.GetFromJsonAsync<JsonObject>("/badge.json");
+
+        response.Should().NotBeNull();
+        response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
+        response["label"]!.GetValue<string>().Should().Be("GDQ");
+        response["message"]!.GetValue<string>().Should().Be("no event now");
+        response["color"]!.GetValue<string>().Should().Be("important");
         response["isError"]!.GetValue<bool>().Should().BeFalse();
         response["logoSvg"]!.GetValue<string>().Should().Be(EXPECTED_LOGO_SVG);
         response.Should().HaveCount(6);

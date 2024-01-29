@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Clone
-        uses: actions/checkout@v3.5.1
+        uses: actions/checkout@v3
           
       - name: Initialize test reporting
         uses: testspace-com/setup-testspace@v1
@@ -30,7 +30,7 @@ jobs:
           domain: ${{github.repository_owner}}
       
       - name: Restore
-        run: dotnet restore --runtime ${{ matrix.targetPlatform }} --verbosity normal
+        run: dotnet restore --locked-mode --verbosity normal
 
       - name: Build
         run: dotnet build Tests --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release --no-self-contained
@@ -50,7 +50,7 @@ jobs:
       - name: Upload test report
         run: testspace Tests/TestResults/TestResults.xml
 
-      - name: Upload coverage
+      - name: Upload coverage report
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -60,7 +60,7 @@ jobs:
         run: exit ${{ env.TEST_EXIT_CODE }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ProjectName }}-${{ matrix.targetPlatform }}
           path: |

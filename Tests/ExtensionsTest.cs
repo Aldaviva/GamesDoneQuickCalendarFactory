@@ -1,5 +1,5 @@
-﻿using GamesDoneQuickCalendarFactory;
-using Ical.Net.DataTypes;
+﻿using Ical.Net.DataTypes;
+using NodaTime.Text;
 
 namespace Tests;
 
@@ -7,7 +7,7 @@ public class ExtensionsTest {
 
     [Fact]
     public void toIDateTime() {
-        IDateTime actual = DateTimeOffset.Parse("2023-05-28T16:30:00Z").toIDateTime();
+        IDateTime actual = OffsetDateTimePattern.GeneralIso.Parse("2023-05-28T16:30:00Z").GetValueOrThrow().toIDateTimeUtc();
         actual.Year.Should().Be(2023);
         actual.Month.Should().Be(5);
         actual.Day.Should().Be(28);
