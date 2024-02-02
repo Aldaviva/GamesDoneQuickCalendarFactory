@@ -18,8 +18,8 @@ public record GdqRun(
     string                                                           category,
     string                                                           console,
     IReadOnlyList<Runner>                                            runners,
-    IReadOnlyList<Person>                                            hosts,
-    IReadOnlyList<Person>                                            commentators,
+    IReadOnlyList<GdqPerson>                                         hosts,
+    IReadOnlyList<GdqPerson>                                         commentators,
     [property: JsonPropertyName("starttime")] OffsetDateTime         startTime,
     [property: JsonPropertyName("endtime")]   OffsetDateTime         endTime,
     int                                                              order,
@@ -29,7 +29,7 @@ public record GdqRun(
     [property: JsonPropertyName("video_links")] IReadOnlyList<Video> recordings
 );
 
-public record Person(
+public record GdqPerson(
     int    id,
     string name,
     string pronouns
@@ -46,7 +46,7 @@ public record Runner(
     string                                                     youtube,
     [property: JsonPropertyName("platform")] StreamingPlatform streamingPlatform,
     string                                                     pronouns
-): Person(id, name, pronouns);
+): GdqPerson(id, name, pronouns);
 
 public enum StreamingPlatform {
 

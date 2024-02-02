@@ -7,7 +7,9 @@ public record GameRun(
     Duration            duration,
     string              name,
     string              description,
-    IEnumerable<string> runners,
-    IEnumerable<string> commentators,
-    IEnumerable<string> hosts
+    IEnumerable<Person> runners,
+    IEnumerable<Person> commentators,
+    IEnumerable<Person> hosts
 );
+
+public record Person(int id, string name);

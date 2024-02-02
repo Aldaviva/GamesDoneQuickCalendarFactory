@@ -41,54 +41,63 @@ public class GdqClientTest {
 
         GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", DateTimeOffset.Parse("2024-01-14T11:30:00-05:00"), "US/Eastern", false);
 
-        IReadOnlyList<GameRun> actual = await gdq.getEventRuns(gdqEvent);
+        IList<GameRun> actual = (await gdq.getEventRuns(gdqEvent)).ToList();
 
         actual.Should().HaveCount(140);
 
-        actual[0].Should().BeEquivalentTo(new GameRun(
+        actual.ElementAt(0).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T11:30:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(42),
             "AGDQ 2024 Pre-Show",
             "Pre-Show — GDQ",
-            new[] { "Interview Crew" },
-            Enumerable.Empty<string>(),
-            Enumerable.Empty<string>()));
+            new[] { new Person(1434, "Interview Crew") },
+            Enumerable.Empty<Person>(),
+            Enumerable.Empty<Person>()));
 
-        actual[1].Should().BeEquivalentTo(new GameRun(
+        actual.ElementAt(1).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(36),
             "TUNIC",
             "Any% Unrestricted — PC",
-            new[] { "Radicoon" },
-            new[] { "kevinregamey", "silentdestroyer" },
-            new[] { "AttyJoe" }));
+            new[] { new Person(2042, "Radicoon") },
+            new[] { new Person(307, "kevinregamey"), new Person(306, "silentdestroyer") },
+            new[] { new Person(190, "AttyJoe") }));
 
-        actual[2].Should().BeEquivalentTo(new GameRun(
+        actual.ElementAt(2).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(33),
             "Super Monkey Ball",
             "Master — Wii",
-            new[] { "Helix" },
-            new[] { "limy", "PeasSMB" },
-            new[] { "AttyJoe" }));
+            new[] { new Person(1023, "Helix") },
+            new[] { new Person(308, "limy"), new Person(469, "PeasSMB") },
+            new[] { new Person(190, "AttyJoe") }));
 
-        actual[3].Should().BeEquivalentTo(new GameRun(
+        actual.ElementAt(3).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
             Duration.FromHours(1) + Duration.FromMinutes(13),
             "Donkey Kong Country",
             "101% — SNES",
-            new[] { "Tonkotsu" },
-            new[] { "Glan", "V0oid" },
-            new[] { "AttyJoe" }));
+            new[] { new Person(1240, "Tonkotsu") },
+            new[] { new Person(310, "Glan"), new Person(309, "V0oid") },
+            new[] { new Person(190, "AttyJoe") }));
 
-        actual[139].Should().BeEquivalentTo(new GameRun(
+        actual.ElementAt(138).Should().BeEquivalentTo(new GameRun(
+            OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
+            Duration.FromHours(2) + Duration.FromMinutes(56),
+            "Final Fantasy V Pixel Remaster",
+            "Any% Cutscene Remover — PC",
+            new[] { new Person(432, "Zic3") },
+            new[] { new Person(448, "FoxyJira"), new Person(449, "WoadyB") },
+            new[] { new Person(2, "Prolix") }));
+
+        actual.Last().Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-21T00:00:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(20),
             "Finale!",
             "The End% — Live",
-            new[] { "Tech Crew" },
-            Enumerable.Empty<string>(),
-            Enumerable.Empty<string>()));
+            new[] { new Person(367, "Tech Crew") },
+            Enumerable.Empty<Person>(),
+            Enumerable.Empty<Person>()));
     }
 
 }

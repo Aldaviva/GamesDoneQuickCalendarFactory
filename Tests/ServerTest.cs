@@ -111,6 +111,15 @@ public class ServerTest: IDisposable {
     }
 
     [Fact]
+    public async Task badgeJsonFrameFatales() {
+        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(new Event("Frost Fatales 2024", "FrostFatales2024", new GameRun[145]));
+
+        JsonObject? response = await client.GetFromJsonAsync<JsonObject>("/badge.json");
+
+        response?["label"]?.GetValue<string>().Should().Be("Frost Fatales 2024");
+    }
+
+    [Fact]
     public async Task badgeJsonEmpty() {
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns((Event?) null);
 

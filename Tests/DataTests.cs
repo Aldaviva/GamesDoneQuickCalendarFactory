@@ -63,14 +63,14 @@ public class DataTests {
         runner.pronouns.Should().BeEmpty();
 
         run.hosts.Should().HaveCount(1);
-        Person host = run.hosts[0];
+        GdqPerson host = run.hosts[0];
         host.Should().NotBeNull();
         host.id.Should().Be(190);
         host.name.Should().Be("AttyJoe");
         host.pronouns.Should().BeEmpty();
 
         run.commentators.Should().HaveCount(2);
-        Person commentator = run.commentators[0];
+        GdqPerson commentator = run.commentators[0];
         commentator.id.Should().Be(307);
         commentator.name.Should().Be("kevinregamey");
         commentator.pronouns.Should().BeEmpty();
@@ -79,11 +79,6 @@ public class DataTests {
         commentator.id.Should().Be(306);
         commentator.name.Should().Be("silentdestroyer");
         commentator.pronouns.Should().BeEmpty();
-    }
-
-    [Fact]
-    public void runnerTest() {
-        _ = new Runner(8, "Ben", new Uri("https://twitch.tv/aldaviva"), "aldaviva", "aldaviva", StreamingPlatform.TWITCH, "he/him");
     }
 
     [Fact]

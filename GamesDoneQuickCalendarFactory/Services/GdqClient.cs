@@ -17,9 +17,9 @@ public interface IGdqClient {
 
     Task<GdqEvent> getCurrentEvent();
 
-    Task<IReadOnlyList<GameRun>> getEventRuns(GdqEvent gdqEvent);
+    Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent);
 
-    Task<IReadOnlyList<GameRun>> getEventRuns(int eventId);
+    Task<IEnumerable<GameRun>> getEventRuns(int eventId);
 
 }
 
@@ -44,36 +44,35 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
     }
 
     public async Task<GdqEvent> getEvent(int eventId) {
-        Uri      eventLocation = EVENTS_API_LOCATION.WithPath(eventId.ToString());
-        GdqEvent eventResponse = (await httpClient.GetFromJsonAsync<GdqEvent>(eventLocation, JSON_SERIALIZER_OPTIONS))!;
-        return eventResponse;
+        Uri eventUrl = EVENTS_API_LOCATION.WithPath(eventId.ToString());
+        return (await httpClient.GetFromJsonAsync<GdqEvent>(eventUrl, JSON_SERIALIZER_OPTIONS))!;
     }
 
     public async Task<GdqEvent> getCurrentEvent() => await getEvent(await getCurrentEventId());
 
-    public Task<IReadOnlyList<GameRun>> getEventRuns(GdqEvent gdqEvent) => getEventRuns(gdqEvent.id);
+    public Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent) => getEventRuns(gdqEvent.id);
 
-    public async Task<IReadOnlyList<GameRun>> getEventRuns(int eventId) {
+    public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         IList<GameRun>? runs         = null;
-        Uri             runsUri      = EVENTS_API_LOCATION.WithPath(eventId.ToString()).WithPath("runs");
+        Uri             runsUrl      = EVENTS_API_LOCATION.WithPath(eventId.ToString()).WithPath("runs");
         var             resultsCount = new ValueHolderStruct<int>();
 
-        await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUri, resultsCount)) {
+        await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
             runs ??= new List<GameRun>(resultsCount.value!.Value);
             runs.Add(new GameRun(
                 start: run.startTime,
                 duration: run.endTime - run.startTime,
                 name: run.gameName,
                 description: $"{run.category} \u2014 {run.console}",
-                runners: run.runners.Select(getName),
-                commentators: run.commentators.Select(getName),
-                hosts: run.hosts.Select(getName)));
+                runners: run.runners.Select(getPerson),
+                commentators: run.commentators.Select(getPerson),
+                hosts: run.hosts.Select(getPerson)));
         }
 
-        return (runs ?? new ReadOnlyCollectionBuilder<GameRun>()).AsReadOnly();
+        return runs?.AsReadOnly() ?? Enumerable.Empty<GameRun>();
     }
 
-    private static string getName(Person person) => person.name;
+    private static Person getPerson(GdqPerson person) => new(person.id, person.name);
 
     private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = default, [EnumeratorCancellation] CancellationToken c = default) {
         for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null;) {
