@@ -16,7 +16,7 @@ jobs:
           - os: ubuntu-latest
             targetPlatform: linux-x64
           - os: windows-latest
-            targetPlatform: win10-x64
+            targetPlatform: win-x64
 
     runs-on: ${{ matrix.os }}
 
@@ -64,10 +64,10 @@ jobs:
         with:
           name: ${{ env.ProjectName }}-${{ matrix.targetPlatform }}
           path: |
-            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}.exe
-            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}
-            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/appsettings.json
-            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/web.config
-            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/Install service.ps1
-            ${{ env.ProjectName }}/bin/Release/net7.0/${{ matrix.targetPlatform }}/publish/gamesdonequickcalendarfactory.service
+            ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}.exe
+            ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}
+            ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/appsettings.json
+            ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/web.config
+            ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/Install service.ps1
+            ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/gamesdonequickcalendarfactory.service
           if-no-files-found: error

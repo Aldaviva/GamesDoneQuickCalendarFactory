@@ -1,12 +1,12 @@
 {
   "version": 1,
   "dependencies": {
-    "net7.0": {
+    "net8.0": {
       "Bom.Squad": {
         "type": "Direct",
-        "requested": "[0.2.1, )",
-        "resolved": "0.2.1",
-        "contentHash": "ImW3bGOADpx+rMMgsW1+TS3+QyGwJRZUKTNpkSJKfdOCUjfF6R50BHlusu8MvuWl2ME4P49CgV7cCs86n6JooQ=="
+        "requested": "[0.3.0, )",
+        "resolved": "0.3.0",
+        "contentHash": "XzhQ6cpYMDACcRosaHBO8P8SGAJ2GBC/9Hcb0WUUe9UTUCttr3PrIWf7r+bg6sDCu3/gPWPgh8lfHMTXAi/v3A=="
       },
       "Ical.Net": {
         "type": "Direct",
@@ -378,7 +378,7 @@
         }
       }
     },
-    "net7.0/linux-x64": {
+    "net8.0/linux-x64": {
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
         "resolved": "8.0.0",
@@ -398,7 +398,7 @@
         "contentHash": "yev/k9GHAEGx2Rg3/tU6MQh4HGBXJs70y7j1LaM1i/ER9po+6nnQ6RRqTJn1E7Xu0fbIFK80Nh5EoODxrbxwBQ=="
       }
     },
-    "net7.0/win10-x64": {
+    "net8.0/win-x64": {
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
         "resolved": "8.0.0",

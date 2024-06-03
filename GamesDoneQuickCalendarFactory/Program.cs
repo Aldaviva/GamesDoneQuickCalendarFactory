@@ -20,6 +20,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
     .UseWindowsService()
     .UseSystemd();
+
 builder.Services
     .AddOutputCache()
     .AddResponseCaching()

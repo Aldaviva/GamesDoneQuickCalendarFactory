@@ -1,41 +1,54 @@
 ﻿using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using NodaTime;
+using System.Reflection;
 using System.Text;
 
 namespace GamesDoneQuickCalendarFactory;
 
 public static class Extensions {
 
+    private static readonly Type       ENCODINGSTACK_TYPE = typeof(SerializerBase).Assembly.GetType("Ical.Net.Serialization.EncodingStack")!;
+    private static readonly MethodInfo ENCODINGSTACK_PUSH = ENCODINGSTACK_TYPE.GetMethod("Push", [typeof(Encoding)])!;
+    private static readonly MethodInfo ENCODINGSTACK_POP  = ENCODINGSTACK_TYPE.GetMethod("Pop")!;
+
     public static IDateTime toIDateTimeUtc(this OffsetDateTime input) => new CalDateTime(input.ToInstant().ToDateTimeUtc(), DateTimeZone.Utc.Id);
 
     public static string joinHumanized(this IEnumerable<object> enumerable, string comma = ",", string conjunction = "and", bool oxfordComma = true) {
-        List<object> elements = enumerable.ToList(); // TODO this could be made single-pass/streaming by looking two elements ahead instead of one, I think
+        using IEnumerator<object> enumerator = enumerable.GetEnumerator();
 
-        switch (elements.Count) {
-            case 0:
-                return string.Empty;
-            case 1:
-                return elements[0].ToString() ?? string.Empty;
-            case 2:
-                return $"{elements[0]} {conjunction} {elements[1]}";
-            default:
-                StringBuilder stringBuilder = new();
-                for (int index = 0; index < elements.Count; index++) {
-                    bool isLast = index == elements.Count - 1;
-                    if (index > 0 && (!isLast || oxfordComma)) {
-                        stringBuilder.Append(comma).Append(' ');
-                    }
-
-                    if (isLast) {
-                        stringBuilder.Append(conjunction).Append(' ');
-                    }
-
-                    stringBuilder.Append(elements[index]);
-                }
-
-                return stringBuilder.ToString();
+        if (!enumerator.MoveNext()) {
+            return string.Empty;
         }
+
+        object first = enumerator.Current;
+        if (!enumerator.MoveNext()) {
+            return first.ToString() ?? string.Empty;
+        }
+
+        object second = enumerator.Current;
+        if (!enumerator.MoveNext()) {
+            return $"{first} {conjunction} {second}";
+        }
+
+        object        third         = enumerator.Current;
+        const char    SPACE         = ' ';
+        StringBuilder stringBuilder = new StringBuilder().Append(first).Append(comma).Append(SPACE);
+
+        while (enumerator.MoveNext()) {
+            first  = second;
+            second = third;
+            third  = enumerator.Current;
+            stringBuilder.Append(first).Append(comma).Append(SPACE);
+        }
+
+        stringBuilder.Append(second);
+        if (oxfordComma) {
+            stringBuilder.Append(comma);
+        }
+        stringBuilder.Append(SPACE).Append(conjunction).Append(SPACE).Append(third);
+
+        return stringBuilder.ToString();
     }
 
     /// <summary>
@@ -46,12 +59,17 @@ public static class Extensions {
     /// webappBuilder.Services.Configure&lt;IISServerOptions&gt;(options =&gt; options.AllowSynchronousIO = true);
     /// </code>
     /// </summary>
-    public static async Task serializeAsync(this SerializerBase serializerBase, object obj, Stream stream, Encoding encoding) {
-        await using StreamWriter streamWriter = new(stream, encoding, 1024, true);
+    public static async Task serializeAsync(this SerializerBase serializer, object dataToSerialize, Stream destinationStream, Encoding destinationEncoding) {
+        await using StreamWriter streamWriter = new(destinationStream, destinationEncoding, 1024, true);
 
-        serializerBase.SerializationContext.Push(obj);
-        await streamWriter.WriteAsync(serializerBase.SerializeToString(obj));
-        serializerBase.SerializationContext.Pop();
+        serializer.SerializationContext.Push(dataToSerialize);
+        object encodingStack = serializer.GetService(ENCODINGSTACK_TYPE);
+        ENCODINGSTACK_PUSH.Invoke(encodingStack, [destinationEncoding]);
+
+        await streamWriter.WriteAsync(serializer.SerializeToString(dataToSerialize));
+
+        ENCODINGSTACK_POP.Invoke(encodingStack, []);
+        serializer.SerializationContext.Pop();
     }
 
 }

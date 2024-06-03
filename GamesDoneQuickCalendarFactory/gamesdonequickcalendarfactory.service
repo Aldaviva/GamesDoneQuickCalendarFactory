@@ -15,6 +15,7 @@ Description=Games Done Quick Calendar Factory
 Type=notify
 ExecStart=/usr/local/bin/GamesDoneQuickCalendarFactory
 WorkingDirectory=/usr/local/bin/
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
