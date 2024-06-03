@@ -19,43 +19,43 @@ public class CalendarGeneratorTest {
 
     [Fact]
     public async Task generateCalendar() {
-        Event @event = new("Awesome Games Done Quick 2024", "AGDQ2024", new[] {
+        Event @event = new("Awesome Games Done Quick 2024", "AGDQ2024", [
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
                 Duration.FromMinutes(36),
                 "TUNIC",
                 "Any% Unrestricted — PC",
-                new[] { new Person(1, "Radicoon") },
-                new[] { new Person(2, "kevinregamey"), new Person(3, "silentdestroyer") },
-                new[] { new Person(4, "AttyJoe") }),
+                [new Person(1, "Radicoon")],
+                [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
+                [new Person(4, "AttyJoe")]),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
                 Duration.FromMinutes(33),
                 "Super Monkey Ball",
                 "Master — Wii",
-                new[] { new Person(1, "Helix") },
-                new[] { new Person(2, "limy"), new Person(3, "PeasSMB") },
-                new[] { new Person(4, "AttyJoe") }),
+                [new Person(1, "Helix")],
+                [new Person(2, "limy"), new Person(3, "PeasSMB")],
+                [new Person(4, "AttyJoe")]),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
                 Duration.FromHours(1) + Duration.FromMinutes(13),
                 "Donkey Kong Country",
                 "101% — SNES",
-                new[] { new Person(1, "Tonkotsu") },
-                new[] { new Person(2, "Glan"), new Person(3, "V0oid") },
-                new[] { new Person(4, "AttyJoe") }),
+                [new Person(1, "Tonkotsu")],
+                [new Person(2, "Glan"), new Person(3, "V0oid")],
+                [new Person(4, "AttyJoe")]),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
                 Duration.FromHours(2) + Duration.FromMinutes(56),
                 "Final Fantasy V Pixel Remaster",
                 "Any% Cutscene Remover — PC",
-                new[] { new Person(1, "Zic3") },
-                new[] { new Person(2, "FoxyJira"), new Person(3, "WoadyB") },
-                new[] { new Person(4, "Prolix") })
-        });
+                [new Person(1, "Zic3")],
+                [new Person(2, "FoxyJira"), new Person(3, "WoadyB")],
+                [new Person(4, "Prolix")])
+        ]);
 
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
 
@@ -64,8 +64,6 @@ public class CalendarGeneratorTest {
         actual.Events.Should().HaveCount(4);
 
         CalendarEvent actualEvent = actual.Events[0];
-
-        actualEvent = actual.Events[0];
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().toIDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(36));
         actualEvent.Summary.Should().Be("TUNIC");
@@ -119,6 +117,43 @@ public class CalendarGeneratorTest {
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
         actualEvent.Alarms.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task ignoreAnnoyingPeople() {
+        Event @event = new("Test", "Test", [
+            new GameRun(
+                new OffsetDateTime(),
+                Duration.FromMinutes(30),
+                "Annoying runner",
+                "",
+                [new Person(60, "spikevegeta")],
+                [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
+                [new Person(4, "AttyJoe")]),
+
+            new GameRun(
+                new OffsetDateTime(),
+                Duration.FromMinutes(30),
+                "Annoying commentator",
+                "",
+                [new Person(1, "Radicoon")],
+                [new Person(60, "spikevegeta")],
+                [new Person(4, "AttyJoe")]),
+
+            new GameRun(
+                new OffsetDateTime(),
+                Duration.FromMinutes(30),
+                "Annoying host",
+                "",
+                [new Person(1, "Radicoon")],
+                [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
+                [new Person(60, "spikevegeta")])
+        ]);
+
+        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
+
+        (await calendarGenerator.generateCalendar(true)).Events.Should().HaveCount(3);
+        (await calendarGenerator.generateCalendar()).Events.Should().BeEmpty();
     }
 
 }

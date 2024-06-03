@@ -25,9 +25,8 @@ public interface IGdqClient {
 
 public class GdqClient(HttpClient httpClient): IGdqClient {
 
-    private static readonly Uri BASE_URL            = new("https://gamesdonequick.com/");
-    private static readonly Uri SCHEDULE_URL        = BASE_URL.WithPath("schedule");
-    private static readonly Uri EVENTS_API_LOCATION = BASE_URL.WithPath("tracker/api/v2/events");
+    private static readonly Uri SCHEDULE_URL   = new("https://gamesdonequick.com/schedule");
+    private static readonly Uri EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
 
     internal static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() {
         Converters = {
@@ -44,7 +43,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
     }
 
     public async Task<GdqEvent> getEvent(int eventId) {
-        Uri eventUrl = EVENTS_API_LOCATION.WithPath(eventId.ToString());
+        Uri eventUrl = EVENTS_API_URL.WithPath(eventId.ToString());
         return (await httpClient.GetFromJsonAsync<GdqEvent>(eventUrl, JSON_SERIALIZER_OPTIONS))!;
     }
 
@@ -54,7 +53,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         IList<GameRun>? runs         = null;
-        Uri             runsUrl      = EVENTS_API_LOCATION.WithPath(eventId.ToString()).WithPath("runs");
+        Uri             runsUrl      = EVENTS_API_URL.WithPath(eventId.ToString()).WithPath("runs");
         var             resultsCount = new ValueHolderStruct<int>();
 
         await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
@@ -75,9 +74,9 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
     private static Person getPerson(GdqPerson person) => new(person.id, person.name);
 
     private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = default, [EnumeratorCancellation] CancellationToken c = default) {
-        for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null;) {
-            JsonObject? page = await httpClient.GetFromJsonAsync<JsonObject>(nextPageToDownload, JSON_SERIALIZER_OPTIONS, c);
-            nextPageToDownload = page?["next"]?.GetValue<Uri?>();
+        JsonObject? page;
+        for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page?["next"]?.GetValue<Uri?>()) {
+            page = await httpClient.GetFromJsonAsync<JsonObject>(nextPageToDownload, JSON_SERIALIZER_OPTIONS, c);
 
             if (page != null) {
                 if (resultsCount is { value: null }) {

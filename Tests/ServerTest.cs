@@ -50,7 +50,7 @@ public class ServerTest: IDisposable {
         calendarEvent.DtStamp     = new CalDateTime("20230416T082040Z");
         calendarEvent.Uid         = "c9e08bcf-773a-4291-b0a4-dd7459ed13ba";
 
-        A.CallTo(() => calendarGenerator.generateCalendar()).Returns(calendar);
+        A.CallTo(() => calendarGenerator.generateCalendar(false)).Returns(calendar);
 
         using HttpResponseMessage response = await client.GetAsync("/");
 
@@ -81,7 +81,7 @@ public class ServerTest: IDisposable {
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        A.CallTo(() => calendarGenerator.generateCalendar()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => calendarGenerator.generateCalendar(false)).MustHaveHappenedOnceExactly();
 
     }
 
@@ -90,7 +90,7 @@ public class ServerTest: IDisposable {
         using HttpResponseMessage response = await client.GetAsync("/");
 
         byte[] responseBytes = await response.Content.ReadAsByteArrayAsync();
-        responseBytes[..3].Should().NotEqual(new byte[] { 0xEF, 0xBB, 0xBF },
+        responseBytes[..3].Should().NotEqual([0xEF, 0xBB, 0xBF],
             "ICS response bytes should not start with a UTF-8 BOM, since Google Calendar's URL subscription client cannot parse them and throws an error");
     }
 
