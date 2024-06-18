@@ -102,7 +102,7 @@ public class ServerTest: IDisposable {
 
         response.Should().NotBeNull();
         response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
-        response["label"]!.GetValue<string>().Should().Be("AGDQ 2024");
+        response["label"]!.GetValue<string>().Should().Be("agdq 2024");
         response["message"]!.GetValue<string>().Should().Be("145 runs");
         response["color"]!.GetValue<string>().Should().Be("success");
         response["isError"]!.GetValue<bool>().Should().BeFalse();
@@ -116,7 +116,7 @@ public class ServerTest: IDisposable {
 
         JsonObject? response = await client.GetFromJsonAsync<JsonObject>("/badge.json");
 
-        response?["label"]?.GetValue<string>().Should().Be("Frost Fatales 2024");
+        response?["label"]?.GetValue<string>().Should().Be("frost fatales 2024");
     }
 
     [Fact]
@@ -127,7 +127,7 @@ public class ServerTest: IDisposable {
 
         response.Should().NotBeNull();
         response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
-        response["label"]!.GetValue<string>().Should().Be("GDQ");
+        response["label"]!.GetValue<string>().Should().Be("gdq");
         response["message"]!.GetValue<string>().Should().Be("no event now");
         response["color"]!.GetValue<string>().Should().Be("important");
         response["isError"]!.GetValue<bool>().Should().BeFalse();

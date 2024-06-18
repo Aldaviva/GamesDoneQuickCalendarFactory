@@ -51,10 +51,10 @@ webApp.MapGet("/", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60, PolicyNa
 webApp.MapGet("/badge.json", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60)] async (IEventDownloader eventDownloader) =>
     await eventDownloader.downloadSchedule() is { } schedule
         ? new ShieldsBadgeResponse(
-            label: Regex.Replace(schedule.shortTitle, @"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])", " "), // add spaces to abbreviation
+            label: Regex.Replace(schedule.shortTitle, @"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])", " ").ToLower(), // add spaces to abbreviation
             message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",
             color: "success",
             logoSvg: Resources.gdqDpadBadgeLogo)
-        : new ShieldsBadgeResponse("GDQ", "no event now", "important", false, Resources.gdqDpadBadgeLogo));
+        : new ShieldsBadgeResponse("gdq", "no event now", "important", false, Resources.gdqDpadBadgeLogo));
 
 webApp.Run();
