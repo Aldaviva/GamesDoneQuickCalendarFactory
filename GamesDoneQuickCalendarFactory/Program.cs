@@ -42,7 +42,7 @@ webApp
     });
 
 webApp.MapGet("/", [OutputCache(Duration = CACHE_DURATION_MINUTES * 60, PolicyName = QUERY_PARAM_CACHE_POLICY)]
-    async Task (ICalendarGenerator calendarGenerator, HttpResponse response, [FromQuery] bool includeAnnoyingPeople = false) => {
+    async Task (ICalendarGenerator calendarGenerator, HttpResponse response, [FromQuery] bool includeAnnoyingPeople = true) => {
         Calendar calendar = await calendarGenerator.generateCalendar(includeAnnoyingPeople);
         response.ContentType = ICALENDAR_MIME_TYPE;
         await new CalendarSerializer().serializeAsync(calendar, response.Body, Encoding.UTF8);

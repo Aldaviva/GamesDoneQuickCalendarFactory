@@ -152,8 +152,8 @@ public class CalendarGeneratorTest {
 
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
 
-        (await calendarGenerator.generateCalendar(true)).Events.Should().HaveCount(3);
-        (await calendarGenerator.generateCalendar()).Events.Should().BeEmpty();
+        (await calendarGenerator.generateCalendar()).Events.Should().HaveCount(3);
+        (await calendarGenerator.generateCalendar(false)).Events.Should().BeEmpty();
     }
 
 }

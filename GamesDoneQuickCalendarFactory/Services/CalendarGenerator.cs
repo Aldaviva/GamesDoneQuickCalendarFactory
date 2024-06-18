@@ -8,7 +8,7 @@ namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface ICalendarGenerator {
 
-    Task<Calendar> generateCalendar(bool includeAnnoyingPeople = false);
+    Task<Calendar> generateCalendar(bool includeAnnoyingPeople = true);
 
 }
 
@@ -20,7 +20,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
         60 // Spike Vegeta
     }.ToFrozenSet();
 
-    public async Task<Calendar> generateCalendar(bool includeAnnoyingPeople = false) {
+    public async Task<Calendar> generateCalendar(bool includeAnnoyingPeople = true) {
         logger.LogDebug("Downloading schedule from Games Done Quick website");
         Event?   gdqEvent = await eventDownloader.downloadSchedule();
         Calendar calendar = new() { Method = CalendarMethods.Publish };
