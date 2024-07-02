@@ -21,7 +21,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
     }.ToFrozenSet();
 
     public async Task<Calendar> generateCalendar(bool includeAnnoyingPeople = true) {
-        logger.LogDebug("Downloading schedule from Games Done Quick website");
+        logger.LogTrace("Downloading schedule from Games Done Quick website");
         Event?   gdqEvent = await eventDownloader.downloadSchedule();
         Calendar calendar = new() { Method = CalendarMethods.Publish };
 
@@ -31,7 +31,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
                 .Select((run, runIndex) => new CalendarEvent {
                     Uid = $"aldaviva.com/{gdqEvent.shortTitle}/{run.name}",
                     // UTC works better than trying to coerce the OffsetDateTime into a ZonedDateTime, because NodaTime will pick a zone like UTC-5 instead of America/New_York (which makes sense), but Vivaldi doesn't apply zones like UTC-5 correctly and render the times as if they were local time, leading to events starting 3 hours too early for subscribers in America/Los_Angeles. Alternatively, we could map offsets and dates to more well-known zones like America/New_York, or use the zone specified in the GdqEvent.timezone property except I don't know if Vivaldi handles US/Eastern
-                    Start    = run.start.toIDateTimeUtc(),
+                    Start    = run.start.toIcsDateTimeUtc(),
                     Duration = run.duration.ToTimeSpan(),
                     IsAllDay = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
                     Summary  = run.name,

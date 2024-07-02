@@ -49,17 +49,13 @@ All types of GDQ events with a published run schedule are included: Awesome Game
 1. Click ≡ (Thunderbird Menu) › + New › Calendar…
 1. Choose **On the Network**, then click Next
 1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Check This location doesn't require credentials
+1. Check **This location doesn't require credentials**
 1. Click **Find Calendars**
 1. Click **Subscribe**
 
 ### Google Calendar
-1. Sign in to [Google Calendar](https://calendar.google.com/)
-1. Go to ⚙️ › [Settings](https://calendar.google.com/calendar/u/0/r/settings)
-1. Expand the **Add calendar** navigation section
-1. Click [**From URL**](https://calendar.google.com/calendar/u/0/r/settings/addbyurl)
-1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Click the **Add calendar** button
+1. Go to [Games Done Quick in Google Calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t)
+1. Click the **Add** button
 
 ### Outlook
 

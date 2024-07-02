@@ -64,7 +64,7 @@ public class CalendarGeneratorTest {
         actual.Events.Should().HaveCount(4);
 
         CalendarEvent actualEvent = actual.Events[0];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().toIDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(36));
         actualEvent.Summary.Should().Be("TUNIC");
         actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/TUNIC");
@@ -86,7 +86,7 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms[2].Trigger.IsRelative.Should().BeTrue();
 
         actualEvent = actual.Events[1];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().toIDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(33));
         actualEvent.Summary.Should().Be("Super Monkey Ball");
         actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/Super Monkey Ball");
@@ -97,7 +97,7 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[2];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().toIDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("1:13:00"));
         actualEvent.Summary.Should().Be("Donkey Kong Country");
         actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/Donkey Kong Country");
@@ -108,7 +108,7 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[3];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow().toIDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("2:56:0"));
         actualEvent.Summary.Should().Be("Final Fantasy V Pixel Remaster");
         actualEvent.Uid.Should().Be("aldaviva.com/AGDQ2024/Final Fantasy V Pixel Remaster");

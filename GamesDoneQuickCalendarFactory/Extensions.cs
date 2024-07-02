@@ -1,4 +1,6 @@
-﻿using Ical.Net.DataTypes;
+﻿using Google.Apis.Calendar.v3.Data;
+using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using NodaTime;
 using System.Reflection;
@@ -12,7 +14,19 @@ public static class Extensions {
     private static readonly MethodInfo ENCODINGSTACK_PUSH = ENCODINGSTACK_TYPE.GetMethod("Push", [typeof(Encoding)])!;
     private static readonly MethodInfo ENCODINGSTACK_POP  = ENCODINGSTACK_TYPE.GetMethod("Pop")!;
 
-    public static IDateTime toIDateTimeUtc(this OffsetDateTime input) => new CalDateTime(input.ToInstant().ToDateTimeUtc(), DateTimeZone.Utc.Id);
+    public static IDateTime toIcsDateTimeUtc(this OffsetDateTime input) => new CalDateTime(input.ToInstant().ToDateTimeUtc(), DateTimeZone.Utc.Id);
+
+    public static EventDateTime toGoogleEventDateTime(this IDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.AsDateTimeOffset, TimeZone = dateTime.TimeZoneName };
+
+    public static Event toGoogleEvent(this CalendarEvent calendarEvent) => new() {
+        ICalUID     = calendarEvent.Uid,
+        Start       = calendarEvent.Start.toGoogleEventDateTime(),
+        End         = calendarEvent.End.toGoogleEventDateTime(),
+        Summary     = calendarEvent.Summary,
+        Description = calendarEvent.Description,
+        Location    = calendarEvent.Location,
+        Visibility  = "public"
+    };
 
     public static string joinHumanized(this IEnumerable<object> enumerable, string comma = ",", string conjunction = "and", bool oxfordComma = true) {
         using IEnumerator<object> enumerator = enumerable.GetEnumerator();
