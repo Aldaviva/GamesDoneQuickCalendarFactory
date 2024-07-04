@@ -20,10 +20,9 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
     private const int MAX_EVENTS_PER_PAGE = 2500; // week-long GDQ events usually comprise about 150 runs
 
-    private readonly CalendarService?        calendarService;
-    private readonly ICalendarPoller         calendarPoller;
-    private readonly IOptions<Configuration> configuration;
-
+    private readonly CalendarService?                    calendarService;
+    private readonly ICalendarPoller                     calendarPoller;
+    private readonly IOptions<Configuration>             configuration;
     private readonly ILogger<GoogleCalendarSynchronizer> logger;
 
     private IDictionary<string, Event> existingGoogleEventsByIcalUid = null!;
@@ -46,22 +45,26 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
     public async Task start() {
         if (calendarService != null) {
             string googleCalendarId = configuration.Value.googleCalendarId!;
+
             logger.LogDebug("Downloading existing events from Google Calendar {calendarId}", googleCalendarId);
             EventsResource.ListRequest listRequest = calendarService.Events.List(googleCalendarId);
             listRequest.MaxResults = MAX_EVENTS_PER_PAGE;
             Events googleCalendarEvents = await listRequest.ExecuteAsync();
+
             existingGoogleEventsByIcalUid = googleCalendarEvents.Items.ToDictionary(googleEvent => googleEvent.ICalUID);
             logger.LogDebug("Found {count:N0} existing events in Google Calendar", existingGoogleEventsByIcalUid.Values.Count);
 
             calendarPoller.calendarChanged += sync;
         }
+
+        await calendarPoller.pollCalendar();
     }
 
     private async void sync(object? sender, Calendar newCalendar) {
         string googleCalendarId = configuration.Value.googleCalendarId!;
 
         IEnumerable<Event> eventsToDelete = existingGoogleEventsByIcalUid.ExceptBy(newCalendar.Events.Select(icsEvent => icsEvent.Uid), gcalEvent => gcalEvent.Key).Select(pair => pair.Value).ToList();
-        IEnumerable<CalendarEvent> eventsToCreate = newCalendar.Events.ExceptBy(existingGoogleEventsByIcalUid.Keys, run => run.Uid).ToList();
+        IEnumerable<CalendarEvent> eventsToCreate = newCalendar.Events.ExceptBy(existingGoogleEventsByIcalUid.Keys, icsEvent => icsEvent.Uid).ToList();
         IEnumerable<CalendarEvent> eventsToUpdate = newCalendar.Events.Except(eventsToCreate).Where(icsEvent => {
             Event googleEvent = existingGoogleEventsByIcalUid[icsEvent.Uid];
             return icsEvent.Summary != googleEvent.Summary ||

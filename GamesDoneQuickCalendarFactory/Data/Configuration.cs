@@ -4,8 +4,8 @@ public class Configuration {
 
     public TimeSpan cacheDuration { get; init; } = TimeSpan.FromMinutes(1);
 
-    public string? googleServiceAccountEmailAddress { get; init; }
-    public string? googleCalendarId { get; init; }
-    public string? googleServiceAccountPrivateKey { get; init; }
+    public string? googleServiceAccountEmailAddress { get; init; } = null;
+    public string? googleCalendarId { get; init; } = null;
+    public string? googleServiceAccountPrivateKey { get; init; } = null;
 
 }

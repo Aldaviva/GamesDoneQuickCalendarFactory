@@ -2,6 +2,7 @@
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Data.Marshal;
 using jaytwo.FluentUri;
+using NodaTime;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -55,20 +56,29 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
         IList<GameRun>? runs         = null;
         Uri             runsUrl      = EVENTS_API_URL.WithPath(eventId.ToString()).WithPath("runs");
         var             resultsCount = new ValueHolderStruct<int>();
+        OffsetDateTime? tailStart    = null;
+        bool            sorted       = true;
 
         await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
             runs ??= new List<GameRun>(resultsCount.value!.Value);
-            runs.Add(new GameRun(
+            GameRun gameRun = new(
                 start: run.startTime,
                 duration: run.endTime - run.startTime,
                 name: run.gameName,
                 description: $"{run.category} \u2014 {run.console}",
                 runners: run.runners.Select(getPerson),
                 commentators: run.commentators.Select(getPerson),
-                hosts: run.hosts.Select(getPerson)));
+                hosts: run.hosts.Select(getPerson));
+            runs.Add(gameRun);
+
+            // The API returns runs sorted in ascending start time order, but guarantee it here so the faster equality check in CalendarPoller is correct
+            if (sorted) {
+                sorted    = !tailStart?.IsAfter(gameRun.start) ?? sorted;
+                tailStart = gameRun.start;
+            }
         }
 
-        return runs?.AsReadOnly() ?? Enumerable.Empty<GameRun>();
+        return ((sorted ? runs?.AsEnumerable() : runs?.OrderBy(run => run.start)) ?? []).ToList().AsReadOnly();
     }
 
     private static Person getPerson(GdqPerson person) => new(person.id, person.name);

@@ -6,13 +6,13 @@ using Ical.Net.Serialization;
 using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using NodaTime;
 using System.Text;
 using System.Text.RegularExpressions;
 
-const string         CACHE_POLICY         = "Cache policy";
 Encoding             calendarEncoding     = Encoding.UTF8;
 MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = calendarEncoding.WebName };
 
@@ -27,8 +27,8 @@ builder.Logging.addMyCustomFormatter();
 
 // GZIP response compression is handled by Apache httpd, not Kestrel, per https://learn.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-8.0#when-to-use-response-compression-middleware
 builder.Services
-    .Configure<Configuration>(builder.Configuration)
-    .AddOutputCache(options => options.AddPolicy(CACHE_POLICY, policyBuilder => policyBuilder.Expire(builder.Configuration.Get<Configuration>()!.cacheDuration)))
+    // .Configure<Configuration>(builder.Configuration) // uncommenting this causes missing JSON properties to be returned as "" instead of null
+    .AddOutputCache()
     .AddSingleton<ICalendarGenerator, CalendarGenerator>()
     .AddSingleton<IEventDownloader, EventDownloader>()
     .AddSingleton<IGdqClient, GdqClient>()
@@ -48,25 +48,26 @@ webApp
         await next();
     });
 
-webApp.MapGet("/", async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
+webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
     CalendarResponse? mostRecentlyPolledCalendar = calendarPoller.mostRecentlyPolledCalendar;
     if (mostRecentlyPolledCalendar != null) {
         ResponseHeaders responseHeaders = response.GetTypedHeaders();
         responseHeaders.ContentType  = icalendarContentType;
         responseHeaders.ETag         = new EntityTagHeaderValue(mostRecentlyPolledCalendar.etag);
         responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
+        responseHeaders.CacheControl = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() };
         await new CalendarSerializer().serializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
     }
-}).CacheOutput(CACHE_POLICY);
+});
 
-webApp.MapGet("/badge.json", async ([FromServices] IEventDownloader eventDownloader) =>
+webApp.MapGet("/badge.json", [OutputCache] async ([FromServices] IEventDownloader eventDownloader) =>
 await eventDownloader.downloadSchedule() is { } schedule
     ? new ShieldsBadgeResponse(
         label: Regex.Replace(schedule.shortTitle, @"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])", " ").ToLower(), // add spaces to abbreviation
         message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",
         color: "success",
         logoSvg: Resources.gdqDpadBadgeLogo)
-    : new ShieldsBadgeResponse("gdq", "no event now", "important", false, Resources.gdqDpadBadgeLogo)).CacheOutput(CACHE_POLICY);
+    : new ShieldsBadgeResponse("gdq", "no event now", "important", false, Resources.gdqDpadBadgeLogo));
 
 await webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 

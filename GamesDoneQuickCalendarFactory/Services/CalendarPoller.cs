@@ -7,8 +7,11 @@ namespace GamesDoneQuickCalendarFactory.Services;
 public interface ICalendarPoller: IDisposable, IAsyncDisposable {
 
     CalendarResponse? mostRecentlyPolledCalendar { get; }
+    TimeSpan getPollingInterval();
 
     event EventHandler<Calendar>? calendarChanged;
+
+    Task pollCalendar();
 
 }
 
@@ -33,17 +36,17 @@ public class CalendarPoller: ICalendarPoller {
         this.config            = config;
         this.logger            = logger;
 
-        pollingTimer = new Timer(pollCalendar, null, TimeSpan.Zero, OUT_OF_EVENT_POLLING_INTERVAL);
+        pollingTimer = new Timer(async _ => await pollCalendar(), null, OUT_OF_EVENT_POLLING_INTERVAL, OUT_OF_EVENT_POLLING_INTERVAL);
     }
 
-    private async void pollCalendar(object? state = null) {
+    public async Task pollCalendar() {
         if (await pollingLock.WaitAsync(0)) { // don't allow parallel polls, and if one is already running, skip the new iteration
             try {
                 logger.LogDebug("Polling GDQ schedule");
                 Calendar       calendar      = await calendarGenerator.generateCalendar();
                 DateTimeOffset generatedDate = DateTimeOffset.UtcNow;
 
-                if (!calendar.Equals(mostRecentlyPolledCalendar?.calendar)) {
+                if (!calendar.EqualsPresorted(mostRecentlyPolledCalendar?.calendar)) {
                     mostRecentlyPolledCalendar = new CalendarResponse(calendar, generatedDate);
                     logger.LogInformation("GDQ schedule changed, new etag is {etag}", mostRecentlyPolledCalendar.etag);
                     calendarChanged?.Invoke(this, calendar);
@@ -56,9 +59,9 @@ public class CalendarPoller: ICalendarPoller {
                     generatedDate < calendar.Events.Max(run => run.Start)!.AsDateTimeOffset;
 
                 if (wasEventRunning != isEventRunning) {
-                    TimeSpan desiredPollingInterval = isEventRunning ? config.Value.cacheDuration : OUT_OF_EVENT_POLLING_INTERVAL;
-                    pollingTimer.Change(desiredPollingInterval, desiredPollingInterval);
                     wasEventRunning = isEventRunning;
+                    TimeSpan desiredPollingInterval = getPollingInterval();
+                    pollingTimer.Change(desiredPollingInterval, desiredPollingInterval);
                 }
             } catch (Exception e) when (e is not OutOfMemoryException) {
                 logger.LogError(e, "Failed to poll GDQ schedule, trying again later");
@@ -66,6 +69,10 @@ public class CalendarPoller: ICalendarPoller {
                 pollingLock.Release();
             }
         }
+    }
+
+    public TimeSpan getPollingInterval() {
+        return wasEventRunning ? config.Value.cacheDuration : OUT_OF_EVENT_POLLING_INTERVAL;
     }
 
     public void Dispose() {

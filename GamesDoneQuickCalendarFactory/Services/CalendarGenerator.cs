@@ -2,13 +2,12 @@
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
-using System.Collections.Frozen;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface ICalendarGenerator {
 
-    Task<Calendar> generateCalendar(bool includeAnnoyingPeople = true);
+    Task<Calendar> generateCalendar();
 
 }
 
@@ -16,18 +15,13 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
 
     private static readonly Uri TWITCH_STREAM_URL = new("https://www.twitch.tv/gamesdonequick");
 
-    private static readonly IReadOnlySet<int> ANNOYING_PERSON_BLACKLIST = new HashSet<int> {
-        60 // Spike Vegeta
-    }.ToFrozenSet();
-
-    public async Task<Calendar> generateCalendar(bool includeAnnoyingPeople = true) {
+    public async Task<Calendar> generateCalendar() {
         logger.LogTrace("Downloading schedule from Games Done Quick website");
         Event?   gdqEvent = await eventDownloader.downloadSchedule();
         Calendar calendar = new() { Method = CalendarMethods.Publish };
 
         if (gdqEvent != null) {
             calendar.Events.AddRange(gdqEvent.runs
-                .Where(run => includeAnnoyingPeople || !containsAnnoyingPerson(run))
                 .Select((run, runIndex) => new CalendarEvent {
                     Uid = $"aldaviva.com/{gdqEvent.shortTitle}/{run.name}",
                     // UTC works better than trying to coerce the OffsetDateTime into a ZonedDateTime, because NodaTime will pick a zone like UTC-5 instead of America/New_York (which makes sense), but Vivaldi doesn't apply zones like UTC-5 correctly and render the times as if they were local time, leading to events starting 3 hours too early for subscribers in America/Los_Angeles. Alternatively, we could map offsets and dates to more well-known zones like America/New_York, or use the zone specified in the GdqEvent.timezone property except I don't know if Vivaldi handles US/Eastern
@@ -63,7 +57,5 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
     }
 
     private static string getName(Person person) => person.name;
-
-    private static bool containsAnnoyingPerson(GameRun run) => run.runners.Concat(run.commentators).Concat(run.hosts).IntersectBy(ANNOYING_PERSON_BLACKLIST, person => person.id).Any();
 
 }
