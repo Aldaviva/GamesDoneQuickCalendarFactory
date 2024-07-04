@@ -19,13 +19,14 @@ public static class Extensions {
     public static EventDateTime toGoogleEventDateTime(this IDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.AsDateTimeOffset, TimeZone = dateTime.TimeZoneName };
 
     public static Event toGoogleEvent(this CalendarEvent calendarEvent) => new() {
-        ICalUID     = calendarEvent.Uid,
-        Start       = calendarEvent.Start.toGoogleEventDateTime(),
-        End         = calendarEvent.End.toGoogleEventDateTime(),
-        Summary     = calendarEvent.Summary,
-        Description = calendarEvent.Description,
-        Location    = calendarEvent.Location,
-        Visibility  = "public"
+        ICalUID      = calendarEvent.Uid,
+        Start        = calendarEvent.Start.toGoogleEventDateTime(),
+        End          = calendarEvent.End.toGoogleEventDateTime(),
+        Summary      = calendarEvent.Summary,
+        Description  = calendarEvent.Description,
+        Location     = calendarEvent.Location,
+        Visibility   = "public",
+        Transparency = "transparent" // show me as available
     };
 
     public static string joinHumanized(this IEnumerable<object> enumerable, string comma = ",", string conjunction = "and", bool oxfordComma = true) {

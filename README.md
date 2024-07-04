@@ -3,11 +3,13 @@
 
 [![GitHub Actions workflow status](https://img.shields.io/github/actions/workflow/status/Aldaviva/GamesDoneQuickCalendarFactory/compile.yml?branch=master&logo=github&label=build)](https://github.com/Aldaviva/GamesDoneQuickCalendarFactory/actions/workflows/compile.yml) [![Testspace](https://img.shields.io/testspace/tests/Aldaviva/Aldaviva:GamesDoneQuickCalendarFactory/master?passed_label=passing&failed_label=failing&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4NTkgODYxIj48cGF0aCBkPSJtNTk4IDUxMy05NCA5NCAyOCAyNyA5NC05NC0yOC0yN3pNMzA2IDIyNmwtOTQgOTQgMjggMjggOTQtOTQtMjgtMjh6bS00NiAyODctMjcgMjcgOTQgOTQgMjctMjctOTQtOTR6bTI5My0yODctMjcgMjggOTQgOTQgMjctMjgtOTQtOTR6TTQzMiA4NjFjNDEuMzMgMCA3Ni44My0xNC42NyAxMDYuNS00NFM1ODMgNzUyIDU4MyA3MTBjMC00MS4zMy0xNC44My03Ni44My00NC41LTEwNi41UzQ3My4zMyA1NTkgNDMyIDU1OWMtNDIgMC03Ny42NyAxNC44My0xMDcgNDQuNXMtNDQgNjUuMTctNDQgMTA2LjVjMCA0MiAxNC42NyA3Ny42NyA0NCAxMDdzNjUgNDQgMTA3IDQ0em0wLTU1OWM0MS4zMyAwIDc2LjgzLTE0LjgzIDEwNi41LTQ0LjVTNTgzIDE5Mi4zMyA1ODMgMTUxYzAtNDItMTQuODMtNzcuNjctNDQuNS0xMDdTNDczLjMzIDAgNDMyIDBjLTQyIDAtNzcuNjcgMTQuNjctMTA3IDQ0cy00NCA2NS00NCAxMDdjMCA0MS4zMyAxNC42NyA3Ni44MyA0NCAxMDYuNVMzOTAgMzAyIDQzMiAzMDJ6bTI3NiAyODJjNDIgMCA3Ny42Ny0xNC44MyAxMDctNDQuNXM0NC02NS4xNyA0NC0xMDYuNWMwLTQyLTE0LjY3LTc3LjY3LTQ0LTEwN3MtNjUtNDQtMTA3LTQ0Yy00MS4zMyAwLTc2LjY3IDE0LjY3LTEwNiA0NHMtNDQgNjUtNDQgMTA3YzAgNDEuMzMgMTQuNjcgNzYuODMgNDQgMTA2LjVTNjY2LjY3IDU4NCA3MDggNTg0em0tNTU3IDBjNDIgMCA3Ny42Ny0xNC44MyAxMDctNDQuNXM0NC02NS4xNyA0NC0xMDYuNWMwLTQyLTE0LjY3LTc3LjY3LTQ0LTEwN3MtNjUtNDQtMTA3LTQ0Yy00MS4zMyAwLTc2LjgzIDE0LjY3LTEwNi41IDQ0UzAgMzkxIDAgNDMzYzAgNDEuMzMgMTQuODMgNzYuODMgNDQuNSAxMDYuNVMxMDkuNjcgNTg0IDE1MSA1ODR6IiBmaWxsPSIjZmZmIi8%2BPC9zdmc%2B)](https://aldaviva.testspace.com/spaces/211585) [![Coveralls](https://img.shields.io/coveralls/github/Aldaviva/GamesDoneQuickCalendarFactory?logo=coveralls)](https://coveralls.io/github/Aldaviva/GamesDoneQuickCalendarFactory?branch=master) [![Current event](https://img.shields.io/endpoint?url=https%3A%2F%2Faldaviva.com%2Fgamesdonequickcalendar%2Fbadge.json)](https://aldaviva.com/docs/gdq.ics)
 
-Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) into an automatically updated [ICS file](https://aldaviva.com/docs/gdq.ics), to which your calendar program can subscribe.
+Converts the [Games Done Quick schedule](https://gamesdonequick.com/schedule) into an automatically updated [ICS file](https://aldaviva.com/docs/gdq.ics) and [public Google calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t), to which your calendar program can subscribe.
 
 Each run in the current GDQ event will appear as a calendar appointment, comprising the run's name, estimated start and end time, category, runners, host, and the URL of the [GDQ Twitch channel](https://www.twitch.tv/gamesdonequick).
 
-All types of GDQ events with a published run schedule are included: Awesome Games Done Quick, Summer Games Done Quick, Frost Fatales, Flame Fatales, and Games Done Quick Express. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded.
+All types of GDQ events with a published run schedule are included: Awesome Games Done Quick, Summer Games Done Quick, Frost Fatales, Flame Fatales, and Games Done Quick Express. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded because its schedule is a messy, nigh-unparsable spreadsheet.
+
+The calendar is updated once per minute while a GDQ event is running, and less frequently the rest of the year.
 
 ![AGDQ 2023 schedule in Vivaldi](https://pbs.twimg.com/media/Fl2xjasaEAATpQC?format=jpg&name=large)
 
@@ -16,13 +18,13 @@ All types of GDQ events with a published run schedule are included: Awesome Game
 - [Subscribing](#subscribing)
     - [Any iCalendar client](#any-icalendar-client)
     - [Vivaldi](#vivaldi)
-    - [Mozilla Thunderbird](#mozilla-thunderbird)
     - [Google Calendar](#google-calendar)
-    - [Outlook](#outlook)
+    - [Microsoft Outlook](#microsoft-outlook)
         - [Outlook for Windows](#outlook-for-windows)
         - [Outlook on the web](#outlook-on-the-web)
         - [Outlook for Android](#outlook-for-android)
         - [Outlook for Mac](#outlook-for-mac)
+    - [Mozilla Thunderbird](#mozilla-thunderbird)
     - [Apple Calendar](#apple-calendar)
 
 <!-- /MarkdownTOC -->
@@ -43,21 +45,13 @@ All types of GDQ events with a published run schedule are included: Awesome Game
 1. Click the **Add Account** button
 1. Click the **Save Account** button
 
-### Mozilla Thunderbird
-1. Open Thunderbird
-1. Go to the 📅 Calendar space
-1. Click ≡ (Thunderbird Menu) › + New › Calendar…
-1. Choose **On the Network**, then click Next
-1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Check **This location doesn't require credentials**
-1. Click **Find Calendars**
-1. Click **Subscribe**
-
 ### Google Calendar
-1. Go to [Games Done Quick in Google Calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t)
-1. Click the **Add** button
+1. Go to the [Games Done Quick shared public calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t)
+1. Click the **Add** button in the Add Calendar dialog box that appears
 
-### Outlook
+*This public calendar is recommended for Google Calendar users because you will observe lower latency updates (about one minute) when a run changes during an event, as opposed to subscribing to the [ICS URL](#any-icalendar-client) that Google polls very infrequently (once every few hours).*
+
+### Microsoft Outlook
 
 #### Outlook for Windows
 1. Open Outlook
@@ -84,6 +78,16 @@ All types of GDQ events with a published run schedule are included: Awesome Game
 #### Outlook for Mac
 1. Sign in to [Outlook on the web](https://outlook.office.com/calendar) with the same Office 365, Exchange, or Outlook.com&#47;Hotmail account with which you are signed into Outlook for Mac
 1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
+
+### Mozilla Thunderbird
+1. Open Thunderbird
+1. Go to the 📅 Calendar space
+1. Click ≡ (Thunderbird Menu) › + New › Calendar…
+1. Choose **On the Network**, then click Next
+1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
+1. Check **This location doesn't require credentials**
+1. Click **Find Calendars**
+1. Click **Subscribe**
 
 ### Apple Calendar
 1. Open 📅 Calendar
