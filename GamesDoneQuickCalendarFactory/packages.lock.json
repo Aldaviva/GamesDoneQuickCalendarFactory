@@ -56,6 +56,12 @@
           "System.ServiceProcess.ServiceController": "8.0.0"
         }
       },
+      "ThrottleDebounce": {
+        "type": "Direct",
+        "requested": "[2.0.0, )",
+        "resolved": "2.0.0",
+        "contentHash": "/lt2PLUjE1bXCkPDVXXhZDzqaK3SmKwJ2EOq/a6ZbsgAWnRz3TqkqU0VyUncbh8bUIJQHCoPUxbwmjWeAbeIbw=="
+      },
       "Google.Apis": {
         "type": "Transitive",
         "resolved": "1.68.0",

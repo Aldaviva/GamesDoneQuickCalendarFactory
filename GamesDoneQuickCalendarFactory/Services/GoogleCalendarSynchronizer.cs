@@ -5,6 +5,7 @@ using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Options;
+using ThrottleDebounce;
 using Calendar = Ical.Net.Calendar;
 using Event = Google.Apis.Calendar.v3.Data.Event;
 
@@ -46,10 +47,12 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
         if (calendarService != null) {
             string googleCalendarId = configuration.Value.googleCalendarId!;
 
-            logger.LogDebug("Downloading existing events from Google Calendar {calendarId}", googleCalendarId);
-            EventsResource.ListRequest listRequest = calendarService.Events.List(googleCalendarId);
-            listRequest.MaxResults = MAX_EVENTS_PER_PAGE;
-            Events googleCalendarEvents = await listRequest.ExecuteAsync();
+            Events googleCalendarEvents = await Retrier.Attempt(_ => {
+                logger.LogDebug("Downloading existing events from Google Calendar {calendarId}", googleCalendarId);
+                EventsResource.ListRequest listRequest = calendarService.Events.List(googleCalendarId);
+                listRequest.MaxResults = MAX_EVENTS_PER_PAGE;
+                return listRequest.ExecuteAsync();
+            }, null, exponentialBackoff);
 
             existingGoogleEventsByIcalUid = googleCalendarEvents.Items.ToDictionary(googleEvent => googleEvent.ICalUID);
             logger.LogDebug("Found {count:N0} existing events in Google Calendar", existingGoogleEventsByIcalUid.Values.Count);
@@ -94,6 +97,8 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
             logger.LogTrace("Updated event {summary} in Google Calendar", eventToUpdate.Summary);
         }
     }
+
+    private static TimeSpan exponentialBackoff(int attempt) => TimeSpan.FromSeconds(Math.Min(attempt * attempt, 300));
 
     public void Dispose() {
         calendarPoller.calendarChanged -= sync;

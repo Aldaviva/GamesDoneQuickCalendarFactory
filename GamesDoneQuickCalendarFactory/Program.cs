@@ -27,15 +27,15 @@ builder.Logging.addMyCustomFormatter();
 
 // GZIP response compression is handled by Apache httpd, not Kestrel, per https://learn.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-8.0#when-to-use-response-compression-middleware
 builder.Services
-    // .Configure<Configuration>(builder.Configuration) // uncommenting this causes missing JSON properties to be returned as "" instead of null
+    .Configure<Configuration>(builder.Configuration)
     .AddOutputCache()
     .AddSingleton<ICalendarGenerator, CalendarGenerator>()
     .AddSingleton<IEventDownloader, EventDownloader>()
     .AddSingleton<IGdqClient, GdqClient>()
     .AddSingleton<ICalendarPoller, CalendarPoller>()
     .AddSingleton<IGoogleCalendarSynchronizer, GoogleCalendarSynchronizer>()
-    .AddSingleton<IClock>(SystemClock.Instance);
-builder.Services.AddHttpClient("http", client => { client.Timeout = TimeSpan.FromSeconds(30); }).SetHandlerLifetime(TimeSpan.FromHours(1));
+    .AddSingleton<IClock>(SystemClock.Instance)
+    .AddSingleton(_ => new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromHours(1) }) { Timeout = TimeSpan.FromSeconds(30) });
 
 WebApplication webApp = builder.Build();
 webApp

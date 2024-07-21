@@ -148,4 +148,7 @@ public static class Extensions {
         return time.ToInstant() > other.ToInstant();
     }
 
+    [Pure]
+    public static string? EmptyToNull(this string? input) => string.IsNullOrEmpty(input) ? null : input;
+
 }
