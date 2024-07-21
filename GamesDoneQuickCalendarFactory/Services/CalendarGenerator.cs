@@ -23,7 +23,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
         if (gdqEvent != null) {
             calendar.Events.AddRange(gdqEvent.runs
                 .Select((run, runIndex) => new CalendarEvent {
-                    Uid = $"aldaviva.com/{gdqEvent.shortTitle}/{run.name}",
+                    Uid = $"{gdqEvent.shortTitle}/{run.name}",
                     // UTC works better than trying to coerce the OffsetDateTime into a ZonedDateTime, because NodaTime will pick a zone like UTC-5 instead of America/New_York (which makes sense), but Vivaldi doesn't apply zones like UTC-5 correctly and render the times as if they were local time, leading to events starting 3 hours too early for subscribers in America/Los_Angeles. Alternatively, we could map offsets and dates to more well-known zones like America/New_York, or use the zone specified in the GdqEvent.timezone property except I don't know if Vivaldi handles US/Eastern
                     Start    = run.start.toIcsDateTimeUtc(),
                     Duration = run.duration.ToTimeSpan(),

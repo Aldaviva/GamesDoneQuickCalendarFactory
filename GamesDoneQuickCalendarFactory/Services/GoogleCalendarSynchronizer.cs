@@ -1,4 +1,5 @@
 ﻿using GamesDoneQuickCalendarFactory.Data;
+using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
@@ -86,8 +87,14 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
         logger.LogDebug("Creating {count:N0} new events in Google Calendar", eventsToCreate.Count());
         foreach (CalendarEvent eventToCreate in eventsToCreate) {
-            existingGoogleEventsByIcalUid[eventToCreate.Uid] = await calendarService!.Events.Insert(eventToCreate.toGoogleEvent(), googleCalendarId).ExecuteAsync();
-            logger.LogTrace("Created event {summary} in Google Calendar", eventToCreate.Summary);
+            Event googleEventToCreate = eventToCreate.toGoogleEvent();
+            try {
+                existingGoogleEventsByIcalUid[googleEventToCreate.ICalUID] = await calendarService!.Events.Insert(googleEventToCreate, googleCalendarId).ExecuteAsync();
+                logger.LogTrace("Created event {summary} in Google Calendar", eventToCreate.Summary);
+            } catch (GoogleApiException e) {
+                logger.LogError(e, "Failed to create event {summary} in Google Calendar (iCalUID={uid})", googleEventToCreate.Summary, googleEventToCreate.ICalUID);
+                throw;
+            }
         }
 
         logger.LogDebug("Updating {count:N0} outdated events in Google Calendar", eventsToUpdate.Count());
