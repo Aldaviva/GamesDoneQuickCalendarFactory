@@ -50,7 +50,7 @@ public class ServerTest: IDisposable {
         calendarEvent.DtStamp     = new CalDateTime("20230416T082040Z");
         calendarEvent.Uid         = "c9e08bcf-773a-4291-b0a4-dd7459ed13ba";
 
-        A.CallTo(() => calendarGenerator.generateCalendar(true)).Returns(calendar);
+        A.CallTo(() => calendarGenerator.generateCalendar()).Returns(calendar);
 
         using HttpResponseMessage response = await client.GetAsync("/");
 
@@ -81,7 +81,7 @@ public class ServerTest: IDisposable {
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        A.CallTo(() => calendarGenerator.generateCalendar(true)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => calendarGenerator.generateCalendar()).MustHaveHappenedOnceExactly();
 
     }
 

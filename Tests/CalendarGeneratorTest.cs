@@ -119,41 +119,4 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms.Should().BeEmpty();
     }
 
-    [Fact]
-    public async Task ignoreAnnoyingPeople() {
-        Event @event = new("Test", "Test", [
-            new GameRun(
-                new OffsetDateTime(),
-                Duration.FromMinutes(30),
-                "Annoying runner",
-                "",
-                [new Person(60, "spikevegeta")],
-                [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
-                [new Person(4, "AttyJoe")]),
-
-            new GameRun(
-                new OffsetDateTime(),
-                Duration.FromMinutes(30),
-                "Annoying commentator",
-                "",
-                [new Person(1, "Radicoon")],
-                [new Person(60, "spikevegeta")],
-                [new Person(4, "AttyJoe")]),
-
-            new GameRun(
-                new OffsetDateTime(),
-                Duration.FromMinutes(30),
-                "Annoying host",
-                "",
-                [new Person(1, "Radicoon")],
-                [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
-                [new Person(60, "spikevegeta")])
-        ]);
-
-        A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);
-
-        (await calendarGenerator.generateCalendar()).Events.Should().HaveCount(3);
-        (await calendarGenerator.generateCalendar(false)).Events.Should().BeEmpty();
-    }
-
 }
