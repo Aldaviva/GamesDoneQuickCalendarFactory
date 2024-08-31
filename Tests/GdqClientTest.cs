@@ -51,8 +51,8 @@ public class GdqClientTest {
             "AGDQ 2024 Pre-Show",
             "Pre-Show — GDQ",
             [new Person(1434, "Interview Crew")],
-            Enumerable.Empty<Person>(),
-            Enumerable.Empty<Person>()));
+            [],
+            []));
 
         actual.ElementAt(1).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
@@ -96,8 +96,8 @@ public class GdqClientTest {
             "Finale!",
             "The End% — Live",
             [new Person(367, "Tech Crew")],
-            Enumerable.Empty<Person>(),
-            Enumerable.Empty<Person>()));
+            [],
+            []));
     }
 
 }

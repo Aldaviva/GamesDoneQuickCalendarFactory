@@ -2,6 +2,8 @@
 using Ical.Net.DataTypes;
 using NodaTime.Text;
 
+// ReSharper disable SuggestVarOrType_Elsewhere
+
 namespace Tests;
 
 public class ExtensionsTest {
@@ -38,5 +40,34 @@ public class ExtensionsTest {
     public void joinHumanized(IEnumerable<object> input, string expected) {
         input.joinHumanized().Should().Be(expected);
     }
+
+    [Fact]
+    public void deltaWithPrimitives() {
+        List<int> existing = [1, 2, 3];
+        List<int> @new     = [1, 2, 4];
+
+        var actual = existing.DeltaWith(@new);
+
+        actual.created.Should().Equal(4);
+        actual.updated.Should().BeEmpty("ints are immutable");
+        actual.deleted.Should().Equal(3);
+        actual.unmodified.Should().Equal(1, 2);
+    }
+
+    [Fact]
+    public void deltaWithObjects() {
+        List<Person> existing = [new Person("A", 1), new Person("B", 2), new Person("C", 3)];
+        List<Human>  @new     = [new Human("A", 1), new Human("B", 4), new Human("D", 5)];
+
+        var actual = existing.DeltaWith(@new, p => p.name, h => h.name, (person, human) => person.name.Equals(human.name, StringComparison.CurrentCulture) && person.age == human.age);
+
+        actual.created.Should().Equal(new Human("D", 5));
+        actual.updated.Should().Equal(new Human("B", 4));
+        actual.deleted.Should().Equal(new Person("C", 3));
+        actual.unmodified.Should().Equal(new Person("A", 1));
+    }
+
+    private record Person(string name, int age);
+    private record Human(string  name, int age);
 
 }
