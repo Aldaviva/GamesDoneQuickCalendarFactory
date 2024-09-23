@@ -22,7 +22,7 @@ public record GdqRun(
     IReadOnlyList<GdqPerson>                                         commentators,
     [property: JsonPropertyName("starttime")] OffsetDateTime         startTime,
     [property: JsonPropertyName("endtime")]   OffsetDateTime         endTime,
-    int                                                              order,
+    int?                                                             order,
     [property: JsonPropertyName("run_time")]    Period               runTime,
     [property: JsonPropertyName("setup_time")]  Period               setupTime,
     [property: JsonPropertyName("anchor_time")] OffsetDateTime?      anchorTime,
