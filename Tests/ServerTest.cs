@@ -3,6 +3,7 @@ using GamesDoneQuickCalendarFactory.Services;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ public class ServerTest: IDisposable {
         webapp = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder => {
                 builder.UseTestServer();
+                builder.UseEnvironment("Test");
                 builder.ConfigureTestServices(collection => collection
                     .AddSingleton(calendarGenerator)
                     .AddSingleton(eventDownloader));
@@ -51,6 +53,7 @@ public class ServerTest: IDisposable {
         calendarEvent.Uid         = "c9e08bcf-773a-4291-b0a4-dd7459ed13ba";
 
         A.CallTo(() => calendarGenerator.generateCalendar()).Returns(calendar);
+        await webapp.Services.GetRequiredService<ICalendarPoller>().pollCalendar(); // clear cache of empty calendar from constructor
 
         using HttpResponseMessage response = await client.GetAsync("/");
 
@@ -77,12 +80,11 @@ public class ServerTest: IDisposable {
         MediaTypeHeaderValue? contentType = response.Content.Headers.ContentType;
         contentType.Should().NotBeNull();
         contentType!.MediaType.Should().Be("text/calendar");
-        contentType.CharSet.Should().Be("UTF-8");
+        contentType.CharSet.Should().Be("utf-8");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        A.CallTo(() => calendarGenerator.generateCalendar()).MustHaveHappenedOnceExactly();
-
+        A.CallTo(() => calendarGenerator.generateCalendar()).MustHaveHappenedTwiceExactly(); // once in constructor, once for our mocked calendar
     }
 
     [Fact]

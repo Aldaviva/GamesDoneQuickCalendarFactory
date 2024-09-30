@@ -5,6 +5,7 @@ using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Logging.Abstractions;
 using NodaTime;
 using NodaTime.Text;
+using Unfucked;
 
 namespace Tests;
 
@@ -64,14 +65,14 @@ public class CalendarGeneratorTest {
         actual.Events.Should().HaveCount(4);
 
         CalendarEvent actualEvent = actual.Events[0];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(36));
         actualEvent.Summary.Should().Be("TUNIC");
-        actualEvent.Uid.Should().Be("AGDQ2024/TUNIC/Any% Unrestricted — PC");
+        actualEvent.Uid.Should().Be("1/AGDQ2024/TUNIC/Any% Unrestricted — PC");
         actualEvent.Description.Should().Be("Any% Unrestricted — PC\nRun by Radicoon\nCommentary by kevinregamey and silentdestroyer\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
-        actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Location.Should().BeNull("I removed the Twitch stream URL because it was repetitive and cluttering up my calendar UI, making it hard to read any events");
         actualEvent.Alarms[0].Action.Should().Be("DISPLAY");
         actualEvent.Alarms[0].Description.Should().Be("Awesome Games Done Quick 2024 is coming up next week");
         actualEvent.Alarms[0].Trigger.Duration.Should().Be(TimeSpan.FromDays(7));
@@ -86,36 +87,36 @@ public class CalendarGeneratorTest {
         actualEvent.Alarms[2].Trigger.IsRelative.Should().BeTrue();
 
         actualEvent = actual.Events[1];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(33));
         actualEvent.Summary.Should().Be("Super Monkey Ball");
-        actualEvent.Uid.Should().Be("AGDQ2024/Super Monkey Ball/Master — Wii");
+        actualEvent.Uid.Should().Be("1/AGDQ2024/Super Monkey Ball/Master — Wii");
         actualEvent.Description.Should().Be("Master — Wii\nRun by Helix\nCommentary by limy and PeasSMB\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
-        actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Location.Should().BeNull("I removed the Twitch stream URL because it was repetitive and cluttering up my calendar UI, making it hard to read any events");
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[2];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("1:13:00"));
         actualEvent.Summary.Should().Be("Donkey Kong Country");
-        actualEvent.Uid.Should().Be("AGDQ2024/Donkey Kong Country/101% — SNES");
+        actualEvent.Uid.Should().Be("1/AGDQ2024/Donkey Kong Country/101% — SNES");
         actualEvent.Description.Should().Be("101% — SNES\nRun by Tonkotsu\nCommentary by Glan and V0oid\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
-        actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Location.Should().BeNull("I removed the Twitch stream URL because it was repetitive and cluttering up my calendar UI, making it hard to read any events");
         actualEvent.Alarms.Should().BeEmpty();
 
         actualEvent = actual.Events[3];
-        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow().toIcsDateTimeUtc());
+        actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("2:56:0"));
         actualEvent.Summary.Should().Be("Final Fantasy V Pixel Remaster");
-        actualEvent.Uid.Should().Be("AGDQ2024/Final Fantasy V Pixel Remaster/Any% Cutscene Remover — PC");
+        actualEvent.Uid.Should().Be("1/AGDQ2024/Final Fantasy V Pixel Remaster/Any% Cutscene Remover — PC");
         actualEvent.Description.Should().Be("Any% Cutscene Remover — PC\nRun by Zic3\nCommentary by FoxyJira and WoadyB\nHosted by Prolix");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
-        actualEvent.Location.Should().Be("https://www.twitch.tv/gamesdonequick");
+        actualEvent.Location.Should().BeNull("I removed the Twitch stream URL because it was repetitive and cluttering up my calendar UI, making it hard to read any events");
         actualEvent.Alarms.Should().BeEmpty();
     }
 

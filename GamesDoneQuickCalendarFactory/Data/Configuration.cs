@@ -1,4 +1,6 @@
-﻿namespace GamesDoneQuickCalendarFactory.Data;
+﻿using Unfucked;
+
+namespace GamesDoneQuickCalendarFactory.Data;
 
 public class Configuration {
 

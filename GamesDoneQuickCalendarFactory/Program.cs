@@ -12,18 +12,21 @@ using Microsoft.Net.Http.Headers;
 using NodaTime;
 using System.Text;
 using System.Text.RegularExpressions;
+using Unfucked;
+
+BomSquad.DefuseUtf8Bom();
 
 Encoding             calendarEncoding     = Encoding.UTF8;
 MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = calendarEncoding.WebName };
-
-BomSquad.DefuseUtf8Bom();
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
     .UseWindowsService()
     .UseSystemd();
 
-builder.Logging.addMyCustomFormatter();
+builder.Logging.AddUnfuckedConsole();
+
+builder.Configuration.AlsoSearchForJsonFilesInExecutableDirectory();
 
 // GZIP response compression is handled by Apache httpd, not Kestrel, per https://learn.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-8.0#when-to-use-response-compression-middleware
 builder.Services
@@ -37,7 +40,7 @@ builder.Services
     .AddSingleton<IClock>(SystemClock.Instance)
     .AddSingleton(_ => new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromHours(1) }) { Timeout = TimeSpan.FromSeconds(30) });
 
-WebApplication webApp = builder.Build();
+await using WebApplication webApp = builder.Build();
 webApp
     .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
     .UseOutputCache()
@@ -56,7 +59,7 @@ webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller cale
         responseHeaders.ETag         = new EntityTagHeaderValue(mostRecentlyPolledCalendar.etag);
         responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
         responseHeaders.CacheControl = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() };
-        await new CalendarSerializer().serializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
+        await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
     }
 });
 
