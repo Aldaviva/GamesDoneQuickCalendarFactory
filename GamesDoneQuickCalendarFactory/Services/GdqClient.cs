@@ -62,20 +62,22 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
         await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
             runs ??= new List<GameRun>(resultsCount.value!.Value);
-            GameRun gameRun = new(
-                start: run.startTime,
-                duration: run.endTime - run.startTime,
-                name: run.gameName,
-                description: $"{run.category} \u2014 {run.console}",
-                runners: run.runners.Select(getPerson),
-                commentators: run.commentators.Select(getPerson),
-                hosts: run.hosts.Select(getPerson));
-            runs.Add(gameRun);
+            if (run is { startTime: not null, endTime: not null }) {
+                GameRun gameRun = new(
+                    start: run.startTime.Value,
+                    duration: run.endTime.Value - run.startTime.Value,
+                    name: run.gameName,
+                    description: $"{run.category} \u2014 {run.console}",
+                    runners: run.runners.Select(getPerson),
+                    commentators: run.commentators.Select(getPerson),
+                    hosts: run.hosts.Select(getPerson));
+                runs.Add(gameRun);
 
-            // The API returns runs sorted in ascending start time order, but guarantee it here so the faster equality check in CalendarPoller is correct
-            if (sorted) {
-                sorted    = !tailStart?.IsAfter(gameRun.start) ?? sorted;
-                tailStart = gameRun.start;
+                // The API returns runs sorted in ascending start time order, but guarantee it here so the faster equality check in CalendarPoller is correct
+                if (sorted) {
+                    sorted    = !tailStart?.IsAfter(gameRun.start) ?? sorted;
+                    tailStart = gameRun.start;
+                }
             }
         }
 

@@ -5,7 +5,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
-        <Version>2.7.4</Version>
+        <Version>2.7.5</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Company>Ben Hutchison</Company>
@@ -30,11 +30,11 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3536" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3557" />
         <PackageReference Include="Ical.Net" Version="4.2.0" />
         <PackageReference Include="jaytwo.FluentUri" Version="0.1.4" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.1" />
         <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
         <PackageReference Include="Unfucked" Version="0.0.0-beta3" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
