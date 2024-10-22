@@ -60,7 +60,7 @@ public class ServerTest: IDisposable {
         string responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Be(Regex.Replace("""
                                                BEGIN:VCALENDAR
-                                               PRODID:-//github.com/rianjs/ical.net//NONSGML ical.net 4.0//EN
+                                               PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 4.0//EN
                                                VERSION:2.0
                                                BEGIN:VEVENT
                                                DESCRIPTION:My description
