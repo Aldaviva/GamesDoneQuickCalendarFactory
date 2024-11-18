@@ -27,7 +27,7 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3557" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3592" />
         <PackageReference Include="Ical.Net" Version="4.3.1" />
         <PackageReference Include="jaytwo.FluentUri" Version="0.1.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
