@@ -13,7 +13,7 @@ Description=Games Done Quick Calendar Factory
 
 [Service]
 Type=notify
-ExecStart=/usr/local/bin/GamesDoneQuickCalendarFactory
+ExecStart=/usr/local/bin/gamesdonequickcalendarfactory
 WorkingDirectory=/usr/local/bin/
 Restart=on-failure
 

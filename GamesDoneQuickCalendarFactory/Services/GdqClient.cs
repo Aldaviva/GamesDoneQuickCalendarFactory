@@ -35,7 +35,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
             EmptyToNullUriConverter.INSTANCE,
             OffsetDateTimeConverter.INSTANCE,
             PeriodConverter.INSTANCE,
-            new JsonStringEnumConverter(JsonNamingPolicy.SnakeCaseUpper)
+            new JsonStringEnumConverter()
         }
     };
 
@@ -86,7 +86,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     private static Person getPerson(GdqPerson person) => new(person.id, person.name);
 
-    private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = default, [EnumeratorCancellation] CancellationToken c = default) {
+    private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = null, [EnumeratorCancellation] CancellationToken c = default) {
         JsonObject? page;
         for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page?["next"]?.GetValue<Uri?>()) {
             page = await httpClient.GetFromJsonAsync<JsonObject>(nextPageToDownload, JSON_SERIALIZER_OPTIONS, c);

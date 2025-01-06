@@ -46,10 +46,14 @@ The calendar is updated once per minute while a GDQ event is running, and less f
 1. Click the **Save Account** button
 
 ### Google Calendar
-1. Go to the [Games Done Quick shared public calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t)
+1. Go to this project's [shared public calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t)
 1. Click the **Add** button in the Add Calendar dialog box that appears
 
-*This public calendar is recommended for Google Calendar users because you will observe lower latency updates (about one minute) when a run changes during an event, as opposed to subscribing to the [ICS URL](#any-icalendar-client) that Google polls very infrequently (once every few hours).*
+> [!NOTE]  
+> This public calendar is recommended for Google Calendar users because it enables lower latency updates (about one minute) when a run changes during an event, as opposed to subscribing to the [ICS URL](#any-icalendar-client) which Google polls very infrequently (once every few hours).
+
+> [!TIP]
+> To prevent runs from appearing in an alternating two-column zipper pattern, you can disable "Display shorter events the same size as 30 minute events" in ⚙ › [Settings](https://calendar.google.com/calendar/r/settings) › General › View options *(web)* or ☰ › ⚙ Settings › General *(Android)*.
 
 ### Microsoft Outlook
 
@@ -82,7 +86,7 @@ The calendar is updated once per minute while a GDQ event is running, and less f
 ### Mozilla Thunderbird
 1. Open Thunderbird
 1. Go to the 📅 Calendar space
-1. Click ≡ (Thunderbird Menu) › + New › Calendar…
+1. Click ☰ (Thunderbird Menu) › + New › Calendar…
 1. Choose **On the Network**, then click Next
 1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Check **This location doesn't require credentials**

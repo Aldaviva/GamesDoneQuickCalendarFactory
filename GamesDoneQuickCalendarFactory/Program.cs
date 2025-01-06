@@ -52,8 +52,7 @@ webApp
     });
 
 webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
-    CalendarResponse? mostRecentlyPolledCalendar = calendarPoller.mostRecentlyPolledCalendar;
-    if (mostRecentlyPolledCalendar != null) {
+    if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
         ResponseHeaders responseHeaders = response.GetTypedHeaders();
         responseHeaders.ContentType  = icalendarContentType;
         responseHeaders.ETag         = new EntityTagHeaderValue(mostRecentlyPolledCalendar.etag);

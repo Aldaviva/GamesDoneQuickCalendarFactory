@@ -4,19 +4,21 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
-        <RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
         <Version>2.7.5</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Company>Ben Hutchison</Company>
-        <Copyright>© 2024 Ben Hutchison</Copyright>
+        <Copyright>© 2025 Ben Hutchison</Copyright>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RollForward>major</RollForward>
         <LangVersion>latest</LangVersion>
         <ApplicationIcon>gdq.ico</ApplicationIcon>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>false</SelfContained>
+        <DebugType>embedded</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,11 +29,11 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3557" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3592" />
         <PackageReference Include="Ical.Net" Version="4.3.1" />
         <PackageReference Include="jaytwo.FluentUri" Version="0.1.4" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.0" />
         <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
         <PackageReference Include="Unfucked" Version="0.0.0-beta3" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
@@ -40,31 +42,24 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
-        <None Update="Install service.ps1">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        <None Update="Install service.ps1" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
-        <None Update="gamesdonequickcalendarfactory.service">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        <None Update="gamesdonequickcalendarfactory.service" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
+
+    <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
+        <AssemblyName>$(AssemblyName.ToLower())</AssemblyName>
+    </PropertyGroup>
 
     <ItemGroup>
         <InternalsVisibleTo Include="Tests" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Resources.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-        <EmbeddedResource Update="Resources.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
+        <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+        <EmbeddedResource Update="Resources.resx" LastGenOutput="Resources.Designer.cs" Generator="ResXFileCodeGenerator" />
     </ItemGroup>
 
 </Project>
