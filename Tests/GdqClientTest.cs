@@ -52,6 +52,7 @@ public class GdqClientTest {
             "Pre-Show — GDQ",
             [new Person(1434, "Interview Crew")],
             [],
+            [],
             []));
 
         actual.ElementAt(1).Should().BeEquivalentTo(new GameRun(
@@ -61,7 +62,8 @@ public class GdqClientTest {
             "Any% Unrestricted — PC",
             [new Person(2042, "Radicoon")],
             [new Person(307, "kevinregamey"), new Person(306, "silentdestroyer")],
-            [new Person(190, "AttyJoe")]));
+            [new Person(190, "AttyJoe")],
+            []));
 
         actual.ElementAt(2).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
@@ -70,7 +72,8 @@ public class GdqClientTest {
             "Master — Wii",
             [new Person(1023, "Helix")],
             [new Person(308, "limy"), new Person(469, "PeasSMB")],
-            [new Person(190, "AttyJoe")]));
+            [new Person(190, "AttyJoe")],
+            []));
 
         actual.ElementAt(3).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
@@ -79,7 +82,8 @@ public class GdqClientTest {
             "101% — SNES",
             [new Person(1240, "Tonkotsu")],
             [new Person(310, "Glan"), new Person(309, "V0oid")],
-            [new Person(190, "AttyJoe")]));
+            [new Person(190, "AttyJoe")],
+            []));
 
         actual.ElementAt(138).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
@@ -88,7 +92,8 @@ public class GdqClientTest {
             "Any% Cutscene Remover — PC",
             [new Person(432, "Zic3")],
             [new Person(448, "FoxyJira"), new Person(449, "WoadyB")],
-            [new Person(2, "Prolix")]));
+            [new Person(2, "Prolix")],
+            []));
 
         actual.Last().Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-21T00:00:00-05:00").GetValueOrThrow(),
@@ -96,6 +101,7 @@ public class GdqClientTest {
             "Finale!",
             "The End% — Live",
             [new Person(367, "Tech Crew")],
+            [],
             [],
             []));
     }

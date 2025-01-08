@@ -8,9 +8,10 @@ namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 /// <param name="name">Usually the same as <paramref name="gameName"/>, but if this is a bonus game, <paramref name="name"/> will have a <c>BONUS GAME 1- </c> prefix.</param>
 /// <param name="gameName">Usually the same as <paramref name="name"/>, but if this is a bonus game, <paramref name="gameName"/> won't have the <c>BONUS GAME 1- </c> prefix.</param>
 /// <param name="category">The type or rule set of the run, such as 100% or Any%.</param>
-/// <param name="console">The hardware the game is running on, such as PC or PS5.</param>
+/// <param name="console">The hardware the game is running on, such as PC or PS5, or the empty string.</param>
 /// <param name="order">The sequence number of this run in its containing event, starting at <c>1</c> for the first run of the even and increasing by <c>1</c> for each run in the event</param>
 /// <param name="runTime">Before a run ends, this is the estimated duration, but after a run ends, this changes to the actual duration. To get the original estimated duration even after the run ends, use <paramref name="endTime"/><c>-</c><paramref name="startTime"/>.</param>
+/// <param name="tags">Zero or more of <c>awful</c>, <c>bingo</c>, <c>bonus</c>, <c>checkpoint</c>, <c>checkpoint_run</c>, <c>coop</c>, <c>finale</c>, <c>horror</c>, <c>kaizo</c>, <c>new_addition</c>, <c>online</c>, <c>opener</c>, <c>race</c>, <c>randomizer</c>, <c>recap</c>, <c>relay</c>, <c>rhythm</c>, <c>showcase</c>, <c>sleep</c>, <c>tas</c>, or <c>tournament</c> (as of AGDQ2025, there can be more in the future). Can be empty, but never null.</param>
 public record GdqRun(
     int id,
     [property: JsonPropertyName("name")] string name,
@@ -26,7 +27,8 @@ public record GdqRun(
     [property: JsonPropertyName("run_time")] Period runTime,
     [property: JsonPropertyName("setup_time")] Period setupTime,
     [property: JsonPropertyName("anchor_time")] OffsetDateTime? anchorTime,
-    [property: JsonPropertyName("video_links")] IReadOnlyList<Video> recordings
+    [property: JsonPropertyName("video_links")] IReadOnlyList<Video> recordings,
+    IReadOnlyList<string> tags
 );
 
 public record GdqPerson(

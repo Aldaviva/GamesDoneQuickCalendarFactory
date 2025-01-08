@@ -70,7 +70,8 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
                     description: $"{run.category} \u2014 {run.console}",
                     runners: run.runners.Select(getPerson),
                     commentators: run.commentators.Select(getPerson),
-                    hosts: run.hosts.Select(getPerson));
+                    hosts: run.hosts.Select(getPerson),
+                    tags: run.tags.Select(s => s.ToLowerInvariant()));
                 runs.Add(gameRun);
 
                 // The API returns runs sorted in ascending start time order, but guarantee it here so the faster equality check in CalendarPoller is correct

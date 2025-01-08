@@ -28,7 +28,8 @@ public class CalendarGeneratorTest {
                 "Any% Unrestricted — PC",
                 [new Person(1, "Radicoon")],
                 [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
-                [new Person(4, "AttyJoe")]),
+                [new Person(4, "AttyJoe")],
+                []),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
@@ -37,7 +38,8 @@ public class CalendarGeneratorTest {
                 "Master — Wii",
                 [new Person(1, "Helix")],
                 [new Person(2, "limy"), new Person(3, "PeasSMB")],
-                [new Person(4, "AttyJoe")]),
+                [new Person(4, "AttyJoe")],
+                []),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
@@ -46,7 +48,8 @@ public class CalendarGeneratorTest {
                 "101% — SNES",
                 [new Person(1, "Tonkotsu")],
                 [new Person(2, "Glan"), new Person(3, "V0oid")],
-                [new Person(4, "AttyJoe")]),
+                [new Person(4, "AttyJoe")],
+                []),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
@@ -55,7 +58,8 @@ public class CalendarGeneratorTest {
                 "Any% Cutscene Remover — PC",
                 [new Person(1, "Zic3")],
                 [new Person(2, "FoxyJira"), new Person(3, "WoadyB")],
-                [new Person(4, "Prolix")])
+                [new Person(4, "Prolix")],
+                [])
         ]);
 
         A.CallTo(() => eventDownloader.downloadSchedule()).Returns(@event);

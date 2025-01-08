@@ -28,7 +28,8 @@ public class EventDownloaderTest {
             "TUNIC", "Any% Unrestricted — PC",
             [new Person(1, "Radicoon")],
             [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
-            [new Person(4, "AttyJoe")]);
+            [new Person(4, "AttyJoe")],
+            []);
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
 
         Event? actual = await eventDownloader.downloadSchedule();
@@ -51,7 +52,8 @@ public class EventDownloaderTest {
             "TUNIC", "Any% Unrestricted — PC",
             [new Person(1, "Radicoon")],
             [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
-            [new Person(4, "AttyJoe")]);
+            [new Person(4, "AttyJoe")],
+            []);
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
 
         Event? actual = await eventDownloader.downloadSchedule();
@@ -60,7 +62,7 @@ public class EventDownloaderTest {
     }
 
     [Fact]
-    public async Task ignoreSleepRuns() {
+    public async Task ignoreRuns() {
         GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", new DateTimeOffset(2024, 1, 14, 11, 30, 0, TimeSpan.FromHours(-5)), "US/Eastern", false);
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
@@ -74,8 +76,9 @@ public class EventDownloaderTest {
                 "Real run",
                 "To show the test works",
                 [new Person(1, "Runner")],
-                Enumerable.Empty<Person>(),
-                Enumerable.Empty<Person>()),
+                [],
+                [],
+                []),
 
             // Sleep event
             new(now,
@@ -83,8 +86,9 @@ public class EventDownloaderTest {
                 "Sleep",
                 "Pillow Fight Boss Rush — GDQ Studio",
                 [new Person(1, "Faith")], // Faith is actually 1884, but that case is tested separately below
-                Enumerable.Empty<Person>(),
-                [new Person(2, "Velocity")]),
+                [],
+                [new Person(2, "Velocity")],
+                []),
 
             // Long event
             new(now,
@@ -92,8 +96,9 @@ public class EventDownloaderTest {
                 "Day 1 Intermission",
                 "Intermission — Offline",
                 [new Person(1, "Twitchcon")],
-                Enumerable.Empty<Person>(),
-                Enumerable.Empty<Person>()),
+                [],
+                [],
+                []),
 
             // Short sleep
             new(now,
@@ -101,48 +106,67 @@ public class EventDownloaderTest {
                 "Sleep",
                 "get-some-rest-too% — GDQ Studio",
                 [new Person(1, "GDQ Studio")],
-                Enumerable.Empty<Person>(),
-                [new Person(2, "Studio Workers")]),
+                [],
+                [new Person(2, "Studio Workers")],
+                []),
 
             // Tech Crew
             new(now, Duration.FromMinutes(70),
                 "The Checkpoint",
                 "Day 1 - Sunday — Live",
                 [new Person(367, "Tech Crew")],
-                Enumerable.Empty<Person>(),
-                [new Person(205, "TheKingsPride")]),
+                [],
+                [new Person(205, "TheKingsPride")],
+                []),
 
             // Interview Crew
             new(now, Duration.FromMinutes(42),
                 "AGDQ 2024 Pre-Show",
                 "Pre-Show — GDQ",
                 [new Person(1434, "Interview Crew")],
-                Enumerable.Empty<Person>(),
-                Enumerable.Empty<Person>()),
+                [],
+                [],
+                []),
 
             // Faith
             new(now, Duration.FromMinutes(1), // actually longer, but long events are tested separately above
                 "Not Sleep",                  // Sleep name is tested separately above
                 "Sound Machine TAS — GDQ Studio",
                 [new Person(1884, "Faith")],
-                Enumerable.Empty<Person>(),
-                Enumerable.Empty<Person>()),
+                [],
+                [],
+                []),
 
             // Everyone
             new(now, Duration.FromMinutes(15),
                 "Finale!",
                 "Finale% — GDQ",
                 [new Person(1885, "Everyone!")],
-                Enumerable.Empty<Person>(),
-                Enumerable.Empty<Person>()),
+                [],
+                [],
+                []),
 
             // Frame Fatales Interstitial Team
             new(now, Duration.FromMinutes(30),
                 "Preshow",
                 "Preshow — GDQ",
                 [new Person(2071, "Frame Fatales Interstitial Team")],
-                Enumerable.Empty<Person>(),
-                Enumerable.Empty<Person>()),
+                [],
+                [],
+                []),
+
+            // recap tag
+            new(now, Duration.FromMinutes(30),
+                "The Red Bull Daily Recap",
+                "The Red Bull Daily Recap",
+                [
+                    new Person(60, "spikevegeta"),
+                    new Person(884, "Kungfufruitcup"),
+                    new Person(2758, "Melo Acevedo"),
+                ],
+                [new Person(2750, "THEKyleThomas")],
+                [],
+                ["recap"])
         };
 
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns(mockRuns);
