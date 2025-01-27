@@ -70,9 +70,9 @@
       },
       "Unfucked": {
         "type": "Direct",
-        "requested": "[0.0.0-beta3, )",
-        "resolved": "0.0.0-beta3",
-        "contentHash": "yV5nP4hBAz0HpVcvVqx+kbuUDu/lMYkPbNo4Ym9SLff8Xb0mgs3oAgGMAbJ3EVbj+TAid7o/GYgzt5/yfuNG6A=="
+        "requested": "[0.0.0-beta4, )",
+        "resolved": "0.0.0-beta4",
+        "contentHash": "pWwHZP9Ok/LAZqFSrZ9CNddcWhx92wFxDh8oUgSrsNZjv/lFbM3HPSdcmLeqj4hhv1eir5a/DcQk+5XPSHzyvQ=="
       },
       "Unfucked.DateTime": {
         "type": "Direct",
