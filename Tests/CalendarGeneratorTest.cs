@@ -79,15 +79,15 @@ public class CalendarGeneratorTest {
         actualEvent.Location.Should().BeNull("I removed the Twitch stream URL because it was repetitive and cluttering up my calendar UI, making it hard to read any events");
         actualEvent.Alarms[0].Action.Should().Be("DISPLAY");
         actualEvent.Alarms[0].Description.Should().Be("Awesome Games Done Quick 2024 is coming up next week");
-        actualEvent.Alarms[0].Trigger.Duration.Should().Be(TimeSpan.FromDays(7));
+        actualEvent.Alarms[0].Trigger.Duration.Should().Be(TimeSpan.FromDays(-7));
         actualEvent.Alarms[0].Trigger.IsRelative.Should().BeTrue();
         actualEvent.Alarms[1].Action.Should().Be("DISPLAY");
         actualEvent.Alarms[1].Description.Should().Be("Awesome Games Done Quick 2024 is starting tomorrow");
-        actualEvent.Alarms[1].Trigger.Duration.Should().Be(TimeSpan.FromDays(1));
+        actualEvent.Alarms[1].Trigger.Duration.Should().Be(TimeSpan.FromDays(-1));
         actualEvent.Alarms[1].Trigger.IsRelative.Should().BeTrue();
         actualEvent.Alarms[2].Action.Should().Be("DISPLAY");
         actualEvent.Alarms[2].Description.Should().Be("Awesome Games Done Quick 2024 will be starting soon");
-        actualEvent.Alarms[2].Trigger.Duration.Should().Be(TimeSpan.FromMinutes(15));
+        actualEvent.Alarms[2].Trigger.Duration.Should().Be(TimeSpan.FromMinutes(-15));
         actualEvent.Alarms[2].Trigger.IsRelative.Should().BeTrue();
 
         actualEvent = actual.Events[1];

@@ -39,18 +39,19 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<
                 // Location = TWITCH_STREAM_URL.ToString(),
                 Alarms = {
                     runIndex == 0 ? new Alarm {
-                        Action      = AlarmAction.Display,
-                        Trigger     = new Trigger(TimeSpan.FromDays(7)),
+                        Action = AlarmAction.Display,
+                        // RFC-5545 valarm documentation is wrong, trigger specifies a duration AFTER the start (by default) of the event to display the alarm, not BEFORE, so the timespan must be negative to trigger before (https://icalendar.org/iCalendar-RFC-5545/3-6-6-alarm-component.html)
+                        Trigger     = new Trigger(TimeSpan.FromDays(-7)),
                         Description = $"{gdqEvent.longTitle} is coming up next week"
                     } : null,
                     runIndex == 0 ? new Alarm {
                         Action      = AlarmAction.Display,
-                        Trigger     = new Trigger(TimeSpan.FromDays(1)),
+                        Trigger     = new Trigger(TimeSpan.FromDays(-1)),
                         Description = $"{gdqEvent.longTitle} is starting tomorrow"
                     } : null,
                     runIndex == 0 ? new Alarm {
                         Action      = AlarmAction.Display,
-                        Trigger     = new Trigger(TimeSpan.FromMinutes(15)),
+                        Trigger     = new Trigger(TimeSpan.FromMinutes(-15)),
                         Description = $"{gdqEvent.longTitle} will be starting soon"
                     } : null
                 }
