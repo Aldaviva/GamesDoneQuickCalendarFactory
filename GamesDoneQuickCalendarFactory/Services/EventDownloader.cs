@@ -26,6 +26,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
 
     private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
         "opener",
+        "preshow",
         "checkpoint",
         "recap",
         "sleep",
