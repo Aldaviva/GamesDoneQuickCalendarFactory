@@ -44,10 +44,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
         return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.GetPathSegment(1));
     }
 
-    public async Task<GdqEvent> getEvent(int eventId) {
-        Uri eventUrl = EVENTS_API_URL.WithPath(eventId.ToString());
-        return (await httpClient.GetFromJsonAsync<GdqEvent>(eventUrl, JSON_SERIALIZER_OPTIONS))!;
-    }
+    public async Task<GdqEvent> getEvent(int eventId) => (await httpClient.GetFromJsonAsync<GdqEvent>(EVENTS_API_URL.WithPath(eventId.ToString()), JSON_SERIALIZER_OPTIONS))!;
 
     public async Task<GdqEvent> getCurrentEvent() => await getEvent(await getCurrentEventId());
 
@@ -62,12 +59,12 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
         await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
             runs ??= new List<GameRun>(resultsCount.value!.Value);
-            if (run is { startTime: not null, endTime: not null }) {
+            if (run is { startTime: { } startTime, endTime: { } endTime }) {
                 GameRun gameRun = new(
-                    start: run.startTime.Value,
-                    duration: run.endTime.Value - run.startTime.Value,
+                    start: startTime,
+                    duration: endTime - startTime,
                     name: run.gameName,
-                    description: $"{run.category} \u2014 {run.console}",
+                    description: ((List<string?>) [run.category, run.console.EmptyToNull(), run.gameReleaseYear?.ToString()]).Compact().Join(" \u2014 "),
                     runners: run.runners.Select(getPerson),
                     commentators: run.commentators.Select(getPerson),
                     hosts: run.hosts.Select(getPerson),
@@ -87,10 +84,10 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     private static Person getPerson(GdqPerson person) => new(person.id, person.name);
 
-    private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = null, [EnumeratorCancellation] CancellationToken c = default) {
+    private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = null, [EnumeratorCancellation] CancellationToken ct = default) {
         JsonObject? page;
         for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page?["next"]?.GetValue<Uri?>()) {
-            page = await httpClient.GetFromJsonAsync<JsonObject>(nextPageToDownload, JSON_SERIALIZER_OPTIONS, c);
+            page = await httpClient.GetFromJsonAsync<JsonObject>(nextPageToDownload, JSON_SERIALIZER_OPTIONS, ct);
 
             if (page != null) {
                 if (resultsCount is { value: null }) {

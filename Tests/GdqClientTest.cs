@@ -30,7 +30,6 @@ public class GdqClientTest {
         actual.id.Should().Be(46);
         actual.shortName.Should().Be("AGDQ2024");
         actual.longName.Should().Be("Awesome Games Done Quick 2024");
-        actual.timezone.Should().Be("US/Eastern");
     }
 
     [Fact]
@@ -39,7 +38,7 @@ public class GdqClientTest {
         A.CallTo(() => httpMessageHandler.SendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/runs"))).Returns(
             new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", DateTimeOffset.Parse("2024-01-14T11:30:00-05:00"), "US/Eastern", false);
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
 
         IList<GameRun> actual = (await gdq.getEventRuns(gdqEvent)).ToList();
 
@@ -59,7 +58,7 @@ public class GdqClientTest {
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(36),
             "TUNIC",
-            "Any% Unrestricted — PC",
+            "Any% Unrestricted — PC — 2022",
             [new Person(2042, "Radicoon")],
             [new Person(307, "kevinregamey"), new Person(306, "silentdestroyer")],
             [new Person(190, "AttyJoe")],

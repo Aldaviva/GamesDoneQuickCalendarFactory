@@ -71,6 +71,7 @@
             ],
             "id" : 5971,
             "name" : "TUNIC",
+            "release_year" : 2022,
             "order" : 2,
             "run_time" : "0:21:42",
             "runners" : [

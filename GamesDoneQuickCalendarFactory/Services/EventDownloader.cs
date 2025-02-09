@@ -15,6 +15,11 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
 
     private static readonly Duration MAX_RUN_DURATION = Duration.FromHours(11);
 
+    /// <summary>
+    /// If there are no calendar events ending in the last 1 day, and no upcoming events, hide all those old past events.
+    /// </summary>
+    private static readonly Duration MAX_EVENT_END_CLEANUP_DELAY = Duration.FromDays(1);
+
     private static readonly IReadOnlySet<int> RUNNER_BLACKLIST = new HashSet<int> {
         367,  // Tech Crew
         1434, // Interview Crew
@@ -26,17 +31,13 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
 
     private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
         "opener",
+        "kickoff",
         "preshow",
         "checkpoint",
         "recap",
         "sleep",
         "finale"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
-
-    /// <summary>
-    /// If there are no calendar events ending in the last 1 day, and no upcoming events, hide all those old past events.
-    /// </summary>
-    private static readonly Duration MAX_EVENT_END_CLEANUP_DELAY = Duration.FromDays(1);
 
     public async Task<Event?> downloadSchedule() {
         GdqEvent currentEvent = await gdq.getCurrentEvent();

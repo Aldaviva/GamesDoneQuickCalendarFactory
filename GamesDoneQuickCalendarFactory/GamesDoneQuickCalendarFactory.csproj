@@ -5,14 +5,14 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
-        <Version>2.7.8</Version>
+        <Version>2.7.9</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Company>Ben Hutchison</Company>
         <Copyright>© 2025 Ben Hutchison</Copyright>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RollForward>major</RollForward>
+        <RollForward>latestMajor</RollForward>
         <LangVersion>latest</LangVersion>
         <ApplicationIcon>gdq.ico</ApplicationIcon>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
@@ -34,6 +34,7 @@
         <PackageReference Include="jaytwo.FluentUri" Version="0.1.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.1" />
+        <PackageReference Include="NodaTime" Version="3.2.1" />
         <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
         <PackageReference Include="Unfucked" Version="0.0.0-beta4" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />

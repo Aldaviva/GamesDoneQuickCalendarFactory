@@ -5,7 +5,7 @@
 
 Converts the official [Games Done Quick schedule](https://gamesdonequick.com/schedule) into an automatically updated [iCalendar ICS file](https://aldaviva.com/docs/gdq.ics) and [public Google calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t), to which your calendar program can subscribe.
 
-Each run in the current GDQ event will appear as a calendar appointment, comprising the run's name, estimated start and end time, category, runners, and host.
+Each run in the current GDQ event will appear as a calendar appointment comprising the run's name, estimated start and end time, category, the game's hardware platform and release year, runners, commentators, and host.
 
 Every type of GDQ event with a published run schedule is included: Awesome Games Done Quick, Summer Games Done Quick, [Frost Fatales, Flame Fatales](https://gamesdonequick.com/site/framefatales), [Back to Black](https://gamesdonequick.com/site/blackinaflash), and Games Done Quick Express for various events like PAX, TwitchCon, and Disaster Relief. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded because its schedule is a messy, nigh-unparsable spreadsheet.
 

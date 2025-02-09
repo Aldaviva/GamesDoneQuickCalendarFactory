@@ -18,7 +18,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task downloadSchedule() {
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", new DateTimeOffset(2024, 1, 14, 11, 30, 0, TimeSpan.FromHours(-5)), "US/Eastern", false);
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
         A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 14, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
@@ -42,7 +42,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task downloadScheduleEmpty() {
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", new DateTimeOffset(2024, 1, 14, 11, 30, 0, TimeSpan.FromHours(-5)), "US/Eastern", false);
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
         A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 28, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
@@ -63,7 +63,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task ignoreRuns() {
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", "", new DateTimeOffset(2024, 1, 14, 11, 30, 0, TimeSpan.FromHours(-5)), "US/Eastern", false);
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
         OffsetDateTime now = SystemClock.Instance.GetCurrentInstant().WithOffset(Offset.Zero);

@@ -5,29 +5,28 @@ using System.Text.Json.Serialization;
 
 namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 
-/// <param name="name">Usually the same as <paramref name="gameName"/>, but if this is a bonus game, <paramref name="name"/> will have a <c>BONUS GAME 1- </c> prefix.</param>
-/// <param name="gameName">Usually the same as <paramref name="name"/>, but if this is a bonus game, <paramref name="gameName"/> won't have the <c>BONUS GAME 1- </c> prefix.</param>
+/// <summary>A playthrough of a game</summary>
+/// <param name="id">unique numeric identifier for this run</param>
+/// <param name="runName">Usually the same as <paramref name="gameName"/>, but if this is a bonus game, <paramref name="runName"/> will have a <c>BONUS GAME 1- </c> prefix.</param>
+/// <param name="gameName">Usually the same as <paramref name="runName"/>, but if this is a bonus game, <paramref name="gameName"/> won't have the <c>BONUS GAME 1- </c> prefix.</param>
 /// <param name="category">The type or rule set of the run, such as 100% or Any%.</param>
 /// <param name="console">The hardware the game is running on, such as PC or PS5, or the empty string.</param>
-/// <param name="order">The sequence number of this run in its containing event, starting at <c>1</c> for the first run of the even and increasing by <c>1</c> for each run in the event</param>
-/// <param name="runTime">Before a run ends, this is the estimated duration, but after a run ends, this changes to the actual duration. To get the original estimated duration even after the run ends, use <paramref name="endTime"/><c>-</c><paramref name="startTime"/>.</param>
-/// <param name="tags">Zero or more of <c>awful</c>, <c>bingo</c>, <c>bonus</c>, <c>checkpoint</c>, <c>checkpoint_run</c>, <c>coop</c>, <c>finale</c>, <c>horror</c>, <c>kaizo</c>, <c>new_addition</c>, <c>online</c>, <c>opener</c>, <c>race</c>, <c>randomizer</c>, <c>recap</c>, <c>relay</c>, <c>rhythm</c>, <c>showcase</c>, <c>sleep</c>, <c>tas</c>, or <c>tournament</c> (as of AGDQ2025, there can be more in the future). Can be empty, but never null.</param>
+/// <param name="gameReleaseYear">The year the game came out, or null.</param>
+/// <param name="actualRunTime">Before a run ends, this is the estimated duration, but after a run ends, this changes to the actual duration. To get the original estimated duration even after the run ends, use <paramref name="endTime"/><c>-</c><paramref name="startTime"/>.</param>
+/// <param name="tags"><para>Zero or more of <c>awful</c>, <c>bingo</c>, <c>bonus</c>, <c>checkpoint</c>, <c>checkpoint_run</c>, <c>coop</c>, <c>finale</c>, <c>horror</c>, <c>kaizo</c>, <c>kickoff</c>, <c>new_addition</c>, <c>online</c>, <c>opener</c>, <c>preshow</c>, <c>race</c>, <c>randomizer</c>, <c>recap</c>, <c>relay</c>, <c>rhythm</c>, <c>showcase</c>, <c>sleep</c>, <c>tas</c>, or <c>tournament</c> (as of BTB2025, there can be more in the future). Can be empty, but never null.</para><para>JSON Query for an array of runs: <c>map(.tags) | flatten() | uniq() | sort()</c></para></param>
 public record GdqRun(
     int id,
-    [property: JsonPropertyName("name")] string name,
+    [property: JsonPropertyName("name")] string runName,
     [property: JsonPropertyName("display_name")] string gameName,
     string category,
     string console,
+    [property: JsonPropertyName("release_year")] int? gameReleaseYear,
     IReadOnlyList<Runner> runners,
     IReadOnlyList<GdqPerson> hosts,
     IReadOnlyList<GdqPerson> commentators,
     [property: JsonPropertyName("starttime")] OffsetDateTime? startTime,
     [property: JsonPropertyName("endtime")] OffsetDateTime? endTime,
-    int? order,
-    [property: JsonPropertyName("run_time")] Period runTime,
-    [property: JsonPropertyName("setup_time")] Period setupTime,
-    [property: JsonPropertyName("anchor_time")] OffsetDateTime? anchorTime,
-    [property: JsonPropertyName("video_links")] IReadOnlyList<Video> recordings,
+    [property: JsonPropertyName("run_time")] Period actualRunTime,
     IReadOnlyList<string> tags
 );
 
@@ -55,21 +54,9 @@ public enum StreamingPlatform {
     TWITCH,
 
     /// <summary>
-    /// Only one person in GDQ history streams primarily on YouTube Live:
-    /// Bar0ti (https://www.youtube.com/@maeveskora) who showed a very cool Katana Zero TAS during Frost Fatales 2023
+    /// Only one person in GDQ history streams on YouTube Live:
+    /// Bar0ti (https://www.youtube.com/@maeveskora), who showed an inspiring Katana Zero TAS during Frost Fatales 2023
     /// </summary>
-    YOUTUBE
-
-}
-
-public record Video(
-    int id,
-    [property: JsonPropertyName("link_type")] VideoHost host,
-    Uri url
-);
-
-public enum VideoHost {
-
     YOUTUBE
 
 }
