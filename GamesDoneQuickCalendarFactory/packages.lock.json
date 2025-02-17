@@ -38,11 +38,11 @@
       },
       "Microsoft.Extensions.Hosting.Systemd": {
         "type": "Direct",
-        "requested": "[9.0.1, )",
-        "resolved": "9.0.1",
-        "contentHash": "DCVM34Ey7NmfxicRuNZyZ+8HViO0Nee35r3ZFKfUY7qFVNAJ+VI4FUnz1mbyCFKFF1CsPmHVo/ZHqKfJkGTygw==",
+        "requested": "[9.0.2, )",
+        "resolved": "9.0.2",
+        "contentHash": "Lj0fjcT0VPy4nI5jgSl21HKClF2dEW3LjdTW8Q07HyksxU0LaSeQTAUQPeNSoFkUnn/zKPK2FmNVnc6c3KD5Vw==",
         "dependencies": {
-          "Microsoft.Extensions.Hosting": "9.0.1"
+          "Microsoft.Extensions.Hosting": "9.0.2"
         }
       },
       "Microsoft.Extensions.Hosting.WindowsServices": {
