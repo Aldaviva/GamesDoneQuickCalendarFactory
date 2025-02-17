@@ -1,15 +1,15 @@
-name: Compile program
+name: Compile and deploy
 
 on:
   push:
     branches: [ master ]
   workflow_dispatch:
 
+env:
+  ProjectName: GamesDoneQuickCalendarFactory
+      
 jobs:
   compile:
-    env:
-      ProjectName: GamesDoneQuickCalendarFactory
-
     strategy:
       matrix:
         include:
@@ -60,6 +60,15 @@ jobs:
       - name: Stop if tests failed
         run: exit ${{ env.TEST_EXIT_CODE }}
 
+      # - name: Send artifact to deployment job
+      #   if: matrix.targetPlatform == "win-x64"
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.ProjectName }}.exe
+      #     path: ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/${{ env.ProjectName }}.exe
+      #     retention-days: 1
+      #     if-no-files-found: error
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -72,3 +81,43 @@ jobs:
             ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/Install service.ps1
             ${{ env.ProjectName }}/bin/Release/net8.0/${{ matrix.targetPlatform }}/publish/gamesdonequickcalendarfactory.service
           if-no-files-found: error
+
+  deploy:
+    runs-on: ubuntu-latest  
+    needs: compile
+    environment: Bragi
+    concurrency: 
+      group: Bragi
+      cancel-in-progress: true
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ProjectName }}-win-x64
+
+      - name: Set up SSH
+        env:
+          SSH_USER_PRIVATE_KEY: ${{ secrets.SSH_USER_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod go-rwx ~/.ssh
+          echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          chmod go-rw ~/.ssh/known_hosts
+          touch user.priv
+          chmod 600 user.priv
+          echo "$SSH_USER_PRIVATE_KEY" > user.priv
+          echo "Known hosts:"
+          cat ~/.ssh/known_hosts
+          echo "SSH machine config:"
+          cat /etc/ssh/ssh_config
+        
+      - name: Stop server
+        run: ssh -vvv -i user.priv ${{ vars.SSH_AUTHORITY }} Stop-Service GamesDoneQuickCalendarFactory
+
+      - name: Upload artifact to server
+        run: scp -i user.priv ${{ env.ProjectName }}.exe ${{ vars.SSH_AUTHORITY }}:${{ vars.EXE_INSTALLATION_PATH }}
+
+      - name: Start server
+        run: ssh -i user.priv ${{ vars.SSH_AUTHORITY }} Start-Service GamesDoneQuickCalendarFactory
