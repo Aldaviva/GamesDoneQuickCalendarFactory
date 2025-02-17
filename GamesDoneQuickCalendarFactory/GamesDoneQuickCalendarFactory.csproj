@@ -16,7 +16,7 @@
         <LangVersion>latest</LangVersion>
         <ApplicationIcon>gdq.ico</ApplicationIcon>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <PublishSingleFile>true</PublishSingleFile>
+        <!-- <PublishSingleFile>true</PublishSingleFile> --><!-- Breaks build when GitHub doesn't update the Actions hosted runners .NET SDK in lockstep with dev machines -->
         <SelfContained>false</SelfContained>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
