@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using NodaTime;
 using System.Text;
@@ -18,6 +17,7 @@ BomSquad.DefuseUtf8Bom();
 
 Encoding             calendarEncoding     = Encoding.UTF8;
 MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = calendarEncoding.WebName };
+string[]             varyHeaderValue      = [HeaderNames.AcceptEncoding];
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
@@ -45,19 +45,20 @@ webApp
     .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
     .UseOutputCache()
     .Use(async (context, next) => {
-        Configuration config = webApp.Services.GetRequiredService<IOptions<Configuration>>().Value;
-        context.Response.GetTypedHeaders().CacheControl = new CacheControlHeaderValue { Public = true, MaxAge = config.cacheDuration };
-        context.Response.Headers[HeaderNames.Vary]      = new[] { HeaderNames.AcceptEncoding };
+        ICalendarPoller calendarPoller  = webApp.Services.GetRequiredService<ICalendarPoller>();
+        ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
+        responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
+        context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
+        if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
+            responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
+            responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
+        }
         await next();
     });
 
 webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
     if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
-        ResponseHeaders responseHeaders = response.GetTypedHeaders();
-        responseHeaders.ContentType  = icalendarContentType;
-        responseHeaders.ETag         = new EntityTagHeaderValue(mostRecentlyPolledCalendar.etag);
-        responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
-        responseHeaders.CacheControl = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() };
+        response.GetTypedHeaders().ContentType = icalendarContentType;
         await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
     }
 });
@@ -65,7 +66,7 @@ webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller cale
 webApp.MapGet("/badge.json", [OutputCache] async ([FromServices] IEventDownloader eventDownloader) =>
 await eventDownloader.downloadSchedule() is { } schedule
     ? new ShieldsBadgeResponse(
-        label: Regex.Replace(schedule.shortTitle, @"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])", " ").ToLower(), // add spaces to abbreviation
+        label: shortNamePattern().Replace(schedule.shortTitle, " ").ToLower(), // add spaces to abbreviation
         message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",
         color: "success",
         logoSvg: Resources.gdqDpadBadgeLogo)
@@ -74,3 +75,10 @@ await eventDownloader.downloadSchedule() is { } schedule
 await webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 
 await webApp.RunAsync();
+
+internal partial class Program {
+
+    [GeneratedRegex(@"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])")]
+    private static partial Regex shortNamePattern();
+
+}
