@@ -29,14 +29,21 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
         2171, // Everyone
     }.ToFrozenSet();
 
+    /// <summary>
+    /// <para>If a run has any of these tags, it will not appear in the calendar.</para>
+    /// <para>To compute the set of all tags in a given event, run this JSON Query on the /runs JSON object:</para>
+    /// <para><c>.results | map(.tags) | flatten() | uniq() | sort()</c></para>
+    /// </summary>
     private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
-        "opener",
         "kickoff",
         "preshow",
         "checkpoint",
+        "chomp",
         "recap",
         "sleep",
-        "finale"
+
+        // #34: Frame Fatales inconsistently uses "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs
+        // "opener", "finale"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
     public async Task<Event?> downloadSchedule() {
