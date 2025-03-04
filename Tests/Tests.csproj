@@ -30,6 +30,12 @@
     <ItemGroup>
         <ProjectReference Include="..\GamesDoneQuickCalendarFactory\GamesDoneQuickCalendarFactory.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Unfucked.ICS">
+        <HintPath>..\..\Unfucked\ICS\bin\Debug\netstandard2.1\Unfucked.ICS.dll</HintPath>
+      </Reference>
+    </ItemGroup>
     
     <ItemGroup>
         <None Update="Data\event.json">

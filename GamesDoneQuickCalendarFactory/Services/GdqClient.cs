@@ -1,13 +1,14 @@
 ﻿using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Data.Marshal;
-using jaytwo.FluentUri;
 using NodaTime;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using Unfucked;
+using Unfucked.HTTP;
+using Unfucked.HTTP.Config;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
@@ -27,8 +28,8 @@ public interface IGdqClient {
 
 public class GdqClient(HttpClient httpClient): IGdqClient {
 
-    private static readonly Uri SCHEDULE_URL   = new("https://gamesdonequick.com/schedule");
-    private static readonly Uri EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
+    private static readonly Uri        SCHEDULE_URL   = new("https://gamesdonequick.com/schedule");
+    private static readonly UrlBuilder EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
 
     internal static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() {
         Converters = {
@@ -39,12 +40,14 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
         }
     };
 
+    private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JSON_SERIALIZER_OPTIONS);
+
     public async Task<int> getCurrentEventId() {
-        using HttpResponseMessage eventIdResponse = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, SCHEDULE_URL));
-        return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.GetPathSegment(1));
+        using HttpResponseMessage eventIdResponse = await httpClient.Target(SCHEDULE_URL).Head();
+        return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.Segments[2]);
     }
 
-    public async Task<GdqEvent> getEvent(int eventId) => (await httpClient.GetFromJsonAsync<GdqEvent>(EVENTS_API_URL.WithPath(eventId.ToString()), JSON_SERIALIZER_OPTIONS))!;
+    public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENTS_API_URL).Path(eventId).Get<GdqEvent>();
 
     public async Task<GdqEvent> getCurrentEvent() => await getEvent(await getCurrentEventId());
 
@@ -52,7 +55,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         IList<GameRun>? runs         = null;
-        Uri             runsUrl      = EVENTS_API_URL.WithPath(eventId.ToString()).WithPath("runs");
+        Uri             runsUrl      = EVENTS_API_URL.Path(eventId).Path("runs");
         var             resultsCount = new ValueHolderStruct<int>();
         OffsetDateTime? tailStart    = null;
         bool            sorted       = true;
@@ -86,17 +89,15 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = null, [EnumeratorCancellation] CancellationToken ct = default) {
         JsonObject? page;
-        for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page?["next"]?.GetValue<Uri?>()) {
-            page = await httpClient.GetFromJsonAsync<JsonObject>(nextPageToDownload, JSON_SERIALIZER_OPTIONS, ct);
+        for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page["next"]?.GetValue<Uri?>()) {
+            page = await httpClient.Target(nextPageToDownload).Get<JsonObject>(ct);
 
-            if (page != null) {
-                if (resultsCount is { value: null }) {
-                    resultsCount.value = page["count"]!.GetValue<int>();
-                }
+            if (resultsCount is { value: null }) {
+                resultsCount.value = page["count"]!.GetValue<int>();
+            }
 
-                foreach (T result in page["results"]!.Deserialize<IEnumerable<T>>(JSON_SERIALIZER_OPTIONS)!) {
-                    yield return result;
-                }
+            foreach (T result in page["results"]!.Deserialize<IEnumerable<T>>(JSON_SERIALIZER_OPTIONS)!) {
+                yield return result;
             }
         }
     }

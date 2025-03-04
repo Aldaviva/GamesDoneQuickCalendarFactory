@@ -27,15 +27,6 @@
           "NodaTime": "3.2.0"
         }
       },
-      "jaytwo.FluentUri": {
-        "type": "Direct",
-        "requested": "[0.1.4, )",
-        "resolved": "0.1.4",
-        "contentHash": "94R1yqZgSBbzGBSvMYsePusbanwVdhzaqbYUriwu8DjLEz5E46Gt/Ea6+/BAd13EQwZkxaY9hwAYdUKXrYaj/Q==",
-        "dependencies": {
-          "jaytwo.UrlHelper": "0.1.8"
-        }
-      },
       "Microsoft.Extensions.Hosting.Systemd": {
         "type": "Direct",
         "requested": "[9.0.2, )",
@@ -68,41 +59,6 @@
         "resolved": "2.0.0",
         "contentHash": "/lt2PLUjE1bXCkPDVXXhZDzqaK3SmKwJ2EOq/a6ZbsgAWnRz3TqkqU0VyUncbh8bUIJQHCoPUxbwmjWeAbeIbw=="
       },
-      "Unfucked": {
-        "type": "Direct",
-        "requested": "[0.0.0-beta4, )",
-        "resolved": "0.0.0-beta4",
-        "contentHash": "pWwHZP9Ok/LAZqFSrZ9CNddcWhx92wFxDh8oUgSrsNZjv/lFbM3HPSdcmLeqj4hhv1eir5a/DcQk+5XPSHzyvQ=="
-      },
-      "Unfucked.DateTime": {
-        "type": "Direct",
-        "requested": "[0.0.0-beta3, )",
-        "resolved": "0.0.0-beta3",
-        "contentHash": "uhVdSPOAzXYsXS3jtZEn/C0vP+t2dV++f0uRBUbG4Ctl502Ki+R+jtY79GhSegcDItHUUmNxRxo2l9vfdk2+5w==",
-        "dependencies": {
-          "NodaTime": "3.1.12"
-        }
-      },
-      "Unfucked.DI": {
-        "type": "Direct",
-        "requested": "[0.0.0-beta4, )",
-        "resolved": "0.0.0-beta4",
-        "contentHash": "e8Cs7u5HOyT/sklyla/rHqnI1d7o7O/TRiJx1PUft1m6L/zk45alxe/6SPeK7zcEecgL+Kgc5B3MTyupNvg1iw==",
-        "dependencies": {
-          "Microsoft.Extensions.Hosting": "8.0.1",
-          "Unfucked": "0.0.0-beta4"
-        }
-      },
-      "Unfucked.ICS": {
-        "type": "Direct",
-        "requested": "[0.0.0-beta3, )",
-        "resolved": "0.0.0-beta3",
-        "contentHash": "CEtyTHCT37u3FTIXXpjReBap4dvPYXYxpWWjOv9BK/2eSd5gLR9/2HIt0TV9INkWV9QqFzwJAN3hI6J+q26W1A==",
-        "dependencies": {
-          "Ical.Net": "4.2.0",
-          "NodaTime": "3.1.12"
-        }
-      },
       "Google.Apis": {
         "type": "Transitive",
         "resolved": "1.69.0",
@@ -128,11 +84,6 @@
         "dependencies": {
           "Newtonsoft.Json": "13.0.3"
         }
-      },
-      "jaytwo.UrlHelper": {
-        "type": "Transitive",
-        "resolved": "0.1.8",
-        "contentHash": "QJ7ruofUyY4YNSbLiI+NId/P3PfXttigsdg34h4Hqsx7jhYybHFk7PCFb785OSmC/vZHZC8+Jqoe8L8EHDNLBg=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Transitive",

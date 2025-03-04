@@ -5,7 +5,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
-        <Version>2.7.10</Version>
+        <Version>2.7.11</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Company>Ben Hutchison</Company>
@@ -31,15 +31,14 @@
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3667" />
         <PackageReference Include="Ical.Net" Version="4.3.1" />
-        <PackageReference Include="jaytwo.FluentUri" Version="0.1.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.2" />
         <PackageReference Include="NodaTime" Version="3.2.1" />
         <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
-        <PackageReference Include="Unfucked" Version="0.0.0-beta4" />
-        <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
-        <PackageReference Include="Unfucked.DI" Version="0.0.0-beta4" />
-        <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta3" />
+        <!-- <PackageReference Include="Unfucked" Version="0.0.0-beta4" /> -->
+        <!-- <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" /> -->
+        <!-- <PackageReference Include="Unfucked.DI" Version="0.0.0-beta4" /> -->
+        <!-- <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta3" /> -->
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
@@ -56,6 +55,24 @@
 
     <ItemGroup>
         <InternalsVisibleTo Include="Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Unfucked">
+            <HintPath>..\..\Unfucked\Unfucked\bin\Debug\net8.0\Unfucked.dll</HintPath>
+        </Reference>
+        <Reference Include="Unfucked.DateTime">
+            <HintPath>..\..\Unfucked\DateTime\bin\Debug\netstandard2.0\Unfucked.DateTime.dll</HintPath>
+        </Reference>
+        <Reference Include="Unfucked.DI">
+            <HintPath>..\..\Unfucked\DI\bin\Debug\net8.0\Unfucked.DI.dll</HintPath>
+        </Reference>
+        <Reference Include="Unfucked.HTTP">
+            <HintPath>..\..\Unfucked\HTTP\bin\Debug\net8.0\Unfucked.HTTP.dll</HintPath>
+        </Reference>
+        <Reference Include="Unfucked.ICS">
+            <HintPath>..\..\Unfucked\ICS\bin\Debug\netstandard2.1\Unfucked.ICS.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>

@@ -93,11 +93,11 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
         run: |
           mkdir -p ~/.ssh
-          chmod go-rwx ~/.ssh
+          chmod 700 ~/.ssh
 
           touch ~/.ssh/known_hosts
-          chmod go-rw ~/.ssh/known_hosts
-          echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
           touch user.priv
           chmod 600 user.priv

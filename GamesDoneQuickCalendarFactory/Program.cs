@@ -12,6 +12,7 @@ using NodaTime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Unfucked;
+using Unfucked.HTTP;
 
 BomSquad.DefuseUtf8Bom();
 
@@ -38,7 +39,7 @@ builder.Services
     .AddSingleton<ICalendarPoller, CalendarPoller>()
     .AddSingleton<IGoogleCalendarSynchronizer, GoogleCalendarSynchronizer>()
     .AddSingleton<IClock>(SystemClock.Instance)
-    .AddSingleton(_ => new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromHours(1) }) { Timeout = TimeSpan.FromSeconds(30) });
+    .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromHours(1) }) { Timeout = TimeSpan.FromSeconds(30) });
 
 await using WebApplication webApp = builder.Build();
 webApp
