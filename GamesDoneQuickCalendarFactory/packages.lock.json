@@ -59,6 +59,51 @@
         "resolved": "2.0.0",
         "contentHash": "/lt2PLUjE1bXCkPDVXXhZDzqaK3SmKwJ2EOq/a6ZbsgAWnRz3TqkqU0VyUncbh8bUIJQHCoPUxbwmjWeAbeIbw=="
       },
+      "Unfucked": {
+        "type": "Direct",
+        "requested": "[0.0.0-beta7, )",
+        "resolved": "0.0.0-beta7",
+        "contentHash": "QMCleI2V3EG8tXPLJb3/vjC/0mcuLR1lve4fOyDjNAlZ9QIe39GDjWQEzNlxxD18nX30DjoS2psyzcLKfg5dbw=="
+      },
+      "Unfucked.DateTime": {
+        "type": "Direct",
+        "requested": "[0.0.0-beta3, )",
+        "resolved": "0.0.0-beta3",
+        "contentHash": "owfqMzIqHw0/hQ/N1iPdfqGnRESOSEByAQWBVziOBqDkDTrodn+/q+KXXExwtDKpVofhv2AmrPvhDE/RatL2SA==",
+        "dependencies": {
+          "NodaTime": "3.2.1"
+        }
+      },
+      "Unfucked.DI": {
+        "type": "Direct",
+        "requested": "[0.0.0-beta5, )",
+        "resolved": "0.0.0-beta5",
+        "contentHash": "7gLJ4lJHLQhJWaQYr/Nk60FN1LwCzEewUmVWBposoeRyMxL+Q3BccSOBCYmwadxXJXA62JXcOflXi4PsuDQl9Q==",
+        "dependencies": {
+          "Microsoft.Extensions.Hosting": "8.0.1",
+          "Unfucked": "0.0.0-beta5"
+        }
+      },
+      "Unfucked.HTTP": {
+        "type": "Direct",
+        "requested": "[0.0.0-beta5, )",
+        "resolved": "0.0.0-beta5",
+        "contentHash": "dvFOqDPsOFlW+JqgYT6gv9mQUvWADmiX7S3dc358N3NhU9a8lPhdW2cJi48traCV/jIE3BLsfW6X148UJvjzog==",
+        "dependencies": {
+          "System.Net.Http.Json": "8.0.1",
+          "Unfucked": "0.0.0-beta7"
+        }
+      },
+      "Unfucked.ICS": {
+        "type": "Direct",
+        "requested": "[0.0.0-beta4, )",
+        "resolved": "0.0.0-beta4",
+        "contentHash": "YkfHZadE34lqVGlzlQB9JMqA3Q/RxTTVJF8cJ7vrFCrqWKfIQBp6K14B87LzAAWPm0YR/i4fae7gys2Fo0CA4A==",
+        "dependencies": {
+          "Ical.Net": "4.3.1",
+          "NodaTime": "3.2.1"
+        }
+      },
       "Google.Apis": {
         "type": "Transitive",
         "resolved": "1.69.0",
@@ -400,6 +445,11 @@
         "dependencies": {
           "System.CodeDom": "7.0.0"
         }
+      },
+      "System.Net.Http.Json": {
+        "type": "Transitive",
+        "resolved": "8.0.1",
+        "contentHash": "F423ZLoJFYg1s6iA+Y7BLflVKjEK5XEA2+Z9CHbxJEUtS3+R5pgnFN499QzriRjYpOu6kS2Crd2YBkOFDHrblg=="
       },
       "System.ServiceProcess.ServiceController": {
         "type": "Transitive",

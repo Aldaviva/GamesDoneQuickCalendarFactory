@@ -15,7 +15,7 @@ public interface ICalendarGenerator {
 
 public sealed class CalendarGenerator(IEventDownloader eventDownloader, ILogger<CalendarGenerator> logger): ICalendarGenerator {
 
-    private const int SCHEMA_VERSION = 3;
+    internal const int SCHEMA_VERSION = 4;
 
     private static readonly Duration MIN_RUN_GAP = Duration.FromMinutes(1);
 

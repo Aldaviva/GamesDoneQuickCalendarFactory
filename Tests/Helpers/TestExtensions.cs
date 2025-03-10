@@ -18,10 +18,9 @@ public static class TestExtensions {
     }
 
     public static HttpRequestMessage Matches(this IArgumentConstraintManager<HttpRequestMessage> manager,
-                                             HttpMethod                                          expectedVerb,
-                                             string                                              expectedUri,
-                                             [LanguageInjection(InjectedLanguage.JSON)]
-                                             string? expectedJsonBody) {
+                                             HttpMethod expectedVerb,
+                                             string expectedUri,
+                                             [LanguageInjection(InjectedLanguage.JSON)] string? expectedJsonBody) {
         return manager.Matches(actual => IsMatch(actual, expectedVerb, expectedUri, expectedJsonBody), writer => {
             writer.Write(expectedVerb);
             writer.Write(" ");
@@ -34,7 +33,7 @@ public static class TestExtensions {
     }
 
     public static bool IsMatch(HttpRequestMessage actual, HttpMethod expectedMethod, string expectedUri) {
-        return actual.Method == expectedMethod && actual.RequestUri!.ToString() == expectedUri;
+        return actual.Method == expectedMethod && actual.RequestUri?.ToString() == expectedUri;
     }
 
     public static bool IsMatch(HttpRequestMessage actual, HttpMethod expectedMethod, string expectedUri, [LanguageInjection(InjectedLanguage.JSON)] string? expectedJsonBody) {

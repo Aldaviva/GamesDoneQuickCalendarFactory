@@ -31,7 +31,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
     private static readonly Uri        SCHEDULE_URL   = new("https://gamesdonequick.com/schedule");
     private static readonly UrlBuilder EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
 
-    internal static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() {
+    internal static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new(JsonSerializerDefaults.Web) {
         Converters = {
             EmptyToNullUriConverter.INSTANCE,
             OffsetDateTimeConverter.INSTANCE,
@@ -67,7 +67,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
                     start: startTime,
                     duration: endTime - startTime,
                     name: run.gameName,
-                    description: ((List<string?>) [run.category, run.console.EmptyToNull(), run.gameReleaseYear?.ToString()]).Compact().Join(" \u2014 "),
+                    description: ((List<string?>) [run.category.Replace(" - ", " \u2014 "), run.console.EmptyToNull(), run.gameReleaseYear?.ToString()]).Compact().Join(" \u2014 "),
                     runners: run.runners.Select(getPerson),
                     commentators: run.commentators.Select(getPerson),
                     hosts: run.hosts.Select(getPerson),

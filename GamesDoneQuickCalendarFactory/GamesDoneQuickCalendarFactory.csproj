@@ -8,8 +8,9 @@
         <Version>2.7.11</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
-        <Company>Ben Hutchison</Company>
-        <Copyright>© 2025 Ben Hutchison</Copyright>
+        <Authors>Ben Hutchison</Authors>
+        <Copyright>© 2025 $(Authors)</Copyright>
+        <Company>$(Authors)</Company>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RollForward>latestMajor</RollForward>
@@ -22,23 +23,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="gdq.ico" />
-        <Content Include="Properties\launchSettings.json" />
+        <Content Include="gdq.ico;Properties\launchSettings.json" />
+        <None Include="..\.github*\**;..\Readme.md;packages.lock.json" />
         <_WebToolingArtifacts Remove="Properties\launchSettings.json" />
+        <InternalsVisibleTo Include="Tests" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3667" />
         <PackageReference Include="Ical.Net" Version="4.3.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.2" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.2" />
         <PackageReference Include="NodaTime" Version="3.2.1" />
         <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
-        <!-- <PackageReference Include="Unfucked" Version="0.0.0-beta4" /> -->
-        <!-- <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" /> -->
-        <!-- <PackageReference Include="Unfucked.DI" Version="0.0.0-beta4" /> -->
-        <!-- <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta3" /> -->
+        <PackageReference Include="Unfucked" Version="0.0.0-beta7" />
+        <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
+        <PackageReference Include="Unfucked.DI" Version="0.0.0-beta5" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.0-beta5" />
+        <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta4" />
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
@@ -52,28 +55,6 @@
     <PropertyGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
         <AssemblyName>$(AssemblyName.ToLower())</AssemblyName>
     </PropertyGroup>
-
-    <ItemGroup>
-        <InternalsVisibleTo Include="Tests" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="Unfucked">
-            <HintPath>..\..\Unfucked\Unfucked\bin\Debug\net8.0\Unfucked.dll</HintPath>
-        </Reference>
-        <Reference Include="Unfucked.DateTime">
-            <HintPath>..\..\Unfucked\DateTime\bin\Debug\netstandard2.0\Unfucked.DateTime.dll</HintPath>
-        </Reference>
-        <Reference Include="Unfucked.DI">
-            <HintPath>..\..\Unfucked\DI\bin\Debug\net8.0\Unfucked.DI.dll</HintPath>
-        </Reference>
-        <Reference Include="Unfucked.HTTP">
-            <HintPath>..\..\Unfucked\HTTP\bin\Debug\net8.0\Unfucked.HTTP.dll</HintPath>
-        </Reference>
-        <Reference Include="Unfucked.ICS">
-            <HintPath>..\..\Unfucked\ICS\bin\Debug\netstandard2.1\Unfucked.ICS.dll</HintPath>
-        </Reference>
-    </ItemGroup>
 
     <ItemGroup>
         <Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
