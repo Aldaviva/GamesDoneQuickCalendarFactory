@@ -63,15 +63,15 @@
         "type": "Direct",
         "requested": "[0.0.0-beta7, )",
         "resolved": "0.0.0-beta7",
-        "contentHash": "QMCleI2V3EG8tXPLJb3/vjC/0mcuLR1lve4fOyDjNAlZ9QIe39GDjWQEzNlxxD18nX30DjoS2psyzcLKfg5dbw=="
+        "contentHash": "TmVNNsO2ZKlE/0u8ZwKAWIddD7o3/mI/JT++wZsiSV2AA16F7UgK92iI/rQ7zKqaHj+8AkawIFLqkicGg8Nv0A=="
       },
       "Unfucked.DateTime": {
         "type": "Direct",
         "requested": "[0.0.0-beta3, )",
         "resolved": "0.0.0-beta3",
-        "contentHash": "owfqMzIqHw0/hQ/N1iPdfqGnRESOSEByAQWBVziOBqDkDTrodn+/q+KXXExwtDKpVofhv2AmrPvhDE/RatL2SA==",
+        "contentHash": "uhVdSPOAzXYsXS3jtZEn/C0vP+t2dV++f0uRBUbG4Ctl502Ki+R+jtY79GhSegcDItHUUmNxRxo2l9vfdk2+5w==",
         "dependencies": {
-          "NodaTime": "3.2.1"
+          "NodaTime": "3.1.12"
         }
       },
       "Unfucked.DI": {
@@ -88,7 +88,7 @@
         "type": "Direct",
         "requested": "[0.0.0-beta5, )",
         "resolved": "0.0.0-beta5",
-        "contentHash": "dvFOqDPsOFlW+JqgYT6gv9mQUvWADmiX7S3dc358N3NhU9a8lPhdW2cJi48traCV/jIE3BLsfW6X148UJvjzog==",
+        "contentHash": "xaqiIahbZ57sZc2jEP2SfGHGYe1mn4DV6Iz/W9jr3FZlJAMcluh4YCBJvMpewF5lPvkziqF/ZA+PtaaMDra8Xg==",
         "dependencies": {
           "System.Net.Http.Json": "8.0.1",
           "Unfucked": "0.0.0-beta7"
