@@ -61,9 +61,9 @@
       },
       "Unfucked": {
         "type": "Direct",
-        "requested": "[0.0.0-beta7, )",
-        "resolved": "0.0.0-beta7",
-        "contentHash": "TmVNNsO2ZKlE/0u8ZwKAWIddD7o3/mI/JT++wZsiSV2AA16F7UgK92iI/rQ7zKqaHj+8AkawIFLqkicGg8Nv0A=="
+        "requested": "[0.0.0-beta8, )",
+        "resolved": "0.0.0-beta8",
+        "contentHash": "QOf9t3vStYNKmOVXa51SYyOwoYPHk89Q/RMDVxpyDPlu9TAcnYlabHjbMbqifLqhoVzisKyUMrFQumJbGBQ1hQ=="
       },
       "Unfucked.DateTime": {
         "type": "Direct",
@@ -76,12 +76,12 @@
       },
       "Unfucked.DI": {
         "type": "Direct",
-        "requested": "[0.0.0-beta5, )",
-        "resolved": "0.0.0-beta5",
-        "contentHash": "7gLJ4lJHLQhJWaQYr/Nk60FN1LwCzEewUmVWBposoeRyMxL+Q3BccSOBCYmwadxXJXA62JXcOflXi4PsuDQl9Q==",
+        "requested": "[0.0.0-beta6, )",
+        "resolved": "0.0.0-beta6",
+        "contentHash": "cqGPHz0NpuP2XyIfvy2BGrHMrpGVFwohOlm5orv02oKnf99GLYOnOYDYIyNWmNXSnLjVBUul6mx210ka0wqlhw==",
         "dependencies": {
           "Microsoft.Extensions.Hosting": "8.0.1",
-          "Unfucked": "0.0.0-beta5"
+          "Unfucked": "0.0.0-beta8"
         }
       },
       "Unfucked.HTTP": {
