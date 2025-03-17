@@ -37,10 +37,10 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.2" />
         <PackageReference Include="NodaTime" Version="3.2.1" />
         <PackageReference Include="ThrottleDebounce" Version="2.0.0" />
-        <PackageReference Include="Unfucked" Version="0.0.0-beta7" />
+        <PackageReference Include="Unfucked" Version="0.0.0-beta8" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
         <PackageReference Include="Unfucked.DI" Version="0.0.0-beta5" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.0-beta5" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.0-beta7" />
         <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta4" />
     </ItemGroup>
 
