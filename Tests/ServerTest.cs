@@ -131,7 +131,7 @@ public class ServerTest: IDisposable {
         response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
         response["label"]!.GetValue<string>().Should().Be("gdq");
         response["message"]!.GetValue<string>().Should().Be("no event now");
-        response["color"]!.GetValue<string>().Should().Be("important");
+        response["color"]!.GetValue<string>().Should().Be("inactive");
         response["isError"]!.GetValue<bool>().Should().BeFalse();
         response["logoSvg"]!.GetValue<string>().Should().Be(EXPECTED_LOGO_SVG);
         response.Should().HaveCount(6);

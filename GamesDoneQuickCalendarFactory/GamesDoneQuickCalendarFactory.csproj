@@ -5,7 +5,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
-        <Version>2.7.11</Version>
+        <Version>2.7.12</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Authors>Ben Hutchison</Authors>
@@ -40,7 +40,7 @@
         <PackageReference Include="Unfucked" Version="0.0.0-beta8" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
         <PackageReference Include="Unfucked.DI" Version="0.0.0-beta6" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.0-beta8" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.0-beta9" />
         <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta4" />
     </ItemGroup>
 

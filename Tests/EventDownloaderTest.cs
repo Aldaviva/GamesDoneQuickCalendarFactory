@@ -2,6 +2,7 @@
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Services;
 using NodaTime;
+using Unfucked.HTTP.Exceptions;
 
 namespace Tests;
 
@@ -55,6 +56,15 @@ public class EventDownloaderTest {
             [new Person(4, "AttyJoe")],
             []);
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
+
+        Event? actual = await eventDownloader.downloadSchedule();
+
+        actual.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task missingSchedule() {
+        A.CallTo(() => gdq.getCurrentEvent()).ThrowsAsync(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null, new HttpResponseMessage().Headers, null)));
 
         Event? actual = await eventDownloader.downloadSchedule();
 

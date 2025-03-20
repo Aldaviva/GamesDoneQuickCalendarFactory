@@ -2,6 +2,7 @@
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using NodaTime;
 using System.Collections.Frozen;
+using Unfucked.HTTP.Exceptions;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
@@ -47,7 +48,13 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
     public async Task<Event?> downloadSchedule() {
-        GdqEvent currentEvent = await gdq.getCurrentEvent();
+        GdqEvent currentEvent;
+        try {
+            currentEvent = await gdq.getCurrentEvent();
+        } catch (NotFoundException) {
+            // No schedule has been yet published for the next event. The official schedule URL redirects to a 404.
+            return null;
+        }
 
         IReadOnlyList<GameRun> runs = (await gdq.getEventRuns(currentEvent))
             .Where(run =>

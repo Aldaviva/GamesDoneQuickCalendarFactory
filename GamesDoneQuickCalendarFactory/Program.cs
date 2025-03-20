@@ -71,7 +71,7 @@ await eventDownloader.downloadSchedule() is { } schedule
         message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",
         color: "success",
         logoSvg: Resources.gdqDpadBadgeLogo)
-    : new ShieldsBadgeResponse("gdq", "no event now", "important", false, Resources.gdqDpadBadgeLogo));
+    : new ShieldsBadgeResponse("gdq", "no event now", "inactive", false, Resources.gdqDpadBadgeLogo));
 
 await webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 
