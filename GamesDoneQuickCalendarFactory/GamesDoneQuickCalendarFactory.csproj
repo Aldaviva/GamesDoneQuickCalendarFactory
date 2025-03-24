@@ -35,7 +35,7 @@
         <PackageReference Include="Ical.Net" Version="4.3.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.3" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.3" />
-        <PackageReference Include="NodaTime" Version="3.2.1" />
+        <PackageReference Include="NodaTime" Version="3.2.2" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta1" />
         <PackageReference Include="Unfucked" Version="0.0.0-beta8" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
