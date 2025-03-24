@@ -49,9 +49,9 @@
       },
       "NodaTime": {
         "type": "Direct",
-        "requested": "[3.2.1, )",
-        "resolved": "3.2.1",
-        "contentHash": "D1aHhUfPQUxU2nfDCVuSLahpp0xCYZTmj/KNH3mSK/tStJYcx9HO9aJ0qbOP3hzjGPV/DXOqY2AHe27Nt4xs4g=="
+        "requested": "[3.2.2, )",
+        "resolved": "3.2.2",
+        "contentHash": "dmju5W0UYC3QP/UJM0juKAZkH0HSDMp0gH91A0+mT9M0kgyM2Jm67hUZPl/WRQLq8Lijjqmdk8kyAViWFWM7dA=="
       },
       "ThrottleDebounce": {
         "type": "Direct",
