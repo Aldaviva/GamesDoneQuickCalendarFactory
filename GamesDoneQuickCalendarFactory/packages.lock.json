@@ -55,9 +55,9 @@
       },
       "ThrottleDebounce": {
         "type": "Direct",
-        "requested": "[3.0.0-beta1, )",
-        "resolved": "3.0.0-beta1",
-        "contentHash": "LUyHTYCrYvcUwxlcvOq40FHfw8Z8I07TqbfNLx6NmkAjwufZTYpqPInDejBJ+Swa1GchW+ChkK2wpg1VEl+u5Q=="
+        "requested": "[3.0.0-beta2, )",
+        "resolved": "3.0.0-beta2",
+        "contentHash": "VHkd+bDkUGBP9+PIARIgKAiczlrItAq2x/zmLMnuIbwI8QDXPUvIYoOQbyGmKVdgODC6V37a0FT4eIhwESPWjA=="
       },
       "Unfucked": {
         "type": "Direct",
