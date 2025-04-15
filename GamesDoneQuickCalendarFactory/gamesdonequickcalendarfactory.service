@@ -3,8 +3,8 @@
 # Install:           sudo systemctl daemon-reload
 # Enable auto-start: sudo systemctl enable gamesdonequickcalendarfactory.service
 # Start:             sudo systemctl start gamesdonequickcalendarfactory.service
-# Check status:      sudo systemctl status gamesdonequickcalendarfactory.service
-# Read logs:         sudo journalctl -u gamesdonequickcalendarfactory.service
+# Check status:      systemctl status gamesdonequickcalendarfactory.service
+# Read logs:         journalctl -f -u gamesdonequickcalendarfactory.service
 #
 # Source: https://devblogs.microsoft.com/dotnet/net-core-and-systemd/
 

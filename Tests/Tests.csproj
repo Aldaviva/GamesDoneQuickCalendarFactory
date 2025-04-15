@@ -14,7 +14,7 @@
         <PackageReference Include="FakeItEasy" Version="8.3.0" />
         <PackageReference Include="FluentAssertions" Version="[7.2.0,8)" />
         <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[8.0.14,9)" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[8.0.15,9)" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
         <PackageReference Include="xunit" Version="2.9.3" />
         <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2">
@@ -32,12 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Data\event.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="Data\runs.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        <None Update="Data\event.json" CopyToOutputDirectory="PreserveNewest" />
+        <None Update="Data\runs.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>

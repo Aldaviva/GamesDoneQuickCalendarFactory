@@ -5,7 +5,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
-        <Version>2.7.12</Version>
+        <Version>2.7.13</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Authors>Ben Hutchison</Authors>
@@ -33,15 +33,15 @@
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3667" />
         <PackageReference Include="Ical.Net" Version="4.3.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.4" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta2" />
-        <PackageReference Include="Unfucked" Version="0.0.0-beta8" />
-        <PackageReference Include="Unfucked.DateTime" Version="0.0.0-beta3" />
-        <PackageReference Include="Unfucked.DI" Version="0.0.0-beta6" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.0-beta9" />
-        <PackageReference Include="Unfucked.ICS" Version="0.0.0-beta4" />
+        <PackageReference Include="Unfucked" Version="0.0.1-beta.1" />
+        <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.2" />
+        <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.1" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.1" />
+        <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.1" />
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">
