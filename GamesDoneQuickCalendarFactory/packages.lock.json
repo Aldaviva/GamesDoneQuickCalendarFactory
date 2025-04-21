@@ -10,9 +10,9 @@
       },
       "Google.Apis.Calendar.v3": {
         "type": "Direct",
-        "requested": "[1.69.0.3667, )",
-        "resolved": "1.69.0.3667",
-        "contentHash": "3+3UBkp0P+tMKzrU9OlirIwVLylpsAipLuwqvHXWiW4lhKd8SorXWXw9F4wlgPv2MrW3eISwZSJ/bIH9eClkwA==",
+        "requested": "[1.69.0.3746, )",
+        "resolved": "1.69.0.3746",
+        "contentHash": "CyHv8R2wYP5R6R1iQBw1HSd5/cAQ2tDSDEykVYmmm+Nv1YyuW3sQtbwBye37xGotmzQeGUKtYw+/y0Us9VAh+Q==",
         "dependencies": {
           "Google.Apis": "1.69.0",
           "Google.Apis.Auth": "1.69.0"
