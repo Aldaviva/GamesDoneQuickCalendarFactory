@@ -41,42 +41,42 @@ public class MarshalTests {
     }
 
     [Theory]
-    [MemberData(nameof(DESERIALIZE_PERIOD_DATA))]
-    public void deserializePeriod(string json, Period expected) {
-        JsonSerializerOptions options = new() { Converters = { new PeriodConverter() } };
+    [MemberData(nameof(DESERIALIZE_DURATION_DATA))]
+    public void deserializeDuration(string json, Duration expected) {
+        JsonSerializerOptions options = new() { Converters = { new DurationConverter() } };
 
-        Period? actual = JsonSerializer.Deserialize<Period>(json, options);
+        Duration? actual = JsonSerializer.Deserialize<Duration>(json, options);
 
         actual.Should().Be(expected);
     }
 
-    public static readonly TheoryData<string, Period> DESERIALIZE_PERIOD_DATA = new() {
-        { "\"0\"", Period.Zero },
-        { "\"0:0:0\"", Period.Zero },
-        { "\"0:0:1\"", Period.FromSeconds(1) },
-        { "\"0:1:2\"", Period.FromMinutes(1) + Period.FromSeconds(2) },
-        { "\"1:2\"", Period.FromMinutes(1) + Period.FromSeconds(2) },
-        { "\"1:2:3\"", Period.FromHours(1) + Period.FromMinutes(2) + Period.FromSeconds(3) },
-        { "\"01:02:03\"", Period.FromHours(1) + Period.FromMinutes(2) + Period.FromSeconds(3) },
+    public static readonly TheoryData<string, Duration> DESERIALIZE_DURATION_DATA = new() {
+        { "\"0\"", Duration.Zero },
+        { "\"0:0:0\"", Duration.Zero },
+        { "\"0:0:1\"", Duration.FromSeconds(1) },
+        { "\"0:1:2\"", Duration.FromMinutes(1) + Duration.FromSeconds(2) },
+        { "\"1:2\"", Duration.FromMinutes(1) + Duration.FromSeconds(2) },
+        { "\"1:2:3\"", Duration.FromHours(1) + Duration.FromMinutes(2) + Duration.FromSeconds(3) },
+        { "\"01:02:03\"", Duration.FromHours(1) + Duration.FromMinutes(2) + Duration.FromSeconds(3) },
     };
 
     [Fact]
-    public void deserializePeriodErrors() {
-        JsonSerializerOptions options = new() { Converters = { new PeriodConverter() } };
+    public void deserializeDurationErrors() {
+        JsonSerializerOptions options = new() { Converters = { new DurationConverter() } };
 
-        ((Action) (() => JsonSerializer.Deserialize<Period>("\"1:2:3:4\"", options))).Should().Throw<FormatException>();
-        ((Action) (() => JsonSerializer.Deserialize<Period>("\"0:0:a\"", options))).Should().Throw<FormatException>();
-        ((Action) (() => JsonSerializer.Deserialize<Period>("123", options))).Should().Throw<InvalidOperationException>();
+        ((Action) (() => JsonSerializer.Deserialize<Duration>("\"1:2:3:4\"", options))).Should().Throw<FormatException>();
+        ((Action) (() => JsonSerializer.Deserialize<Duration>("\"0:0:a\"", options))).Should().Throw<FormatException>();
+        ((Action) (() => JsonSerializer.Deserialize<Duration>("123", options))).Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
-    public void serializePeriod() {
-        JsonSerializerOptions options = new() { Converters = { new PeriodConverter() } };
+    public void serializeDuration() {
+        JsonSerializerOptions options = new() { Converters = { new DurationConverter() } };
 
-        string actual = JsonSerializer.Serialize(Period.FromHours(1) + Period.FromMinutes(2) + Period.FromSeconds(3), options);
+        string actual = JsonSerializer.Serialize(Duration.FromHours(1) + Duration.FromMinutes(2) + Duration.FromSeconds(3), options);
         actual.Should().Be("\"1:2:3\"");
 
-        JsonSerializer.Serialize<Period?>(null, options).Should().Be("null");
+        JsonSerializer.Serialize<Duration?>(null, options).Should().Be("null");
     }
 
     [Theory]

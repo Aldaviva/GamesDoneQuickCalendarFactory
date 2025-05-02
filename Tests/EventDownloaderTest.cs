@@ -184,7 +184,7 @@ public class EventDownloaderTest {
         Event? actual = await eventDownloader.downloadSchedule();
 
         actual.Should().NotBeNull();
-        actual!.runs.Should().HaveCount(1);
+        actual.runs.Should().HaveCount(1);
         actual.runs[0].name.Should().Be("Real run");
     }
 

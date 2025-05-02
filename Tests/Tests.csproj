@@ -32,8 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Data\event.json" CopyToOutputDirectory="PreserveNewest" />
-        <None Update="Data\runs.json" CopyToOutputDirectory="PreserveNewest" />
+        <None Update="Data\*.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>

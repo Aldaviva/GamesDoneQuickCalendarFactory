@@ -44,8 +44,7 @@ public class GdqClientTest {
     public async Task getEventRuns() {
         await using Stream runsStream = File.OpenRead("Data/runs.json");
         A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/runs"),
-            A<CancellationToken>._)).Returns(
-            new HttpResponseMessage { Content = new StreamContent(runsStream) });
+            A<CancellationToken>._)).Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
         GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
 
@@ -109,6 +108,49 @@ public class GdqClientTest {
             "Finale!",
             "The End% — Live",
             [new Person(367, "Tech Crew")],
+            [],
+            [],
+            []));
+    }
+
+    [Fact]
+    public async Task getEventRunsWithOvernightSetupTimes() {
+        await using Stream runsStream = File.OpenRead("Data/runs-with-overnight-setup-times.json");
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/57/runs"),
+            A<CancellationToken>._)).Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
+
+        GdqEvent gdqEvent = new(57, "SpeedAtPAXEast25", "Speedrun Stage @ PAX East 25");
+
+        IList<GameRun> actual = (await gdq.getEventRuns(gdqEvent)).ToList();
+
+        actual.Should().HaveCount(24);
+
+        actual.ElementAt(6).Should().BeEquivalentTo(new GameRun(
+            OffsetDateTimePattern.GeneralIso.Parse("2025-05-08T14:46:00-04:00").GetValueOrThrow(),
+            Duration.FromHours(2),
+            "Donkey Kong 64 Randomizer",
+            "Beat K Rool — N64",
+            [new Person(363, "altabiscuit")],
+            [],
+            [],
+            []));
+
+        actual.ElementAt(12).Should().BeEquivalentTo(new GameRun(
+            OffsetDateTimePattern.GeneralIso.Parse("2025-05-09T16:37:00-04:00").GetValueOrThrow(),
+            Duration.FromMinutes(20),
+            "Portal",
+            "Glitchless — PC",
+            [new Person(924, "Msushi")],
+            [],
+            [],
+            []));
+
+        actual.ElementAt(18).Should().BeEquivalentTo(new GameRun(
+            OffsetDateTimePattern.GeneralIso.Parse("2025-05-10T16:14:00-04:00").GetValueOrThrow(),
+            Duration.FromMinutes(15),
+            "Super Mario World",
+            "11 Exit Orb — SNES",
+            [new Person(3958, "ThePresidentNoir")],
             [],
             [],
             []));

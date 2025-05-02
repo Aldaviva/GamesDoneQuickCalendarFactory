@@ -26,7 +26,8 @@ public record GdqRun(
     IReadOnlyList<GdqPerson> commentators,
     [property: JsonPropertyName("starttime")] OffsetDateTime? startTime,
     [property: JsonPropertyName("endtime")] OffsetDateTime? endTime,
-    [property: JsonPropertyName("run_time")] Period actualRunTime,
+    [property: JsonPropertyName("setup_time")] Duration setupTime,
+    [property: JsonPropertyName("run_time")] Duration actualRunTime,
     IReadOnlyList<string> tags
 );
 

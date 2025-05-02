@@ -38,7 +38,7 @@ public class DataTests {
         run.gameReleaseYear.Should().Be(2022);
         run.startTime.Should().Be(new OffsetDateTime(new LocalDateTime(2024, 1, 14, 12, 12, 0), Offset.FromHours(-5)));
         run.endTime.Should().Be(new OffsetDateTime(new LocalDateTime(2024, 1, 14, 12, 48, 0), Offset.FromHours(-5)));
-        run.actualRunTime.Should().Be(Period.FromMinutes(21) + Period.FromSeconds(42));
+        run.actualRunTime.Should().Be(Duration.FromMinutes(21) + Duration.FromSeconds(42));
 
         run.runners.Should().HaveCount(1);
         Runner runner = run.runners[0];
