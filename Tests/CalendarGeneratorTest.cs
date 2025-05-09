@@ -15,7 +15,7 @@ public class CalendarGeneratorTest {
     private readonly IEventDownloader  eventDownloader = A.Fake<IEventDownloader>();
 
     public CalendarGeneratorTest() {
-        calendarGenerator = new CalendarGenerator(eventDownloader, new NullLogger<CalendarGenerator>());
+        calendarGenerator = new CalendarGenerator(eventDownloader, new State { googleCalendarUidCounter = 5 }, new NullLogger<CalendarGenerator>());
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(35), "min run gap");
         actualEvent.Summary.Should().Be("TUNIC");
-        actualEvent.Uid.Should().Be($"{CalendarGenerator.SCHEMA_VERSION}/AGDQ2024/TUNIC/Any% Unrestricted — PC");
+        actualEvent.Uid.Should().Be("5/AGDQ2024/TUNIC/Any% Unrestricted — PC");
         actualEvent.Description.Should().Be("Any% Unrestricted — PC\nRun by Radicoon\nCommentary by kevinregamey and silentdestroyer\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -94,7 +94,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(32), "min run gap");
         actualEvent.Summary.Should().Be("Super Monkey Ball");
-        actualEvent.Uid.Should().Be($"{CalendarGenerator.SCHEMA_VERSION}/AGDQ2024/Super Monkey Ball/Master — Wii");
+        actualEvent.Uid.Should().Be("5/AGDQ2024/Super Monkey Ball/Master — Wii");
         actualEvent.Description.Should().Be("Master — Wii\nRun by Helix\nCommentary by limy and PeasSMB\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -105,7 +105,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("1:13:00"));
         actualEvent.Summary.Should().Be("Donkey Kong Country");
-        actualEvent.Uid.Should().Be($"{CalendarGenerator.SCHEMA_VERSION}/AGDQ2024/Donkey Kong Country/101% — SNES");
+        actualEvent.Uid.Should().Be("5/AGDQ2024/Donkey Kong Country/101% — SNES");
         actualEvent.Description.Should().Be("101% — SNES\nRun by Tonkotsu\nCommentary by Glan and V0oid\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -116,7 +116,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("2:56:0"));
         actualEvent.Summary.Should().Be("Final Fantasy V Pixel Remaster");
-        actualEvent.Uid.Should().Be($"{CalendarGenerator.SCHEMA_VERSION}/AGDQ2024/Final Fantasy V Pixel Remaster/Any% Cutscene Remover — PC");
+        actualEvent.Uid.Should().Be("5/AGDQ2024/Final Fantasy V Pixel Remaster/Any% Cutscene Remover — PC");
         actualEvent.Description.Should().Be("Any% Cutscene Remover — PC\nRun by Zic3\nCommentary by FoxyJira and WoadyB\nHosted by Prolix");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();

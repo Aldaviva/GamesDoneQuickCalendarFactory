@@ -41,7 +41,10 @@ builder.Services
     .AddSingleton<IClock>(SystemClock.Instance)
     .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromHours(1) }) { Timeout = TimeSpan.FromSeconds(30) });
 
+builder.Services.AddSingleton(await State.load("state.json"));
+
 await using WebApplication webApp = builder.Build();
+
 webApp
     .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
     .UseOutputCache()

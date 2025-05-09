@@ -40,6 +40,7 @@ public class CalendarPoller: ICalendarPoller {
     }
 
     public async Task pollCalendar() {
+        Calendar? changedCalendar = null;
         if (await pollingLock.WaitAsync(0)) { // don't allow parallel polls, and if one is already running, skip the new iteration
             try {
                 logger.LogDebug("Polling GDQ schedule");
@@ -49,7 +50,7 @@ public class CalendarPoller: ICalendarPoller {
                 if (!calendar.EqualsPresorted(mostRecentlyPolledCalendar?.calendar)) {
                     mostRecentlyPolledCalendar = new CalendarResponse(calendar, generatedDate);
                     logger.LogInformation("GDQ schedule changed, new etag is {etag}", mostRecentlyPolledCalendar.etag);
-                    calendarChanged?.Invoke(this, calendar);
+                    changedCalendar = calendar;
                 } else {
                     logger.LogTrace("GDQ schedule is unchanged");
                 }
@@ -68,6 +69,11 @@ public class CalendarPoller: ICalendarPoller {
             } finally {
                 pollingLock.Release();
             }
+        }
+
+        if (changedCalendar != null) {
+            // avoid any potential lock reentrancy deadlocks by firing this event outside the lock above, since its subscribers may try to reenter the lock
+            calendarChanged?.Invoke(this, changedCalendar);
         }
     }
 
