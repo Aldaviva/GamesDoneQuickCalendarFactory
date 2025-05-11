@@ -7,7 +7,7 @@ Converts the official [Games Done Quick schedule](https://gamesdonequick.com/sch
 
 Each run in the current GDQ event will appear as a calendar appointment comprising the run's name, estimated start and end time, category, the game's hardware platform and release year, runners, commentators, and host.
 
-Every type of GDQ event with a published run schedule is included: Awesome Games Done Quick, Summer Games Done Quick, [Frost Fatales, Flame Fatales](https://gamesdonequick.com/site/framefatales), [Back to Black](https://gamesdonequick.com/site/blackinaflash), and Games Done Quick Express for various events like PAX, TwitchCon, and Disaster Relief. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded because its schedule is a messy, nigh-unparsable spreadsheet.
+Every type of GDQ event with a published schedule is included: the mainline events Awesome Games Done Quick and Summer Games Done Quick; community events [Frost Fatales, Flame Fatales](https://gamesdonequick.com/site/framefatales), [Back to Black, and Juneteenth](https://gamesdonequick.com/site/blackinaflash); and small tie-in events like PAX, TwitchCon, and Disaster Relief. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded because it runs year-round and its schedule is a messy, unparsable spreadsheet.
 
 All future GDQ events will also appear in this exact same ICS file when their schedules are revealed &mdash; you don't have to resubscribe to different ICS files every few months, just subscribe once to this single calendar URL and let it update forever. This is especially helpful if you forget when GDQ starts and it sneaks up on you, causing you to miss the beginning of the event.
 
