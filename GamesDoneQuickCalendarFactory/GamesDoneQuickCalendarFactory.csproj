@@ -36,11 +36,11 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.5" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.5" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
-        <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta2" />
-        <PackageReference Include="Unfucked" Version="0.0.1-beta.2" />
+        <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta3" />
+        <PackageReference Include="Unfucked" Version="0.0.1-beta.5" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.2" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.1" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.3" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.4" />
         <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.1" />
     </ItemGroup>
 

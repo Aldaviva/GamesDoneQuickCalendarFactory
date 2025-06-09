@@ -55,15 +55,15 @@
       },
       "ThrottleDebounce": {
         "type": "Direct",
-        "requested": "[3.0.0-beta2, )",
-        "resolved": "3.0.0-beta2",
-        "contentHash": "VHkd+bDkUGBP9+PIARIgKAiczlrItAq2x/zmLMnuIbwI8QDXPUvIYoOQbyGmKVdgODC6V37a0FT4eIhwESPWjA=="
+        "requested": "[3.0.0-beta3, )",
+        "resolved": "3.0.0-beta3",
+        "contentHash": "pZTefK4xZEvc5Q+M63lIAKVl8ZDsPWiUvuFk1+d9q3Hmgme76P3qC07Ho40ccaUiUKQYnO3a/dnu/SD8CsPZqQ=="
       },
       "Unfucked": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.2, )",
-        "resolved": "0.0.1-beta.2",
-        "contentHash": "J8VhdV4QyfN40LO+m5tCa4O1lmpQXPB5rK2fmcJ/uN+y0VGldzjVNJnUxe/sPntPCxWuFc6OOjjPF9f6GpYOMQ=="
+        "requested": "[0.0.1-beta.5, )",
+        "resolved": "0.0.1-beta.5",
+        "contentHash": "2vpz1u3knWf7F7QCbns1lbEps0wWWeJa1d5lGHiSQ9JTK3YBvd6Nn1jh3AzNTxSLppb9SAPUijLKP63kI3DdvA=="
       },
       "Unfucked.DateTime": {
         "type": "Direct",
@@ -86,12 +86,12 @@
       },
       "Unfucked.HTTP": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.3, )",
-        "resolved": "0.0.1-beta.3",
-        "contentHash": "JMXFWAEEOBS3XrGnDoSKuDZeQnrg13HsV4AhAG7XbD6iFhB991bCE5rsKQtGRB5956o7DgYqwHw30gZOvcqJRQ==",
+        "requested": "[0.0.1-beta.4, )",
+        "resolved": "0.0.1-beta.4",
+        "contentHash": "Vj38uvOzTR+r/tmfDegKuVVjJldCNNpMH/tYI6roFtPuPND5VoIjASLZgwd/f5fXa8uhtQYkTefS01uKACg52w==",
         "dependencies": {
           "System.Text.Json": "8.0.5",
-          "Unfucked": "0.0.1-beta.2"
+          "Unfucked": "0.0.1-beta.3"
         }
       },
       "Unfucked.ICS": {
