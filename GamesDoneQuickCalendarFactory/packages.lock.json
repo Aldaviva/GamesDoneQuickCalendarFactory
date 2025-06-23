@@ -20,11 +20,11 @@
       },
       "Ical.Net": {
         "type": "Direct",
-        "requested": "[4.3.1, )",
-        "resolved": "4.3.1",
-        "contentHash": "ZQHNJAy26XeW0OnVRxyHW1xNWkLdueIInPCo76sdNCC0Sr8dAfBzN3DApWWk2r0nwCU0oJIGsrFHdCcQu5RWag==",
+        "requested": "[5.0.0, )",
+        "resolved": "5.0.0",
+        "contentHash": "7reah0v54sUXYa0mcNcXLx93tfrqasMxqudQ+zELidII+qhfaVqlw2A+Zbtb7q6eO64j7dSm9650zZnF6NeDGw==",
         "dependencies": {
-          "NodaTime": "3.2.0"
+          "NodaTime": "3.2.2"
         }
       },
       "Microsoft.Extensions.Hosting.Systemd": {
@@ -55,9 +55,9 @@
       },
       "ThrottleDebounce": {
         "type": "Direct",
-        "requested": "[3.0.0-beta3, )",
-        "resolved": "3.0.0-beta3",
-        "contentHash": "pZTefK4xZEvc5Q+M63lIAKVl8ZDsPWiUvuFk1+d9q3Hmgme76P3qC07Ho40ccaUiUKQYnO3a/dnu/SD8CsPZqQ=="
+        "requested": "[3.0.0-beta4, )",
+        "resolved": "3.0.0-beta4",
+        "contentHash": "COoRYQqWRZmENa7YQk7UrFISMBkdhECX1wasSFMy5am34ok5s1JYDgS8Ea5WLk0L/iau1jM904bldCZZF56xAQ=="
       },
       "Unfucked": {
         "type": "Direct",
@@ -76,12 +76,12 @@
       },
       "Unfucked.DI": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.1, )",
-        "resolved": "0.0.1-beta.1",
-        "contentHash": "rRig5uxCbfMu9smwYhBYHphcFjN29hrlCC9K2vw6jex4Qx7fZ7sSNe2/ugxGY09xuYIXcmMpGSX8jD3meordqA==",
+        "requested": "[0.0.1-beta.2, )",
+        "resolved": "0.0.1-beta.2",
+        "contentHash": "bjJPSbCV1mCTb8rjXKvr3jNAX6NIZaNOm28BkFkcm1t4Kxsk3h0gV82vj3DSgvbT+KTYtH38eD9gr2M5ceUp+Q==",
         "dependencies": {
           "Microsoft.Extensions.Hosting": "8.0.1",
-          "Unfucked": "0.0.1-beta.1"
+          "Unfucked": "0.0.1-beta.5"
         }
       },
       "Unfucked.HTTP": {
