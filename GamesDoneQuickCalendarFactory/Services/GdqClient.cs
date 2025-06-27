@@ -28,7 +28,7 @@ public interface IGdqClient {
 
 public class GdqClient(HttpClient httpClient): IGdqClient {
 
-    private static readonly Uri        SCHEDULE_URL   = new("https://gamesdonequick.com/schedule");
+    private static readonly Uri        SCHEDULE_URL   = new("https://tracker.gamesdonequick.com/tracker/donate/");
     private static readonly UrlBuilder EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
     private static readonly Duration   MAX_SETUP_TIME = Duration.FromHours(17);
 
@@ -45,7 +45,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     public async Task<int> getCurrentEventId() {
         using HttpResponseMessage eventIdResponse = await httpClient.Target(SCHEDULE_URL).Head();
-        return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.Segments[2]);
+        return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.Segments[4].TrimEnd('/'));
     }
 
     public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENTS_API_URL).Path(eventId).Get<GdqEvent>();

@@ -1,4 +1,4 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Services;
 using NodaTime;
@@ -20,8 +20,8 @@ public class GdqClientTest {
 
     [Fact]
     public async Task getCurrentEvent() {
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://gamesdonequick.com/schedule"), A<CancellationToken>._)).Returns(
-            new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://gamesdonequick.com/schedule/46") });
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://tracker.gamesdonequick.com/tracker/donate/"), A<CancellationToken>._))
+            .Returns(new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://tracker.gamesdonequick.com/tracker/ui/events/46/donate") });
 
         await using Stream eventStream = File.OpenRead("Data/event.json");
         A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46"), A<CancellationToken>._))
