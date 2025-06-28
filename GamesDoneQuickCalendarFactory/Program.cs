@@ -1,4 +1,4 @@
-﻿using Bom.Squad;
+using Bom.Squad;
 using GamesDoneQuickCalendarFactory;
 using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Services;
@@ -49,13 +49,13 @@ webApp
     .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
     .UseOutputCache()
     .Use(async (context, next) => {
-        ICalendarPoller calendarPoller  = webApp.Services.GetRequiredService<ICalendarPoller>();
+        ICalendarPoller calendarPoller  = context.RequestServices.GetRequiredService<ICalendarPoller>();
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
         responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
         context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
         if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
             responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
-            responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
+            responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
         }
         await next();
     });

@@ -1,6 +1,9 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using Ical.Net;
 using Microsoft.Extensions.Options;
+using NodaTime;
+using NodaTime.Extensions;
+using Unfucked;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
@@ -22,6 +25,7 @@ public class CalendarPoller: ICalendarPoller {
     private readonly ICalendarGenerator      calendarGenerator;
     private readonly IOptions<Configuration> config;
     private readonly ILogger<CalendarPoller> logger;
+    private readonly IClock                  clock;
     private readonly Timer                   pollingTimer;
     private readonly SemaphoreSlim           pollingLock = new(1);
 
@@ -31,10 +35,11 @@ public class CalendarPoller: ICalendarPoller {
 
     private bool wasEventRunning;
 
-    public CalendarPoller(ICalendarGenerator calendarGenerator, IOptions<Configuration> config, ILogger<CalendarPoller> logger) {
+    public CalendarPoller(ICalendarGenerator calendarGenerator, IOptions<Configuration> config, ILogger<CalendarPoller> logger, IClock clock) {
         this.calendarGenerator = calendarGenerator;
         this.config            = config;
         this.logger            = logger;
+        this.clock             = clock;
 
         pollingTimer = new Timer(async _ => await pollCalendar(), null, OUT_OF_EVENT_POLLING_INTERVAL, OUT_OF_EVENT_POLLING_INTERVAL);
     }
@@ -44,8 +49,8 @@ public class CalendarPoller: ICalendarPoller {
         if (await pollingLock.WaitAsync(0)) { // don't allow parallel polls, and if one is already running, skip the new iteration
             try {
                 logger.LogDebug("Polling GDQ schedule");
-                Calendar       calendar      = await calendarGenerator.generateCalendar();
-                DateTimeOffset generatedDate = DateTimeOffset.UtcNow;
+                Calendar calendar      = await calendarGenerator.generateCalendar();
+                Instant  generatedDate = clock.GetCurrentInstant();
 
                 if (!calendar.EqualsPresorted(mostRecentlyPolledCalendar?.calendar)) {
                     mostRecentlyPolledCalendar = new CalendarResponse(calendar, generatedDate);
@@ -56,8 +61,8 @@ public class CalendarPoller: ICalendarPoller {
                 }
 
                 bool isEventRunning = calendar.Events.Count != 0 &&
-                    generatedDate >= calendar.Events.Min(run => run.Start)!.AsDateTimeOffset - OUT_OF_EVENT_POLLING_INTERVAL &&
-                    generatedDate < calendar.Events.Max(run => run.Start)!.AsDateTimeOffset;
+                    generatedDate >= calendar.Events.Min(run => run.Start)!.ToZonedDateTime().Minus(OUT_OF_EVENT_POLLING_INTERVAL.ToDuration()).ToInstant() &&
+                    generatedDate < calendar.Events.Max(run => run.Start)!.ToZonedDateTime().ToInstant();
 
                 if (wasEventRunning != isEventRunning) {
                     wasEventRunning = isEventRunning;

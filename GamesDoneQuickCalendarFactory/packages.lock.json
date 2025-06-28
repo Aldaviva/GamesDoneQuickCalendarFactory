@@ -20,11 +20,11 @@
       },
       "Ical.Net": {
         "type": "Direct",
-        "requested": "[4.3.1, )",
-        "resolved": "4.3.1",
-        "contentHash": "ZQHNJAy26XeW0OnVRxyHW1xNWkLdueIInPCo76sdNCC0Sr8dAfBzN3DApWWk2r0nwCU0oJIGsrFHdCcQu5RWag==",
+        "requested": "[5.0.0, )",
+        "resolved": "5.0.0",
+        "contentHash": "7reah0v54sUXYa0mcNcXLx93tfrqasMxqudQ+zELidII+qhfaVqlw2A+Zbtb7q6eO64j7dSm9650zZnF6NeDGw==",
         "dependencies": {
-          "NodaTime": "3.2.0"
+          "NodaTime": "3.2.2"
         }
       },
       "Microsoft.Extensions.Hosting.Systemd": {
@@ -95,11 +95,11 @@
       },
       "Unfucked.ICS": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.1, )",
-        "resolved": "0.0.1-beta.1",
-        "contentHash": "1IuLeodTd/QRf/0KwOKo5sHXUb7cmxqAmyrcLJ3CyM+fciU4zoqbPo5oLIdR0b8BzYW9xnHEoDS6ZHQBIwoH1Q==",
+        "requested": "[0.0.1-beta.2, )",
+        "resolved": "0.0.1-beta.2",
+        "contentHash": "Jx/RCzKh53A0AXhT7/3Au0J8MjJg2rpmCpTGEx5mAV5VRpvCCNZaLKwnPNkegXhQp6jOhjdu0JNAWK3EqO3jdg==",
         "dependencies": {
-          "Ical.Net": "4.3.1",
+          "Ical.Net": "5.0.0",
           "NodaTime": "3.2.2"
         }
       },

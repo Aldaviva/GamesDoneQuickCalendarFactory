@@ -1,8 +1,9 @@
-﻿using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Calendar.v3.Data;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Proxies;
 using System.Diagnostics.Contracts;
+using Unfucked;
 using Calendar = Ical.Net.Calendar;
 
 namespace GamesDoneQuickCalendarFactory;
@@ -10,13 +11,13 @@ namespace GamesDoneQuickCalendarFactory;
 public static class Extensions {
 
     [Pure]
-    public static EventDateTime toGoogleEventDateTime(this IDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.AsDateTimeOffset, TimeZone = dateTime.TimeZoneName };
+    public static EventDateTime toGoogleEventDateTime(this CalDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.Value, TimeZone = dateTime.TimeZoneName };
 
     [Pure]
     public static Event toGoogleEvent(this CalendarEvent calendarEvent) => new() {
         ICalUID      = calendarEvent.Uid,
-        Start        = calendarEvent.Start.toGoogleEventDateTime(),
-        End          = calendarEvent.End.toGoogleEventDateTime(),
+        Start        = calendarEvent.Start!.toGoogleEventDateTime(),
+        End          = calendarEvent.End!.toGoogleEventDateTime(),
         Summary      = calendarEvent.Summary,
         Description  = calendarEvent.Description,
         Location     = calendarEvent.Location,
@@ -53,7 +54,7 @@ public static class Extensions {
         a.Summary == b.Summary &&
         a.Location == b.Location &&
         a.Description == b.Description &&
-        a.DtStart.Equals(b.DtStart) &&
-        a.DtEnd.Equals(b.DtEnd);
+        a.DtStart!.Value.Equals(b.DtStart!.Value) &&
+        a.Duration!.Value.Equals(b.Duration!.Value, fucked: false);
 
 }

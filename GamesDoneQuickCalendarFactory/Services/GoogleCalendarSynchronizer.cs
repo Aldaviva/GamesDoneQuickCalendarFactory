@@ -6,8 +6,10 @@ using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Options;
+using NodaTime.Extensions;
 using System.Net;
 using ThrottleDebounce.Retry;
+using Unfucked;
 using Unfucked.DateTime;
 using Calendar = Ical.Net.Calendar;
 using Event = Google.Apis.Calendar.v3.Data.Event;
@@ -82,10 +84,10 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                     .ToList();
                 IEnumerable<CalendarEvent> eventsToCreate = newCalendar.Events.ExceptBy(existingGoogleEventsByIcalUid.Keys, icsEvent => icsEvent.Uid).ToList();
                 IEnumerable<CalendarEvent> eventsToUpdate = newCalendar.Events.Except(eventsToCreate).Where(icsEvent => {
-                    Event googleEvent = existingGoogleEventsByIcalUid[icsEvent.Uid];
+                    Event googleEvent = existingGoogleEventsByIcalUid[icsEvent.Uid!];
                     return icsEvent.Summary != googleEvent.Summary ||
-                        !icsEvent.Start.AsDateTimeOffset.Equals(googleEvent.Start.DateTimeDateTimeOffset) ||
-                        !icsEvent.End.AsDateTimeOffset.Equals(googleEvent.End.DateTimeDateTimeOffset) ||
+                        !icsEvent.Start!.ToInstant().Equals(googleEvent.Start.DateTimeDateTimeOffset?.ToInstant()) ||
+                        !icsEvent.End!.ToInstant().Equals(googleEvent.End.DateTimeDateTimeOffset?.ToInstant()) ||
                         icsEvent.Location != googleEvent.Location ||
                         icsEvent.Description != googleEvent.Description;
                 }).ToList();
