@@ -11,7 +11,7 @@ namespace GamesDoneQuickCalendarFactory;
 public static class Extensions {
 
     [Pure]
-    public static EventDateTime toGoogleEventDateTime(this CalDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.Value, TimeZone = dateTime.TimeZoneName };
+    public static EventDateTime toGoogleEventDateTime(this CalDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.ToZonedDateTime().ToDateTimeOffset(), TimeZone = dateTime.TimeZoneName };
 
     [Pure]
     public static Event toGoogleEvent(this CalendarEvent calendarEvent) => new() {

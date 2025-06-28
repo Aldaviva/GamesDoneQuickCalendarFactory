@@ -113,8 +113,8 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
                 logger.LogDebug("Updating {count:N0} outdated events in Google Calendar", eventsToUpdate.Count());
                 foreach (CalendarEvent eventToUpdate in eventsToUpdate) {
-                    existingGoogleEventsByIcalUid[eventToUpdate.Uid] =
-                        await calendarService!.Events.Update(eventToUpdate.toGoogleEvent(), googleCalendarId, existingGoogleEventsByIcalUid[eventToUpdate.Uid].Id).ExecuteAsync();
+                    existingGoogleEventsByIcalUid[eventToUpdate.Uid!] =
+                        await calendarService!.Events.Update(eventToUpdate.toGoogleEvent(), googleCalendarId, existingGoogleEventsByIcalUid[eventToUpdate.Uid!].Id).ExecuteAsync();
                     logger.LogTrace("Updated event {summary} in Google Calendar", eventToUpdate.Summary);
                 }
             } finally {
