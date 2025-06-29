@@ -1,4 +1,4 @@
-﻿using Bom.Squad;
+using Bom.Squad;
 using GamesDoneQuickCalendarFactory;
 using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Services;
@@ -53,17 +53,25 @@ webApp
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
         responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
         context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
-        if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
+
+        if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is { } mostRecentlyPolledCalendar) {
             responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
             responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
         }
         await next();
     });
 
-webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
-    if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
-        response.GetTypedHeaders().ContentType = icalendarContentType;
-        await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
+webApp.MapGet("/", [OutputCache] async Task<IResult> ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
+    try {
+        if (await calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
+            response.GetTypedHeaders().ContentType = icalendarContentType;
+            await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
+            return TypedResults.Ok();
+        } else {
+            return Results.NoContent();
+        }
+    } catch (Exception e) when (e is not OutOfMemoryException) {
+        return Results.Problem(e.ToString(), statusCode: StatusCodes.Status500InternalServerError, type: e.GetType().Name);
     }
 });
 
