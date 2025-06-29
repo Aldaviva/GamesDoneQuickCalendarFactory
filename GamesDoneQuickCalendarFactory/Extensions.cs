@@ -26,7 +26,7 @@ public static class Extensions {
     };
 
     /// <summary>
-    /// Checks if two calendars have equal lists of events. Both calendars' event lists must already be sorted the same (such as ascending start time) for vastly improved CPU and memory usage compared to <see cref="Calendar.Equals(Ical.Net.Calendar)"/>.
+    /// Checks if two calendars have equal lists of events. Both calendars' event lists must already be sorted the same (such as ascending start time) for vastly improved CPU and memory usage compared to <see cref="Calendar.Equals(Ical.Net.CalendarObject)"/>.
     /// </summary>
     /// <param name="a">a <see cref="Calendar"/></param>
     /// <param name="b">another <see cref="Calendar"/></param>
