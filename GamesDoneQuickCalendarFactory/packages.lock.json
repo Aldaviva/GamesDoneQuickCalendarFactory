@@ -20,11 +20,11 @@
       },
       "Ical.Net": {
         "type": "Direct",
-        "requested": "[4.3.1, )",
-        "resolved": "4.3.1",
-        "contentHash": "ZQHNJAy26XeW0OnVRxyHW1xNWkLdueIInPCo76sdNCC0Sr8dAfBzN3DApWWk2r0nwCU0oJIGsrFHdCcQu5RWag==",
+        "requested": "[5.0.0, )",
+        "resolved": "5.0.0",
+        "contentHash": "7reah0v54sUXYa0mcNcXLx93tfrqasMxqudQ+zELidII+qhfaVqlw2A+Zbtb7q6eO64j7dSm9650zZnF6NeDGw==",
         "dependencies": {
-          "NodaTime": "3.2.0"
+          "NodaTime": "3.2.2"
         }
       },
       "Microsoft.Extensions.Hosting.Systemd": {
@@ -55,15 +55,15 @@
       },
       "ThrottleDebounce": {
         "type": "Direct",
-        "requested": "[3.0.0-beta4, )",
-        "resolved": "3.0.0-beta4",
-        "contentHash": "COoRYQqWRZmENa7YQk7UrFISMBkdhECX1wasSFMy5am34ok5s1JYDgS8Ea5WLk0L/iau1jM904bldCZZF56xAQ=="
+        "requested": "[3.0.0-beta5, )",
+        "resolved": "3.0.0-beta5",
+        "contentHash": "hvmR5CBGzzRAO+jJBkZuPUfXeChZRR9X2vfVLYEo7CffFV2oz4yuX9sj80GqH6oxj5KYXodJ+oGaYOtIE+H5tw=="
       },
       "Unfucked": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.6, )",
-        "resolved": "0.0.1-beta.6",
-        "contentHash": "ZS+i+R/E2sIIizgSGiakTIYQf2cUXuyGHC9kPI+xKx3ABSkAaAi9MpOrE/WYNG2LB6afGpPgB+bwxZzhCIh2Bw=="
+        "requested": "[0.0.1-beta.9, )",
+        "resolved": "0.0.1-beta.9",
+        "contentHash": "rwjRGKTGiwK5ZASsGFi3iKcJNMvALBlJ0HZzt7We0d8mfL0TgXpfXE+Icg97jvtJdHmH1pc446tb27LULFJKTQ=="
       },
       "Unfucked.DateTime": {
         "type": "Direct",
@@ -85,21 +85,21 @@
       },
       "Unfucked.HTTP": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.4, )",
-        "resolved": "0.0.1-beta.4",
-        "contentHash": "Vj38uvOzTR+r/tmfDegKuVVjJldCNNpMH/tYI6roFtPuPND5VoIjASLZgwd/f5fXa8uhtQYkTefS01uKACg52w==",
+        "requested": "[0.0.1-beta.7, )",
+        "resolved": "0.0.1-beta.7",
+        "contentHash": "s8AoAB+oaCKgmUeCrKiuLq3mO1vCIUsZ4FQ/Fg/HVFwKAT/MIgf9WRvg/ZncvZKICpZbv1ABqqerfETAkMin0A==",
         "dependencies": {
           "System.Text.Json": "8.0.5",
-          "Unfucked": "0.0.1-beta.3"
+          "Unfucked": "0.0.1-beta.9"
         }
       },
       "Unfucked.ICS": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.1, )",
-        "resolved": "0.0.1-beta.1",
-        "contentHash": "1IuLeodTd/QRf/0KwOKo5sHXUb7cmxqAmyrcLJ3CyM+fciU4zoqbPo5oLIdR0b8BzYW9xnHEoDS6ZHQBIwoH1Q==",
+        "requested": "[0.0.1-beta.2, )",
+        "resolved": "0.0.1-beta.2",
+        "contentHash": "Jx/RCzKh53A0AXhT7/3Au0J8MjJg2rpmCpTGEx5mAV5VRpvCCNZaLKwnPNkegXhQp6jOhjdu0JNAWK3EqO3jdg==",
         "dependencies": {
-          "Ical.Net": "4.3.1",
+          "Ical.Net": "5.0.0",
           "NodaTime": "3.2.2"
         }
       },
