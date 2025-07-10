@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Net.Http.Headers;
 using NodaTime;
+using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Unfucked;
@@ -16,8 +17,8 @@ using Unfucked.HTTP;
 
 BomSquad.DefuseUtf8Bom();
 
-Encoding             calendarEncoding     = Encoding.UTF8;
-MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = calendarEncoding.WebName };
+Encoding             responseEncoding     = Encoding.UTF8;
+MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = responseEncoding.WebName };
 string[]             varyHeaderValue      = [HeaderNames.AcceptEncoding];
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -61,17 +62,19 @@ webApp
         await next();
     });
 
-webApp.MapGet("/", [OutputCache] async Task<IResult> ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
+webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
     try {
         if (await calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
             response.GetTypedHeaders().ContentType = icalendarContentType;
-            await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
-            return TypedResults.Ok();
+            await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, responseEncoding);
         } else {
-            return Results.NoContent();
+            response.StatusCode = StatusCodes.Status204NoContent;
         }
     } catch (Exception e) when (e is not OutOfMemoryException) {
-        return Results.Problem(e.ToString(), statusCode: StatusCodes.Status500InternalServerError, type: e.GetType().Name);
+        response.StatusCode  = StatusCodes.Status500InternalServerError;
+        response.ContentType = MediaTypeNames.Text.Plain;
+        await using StreamWriter bodyWriter = new(response.Body, responseEncoding);
+        await bodyWriter.WriteAsync(e.ToString());
     }
 });
 

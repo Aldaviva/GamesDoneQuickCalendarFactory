@@ -11,7 +11,6 @@ using ThrottleDebounce.Retry;
 using Unfucked.DateTime;
 using Calendar = Ical.Net.Calendar;
 using Event = Google.Apis.Calendar.v3.Data.Event;
-using Options = ThrottleDebounce.Retry.Options;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
@@ -59,7 +58,7 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                 EventsResource.ListRequest listRequest = calendarService.Events.List(googleCalendarId);
                 listRequest.MaxResults = MAX_EVENTS_PER_PAGE;
                 return await listRequest.ExecuteAsync();
-            }, new Options { Delay = Delays.Exponential(new Seconds(1), max: new Seconds(300)) });
+            }, new RetryOptions { Delay = Delays.Exponential(new Seconds(1), max: new Seconds(300)) });
 
             existingGoogleEventsByIcalUid = googleCalendarEvents.Items.ToDictionary(googleEvent => googleEvent.ICalUID);
             logger.LogDebug("Found {count:N0} existing events in Google Calendar", existingGoogleEventsByIcalUid.Values.Count);

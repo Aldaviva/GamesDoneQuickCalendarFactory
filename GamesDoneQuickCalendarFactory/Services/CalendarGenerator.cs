@@ -1,8 +1,9 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using NodaTime;
+using System.Collections.Frozen;
 using Unfucked;
 
 namespace GamesDoneQuickCalendarFactory.Services;
@@ -15,7 +16,8 @@ public interface ICalendarGenerator {
 
 public sealed class CalendarGenerator(IEventDownloader eventDownloader, State state, ILogger<CalendarGenerator> logger): ICalendarGenerator {
 
-    private static readonly Duration MIN_RUN_GAP = Duration.FromMinutes(1);
+    private static readonly Duration     MIN_RUN_GAP  = Duration.FromMinutes(1);
+    private static readonly ISet<string> IGNORED_TAGS = new HashSet<string> { "bonus", "finale", "new_addition", "new_highlighted", "online", "opener", "studio" }.ToFrozenSet();
 
     public async Task<Calendar> generateCalendar() {
         logger.LogTrace("Downloading schedule from Games Done Quick website");
@@ -32,9 +34,11 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
                 IsAllDay = false, // needed because iCal.NET assumes all events that start at midnight are always all-day events, even if they have a duration that isn't 24 hours
                 Summary  = run.name,
                 // having an Organizer makes Outlook show "this event has not been accepted"
-                Description =
-                    $"{run.description}\nRun by {run.runners.Select(getName).JoinHumanized()}{(run.commentators.Any() ? $"\nCommentary by {run.commentators.Select(getName).JoinHumanized()}" : string.Empty)}{(run.hosts.Any() ? $"\nHosted by {run.hosts.Select(getName).JoinHumanized()}" : string.Empty)}",
-                // Location = TWITCH_STREAM_URL.ToString(),
+                Description = run.description +
+                    $"\nRun by {run.runners.Select(getName).JoinHumanized()}" +
+                    $"{(run.commentators.Any() ? $"\nCommentary by {run.commentators.Select(getName).JoinHumanized()}" : string.Empty)}" +
+                    $"{(run.hosts.Any() ? $"\nHosted by {run.hosts.Select(getName).JoinHumanized()}" : string.Empty)}" +
+                    $"{(run.tags.Except(IGNORED_TAGS).ToList() is { Count: not 0 } tags ? $"\nTagged {tags.Select(formatTag).Order(StringComparer.CurrentCultureIgnoreCase).Join(", ")}" : string.Empty)}",
                 Alarms = {
                     runIndex == 0 ? new Alarm {
                         Action = AlarmAction.Display,
@@ -60,5 +64,13 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
     }
 
     private static string getName(Person person) => person.name;
+
+    private static string formatTag(string rawTag) => rawTag switch {
+        "coop"           => "co-op",
+        "tas"            => "tool-assisted",
+        "checkpoint_run" => "Checkpoint run",
+        "kaizo"          => "Kaizo",
+        _                => rawTag.Replace('_', ' ')
+    };
 
 }
