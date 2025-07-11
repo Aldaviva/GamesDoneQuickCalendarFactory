@@ -78,9 +78,9 @@
         "type": "Direct",
         "requested": "[0.0.1-beta.6, )",
         "resolved": "0.0.1-beta.6",
-        "contentHash": "aPteQ2lE9jX7xGT9CtK2zUuaTrNOaNGlosD+M2qGLDsyrIEvFlO7nT/WeZ9zWHK+bdRvN1jxwSmOLTME54lH5A==",
+        "contentHash": "Vlk1zw2aJRpbBEkpq1fwn5p5qwDIFIbaXfEOP5WlPzXp0HQKCkFGCG35pmeLMHzJuO71dbFAhNValQsb2/7rCA==",
         "dependencies": {
-          "Unfucked": "0.0.1-beta.9"
+          "Unfucked": "0.0.1-beta.5"
         }
       },
       "Unfucked.HTTP": {
