@@ -29,7 +29,7 @@ public class CalendarGeneratorTest {
                 [new Person(1, "Radicoon")],
                 [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
                 [new Person(4, "AttyJoe")],
-                []),
+                ["coop", "tas", "race"]),
 
             new GameRun(
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
@@ -73,7 +73,7 @@ public class CalendarGeneratorTest {
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(35), "min run gap");
         actualEvent.Summary.Should().Be("TUNIC");
         actualEvent.Uid.Should().Be("5/AGDQ2024/TUNIC/Any% Unrestricted — PC");
-        actualEvent.Description.Should().Be("Any% Unrestricted — PC\nRun by Radicoon\nCommentary by kevinregamey and silentdestroyer\nHosted by AttyJoe");
+        actualEvent.Description.Should().Be("Any% Unrestricted — PC\nRun by Radicoon\nCommentary by kevinregamey and silentdestroyer\nHosted by AttyJoe\nTagged co-op, race, tool-assisted");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
         actualEvent.Location.Should().BeNull("I removed the Twitch stream URL because it was repetitive and cluttering up my calendar UI, making it hard to read any events");
