@@ -21,7 +21,7 @@ public record GdqRun(
     string category,
     string console,
     [property: JsonPropertyName("release_year")] int? gameReleaseYear,
-    IReadOnlyList<Runner> runners,
+    IReadOnlyList<GdqPerson> runners,
     IReadOnlyList<GdqPerson> hosts,
     IReadOnlyList<GdqPerson> commentators,
     [property: JsonPropertyName("starttime")] OffsetDateTime? startTime,
@@ -30,34 +30,3 @@ public record GdqRun(
     [property: JsonPropertyName("run_time")] Duration actualRunTime,
     IReadOnlyList<string> tags
 );
-
-public record GdqPerson(
-    int id,
-    string name,
-    string pronouns
-);
-
-/// <param name="twitter">Handle/username on Twitter</param>
-/// <param name="youtube">Handle on YouTube</param>
-/// <param name="streamingPlatform">The service that <paramref name="stream"/> is hosted on, defaults to <see cref="StreamingPlatform.TWITCH"/> even if <paramref name="stream"/> is <c>null</c>.</param>
-public record Runner(
-    int id,
-    string name,
-    Uri? stream,
-    string twitter,
-    string youtube,
-    [property: JsonPropertyName("platform")] StreamingPlatform streamingPlatform,
-    string pronouns
-): GdqPerson(id, name, pronouns);
-
-public enum StreamingPlatform {
-
-    TWITCH,
-
-    /// <summary>
-    /// Only one person in GDQ history streams on YouTube Live:
-    /// Bar0ti (https://www.youtube.com/@maeveskora), who showed an inspiring Katana Zero TAS during Frost Fatales 2023
-    /// </summary>
-    YOUTUBE
-
-}

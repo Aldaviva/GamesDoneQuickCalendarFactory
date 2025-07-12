@@ -39,7 +39,7 @@
         <PackageReference Include="Unfucked" Version="0.0.1-beta.9" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.2" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.6" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.7" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.9" />
         <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.1" />
     </ItemGroup>
 
