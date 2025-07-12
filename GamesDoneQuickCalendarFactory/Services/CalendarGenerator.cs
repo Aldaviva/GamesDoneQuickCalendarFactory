@@ -17,7 +17,7 @@ public interface ICalendarGenerator {
 public sealed class CalendarGenerator(IEventDownloader eventDownloader, State state, ILogger<CalendarGenerator> logger): ICalendarGenerator {
 
     private static readonly Duration     MIN_RUN_GAP  = Duration.FromMinutes(1);
-    private static readonly ISet<string> IGNORED_TAGS = new HashSet<string> { "bonus", "finale", "new_addition", "new_highlighted", "online", "opener", "studio" }.ToFrozenSet();
+    private static readonly ISet<string> IGNORED_TAGS = new HashSet<string> { "online", "studio" }.ToFrozenSet();
 
     public async Task<Calendar> generateCalendar() {
         logger.LogTrace("Downloading schedule from Games Done Quick website");
@@ -66,10 +66,10 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
     private static string getName(Person person) => person.name;
 
     private static string formatTag(string rawTag) => rawTag switch {
-        "coop"           => "co-op",
-        "tas"            => "tool-assisted",
         "checkpoint_run" => "Checkpoint run",
+        "coop"           => "co-op",
         "kaizo"          => "Kaizo",
+        "tas"            => "tool-assisted",
         _                => rawTag.Replace('_', ' ')
     };
 
