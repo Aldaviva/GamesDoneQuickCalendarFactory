@@ -62,11 +62,12 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
                     commentators: run.commentators.Select(getPerson),
                     hosts: run.hosts.Select(getPerson),
                     tags: run.tags.Select(s => s.ToLowerInvariant()).ToHashSet());
-                runs.Add(gameRun);
 
                 if (gameRun.tags.Remove("new_highlighted")) {
-                    gameRun.tags.AddAll("highlighted", "new_addition");
+                    gameRun.tags.AddAll("highlight", "new_addition");
                 }
+
+                runs.Add(gameRun);
 
                 // The API returns runs sorted in ascending start time order, but guarantee it here so the faster equality check in CalendarPoller is correct
                 if (sorted) {
