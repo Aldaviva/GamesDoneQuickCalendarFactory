@@ -1,7 +1,8 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Services;
 using NodaTime;
+using Unfucked;
 using Unfucked.HTTP.Exceptions;
 
 namespace Tests;
@@ -30,7 +31,7 @@ public class EventDownloaderTest {
             [new Person(1, "Radicoon")],
             [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
             [new Person(4, "AttyJoe")],
-            []);
+            new HashSet<string>(0));
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
 
         Event? actual = await eventDownloader.downloadSchedule();
@@ -54,7 +55,7 @@ public class EventDownloaderTest {
             [new Person(1, "Radicoon")],
             [new Person(2, "kevinregamey"), new Person(3, "silentdestroyer")],
             [new Person(4, "AttyJoe")],
-            []);
+            new HashSet<string>(0));
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns([tunic]);
 
         Event? actual = await eventDownloader.downloadSchedule();
@@ -88,7 +89,7 @@ public class EventDownloaderTest {
                 [new Person(1, "Runner")],
                 [],
                 [],
-                []),
+                new HashSet<string>(0)),
 
             // Sleep event
             new(now,
@@ -98,7 +99,7 @@ public class EventDownloaderTest {
                 [new Person(1, "Faith")], // Faith is actually 1884, but that case is tested separately below
                 [],
                 [new Person(2, "Velocity")],
-                []),
+                new HashSet<string>(0)),
 
             // Long event
             new(now,
@@ -108,7 +109,7 @@ public class EventDownloaderTest {
                 [new Person(1, "Twitchcon")],
                 [],
                 [],
-                []),
+                new HashSet<string>(0)),
 
             // Short sleep
             new(now,
@@ -118,7 +119,7 @@ public class EventDownloaderTest {
                 [new Person(1, "GDQ Studio")],
                 [],
                 [new Person(2, "Studio Workers")],
-                []),
+                new HashSet<string>(0)),
 
             // Tech Crew
             new(now, Duration.FromMinutes(70),
@@ -127,7 +128,7 @@ public class EventDownloaderTest {
                 [new Person(367, "Tech Crew")],
                 [],
                 [new Person(205, "TheKingsPride")],
-                []),
+                new HashSet<string>(0)),
 
             // Interview Crew
             new(now, Duration.FromMinutes(42),
@@ -136,7 +137,7 @@ public class EventDownloaderTest {
                 [new Person(1434, "Interview Crew")],
                 [],
                 [],
-                []),
+                new HashSet<string>(0)),
 
             // Faith
             new(now, Duration.FromMinutes(1), // actually longer, but long events are tested separately above
@@ -145,7 +146,7 @@ public class EventDownloaderTest {
                 [new Person(1884, "Faith")],
                 [],
                 [],
-                []),
+                new HashSet<string>(0)),
 
             // Everyone
             new(now, Duration.FromMinutes(15),
@@ -154,7 +155,7 @@ public class EventDownloaderTest {
                 [new Person(1885, "Everyone!")],
                 [],
                 [],
-                []),
+                new HashSet<string>(0)),
 
             // Frame Fatales Interstitial Team
             new(now, Duration.FromMinutes(30),
@@ -163,7 +164,7 @@ public class EventDownloaderTest {
                 [new Person(2071, "Frame Fatales Interstitial Team")],
                 [],
                 [],
-                []),
+                new HashSet<string>(0)),
 
             // recap tag
             new(now, Duration.FromMinutes(30),
@@ -176,7 +177,7 @@ public class EventDownloaderTest {
                 ],
                 [new Person(2750, "THEKyleThomas")],
                 [],
-                ["recap"])
+                Singleton.Set("recap"))
         };
 
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns(mockRuns);
