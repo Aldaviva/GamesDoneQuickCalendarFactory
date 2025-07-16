@@ -1,4 +1,4 @@
-﻿using Unfucked;
+using Unfucked;
 
 namespace GamesDoneQuickCalendarFactory.Data;
 

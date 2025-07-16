@@ -53,6 +53,7 @@ public class GdqClientTest {
         actual.Should().HaveCount(140);
 
         actual.ElementAt(0).Should().BeEquivalentTo(new GameRun(
+            5970,
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T11:30:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(42),
             "AGDQ 2024 Pre-Show",
@@ -63,6 +64,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.ElementAt(1).Should().BeEquivalentTo(new GameRun(
+            5971,
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(36),
             "TUNIC",
@@ -73,6 +75,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.ElementAt(2).Should().BeEquivalentTo(new GameRun(
+            5972,
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(33),
             "Super Monkey Ball",
@@ -83,6 +86,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.ElementAt(3).Should().BeEquivalentTo(new GameRun(
+            5973,
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
             Duration.FromHours(1) + Duration.FromMinutes(13),
             "Donkey Kong Country",
@@ -93,6 +97,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.ElementAt(138).Should().BeEquivalentTo(new GameRun(
+            6108,
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
             Duration.FromHours(2) + Duration.FromMinutes(56),
             "Final Fantasy V Pixel Remaster",
@@ -103,6 +108,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.Last().Should().BeEquivalentTo(new GameRun(
+            6109,
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-21T00:00:00-05:00").GetValueOrThrow(),
             Duration.FromMinutes(20),
             "Finale!",
@@ -126,6 +132,7 @@ public class GdqClientTest {
         actual.Should().HaveCount(24);
 
         actual.ElementAt(6).Should().BeEquivalentTo(new GameRun(
+            6911,
             OffsetDateTimePattern.GeneralIso.Parse("2025-05-08T14:46:00-04:00").GetValueOrThrow(),
             Duration.FromHours(2),
             "Donkey Kong 64 Randomizer",
@@ -136,6 +143,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.ElementAt(12).Should().BeEquivalentTo(new GameRun(
+            6917,
             OffsetDateTimePattern.GeneralIso.Parse("2025-05-09T16:37:00-04:00").GetValueOrThrow(),
             Duration.FromMinutes(20),
             "Portal",
@@ -146,6 +154,7 @@ public class GdqClientTest {
             new HashSet<string>(0)));
 
         actual.ElementAt(18).Should().BeEquivalentTo(new GameRun(
+            6923,
             OffsetDateTimePattern.GeneralIso.Parse("2025-05-10T16:14:00-04:00").GetValueOrThrow(),
             Duration.FromMinutes(15),
             "Super Mario World",

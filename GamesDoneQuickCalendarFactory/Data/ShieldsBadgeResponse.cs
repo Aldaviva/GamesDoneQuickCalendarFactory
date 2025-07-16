@@ -1,4 +1,4 @@
-﻿namespace GamesDoneQuickCalendarFactory.Data;
+namespace GamesDoneQuickCalendarFactory.Data;
 
 /// <summary>
 /// <see href="https://shields.io/badges/endpoint-badge"/>

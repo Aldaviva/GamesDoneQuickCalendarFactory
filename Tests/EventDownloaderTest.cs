@@ -25,7 +25,8 @@ public class EventDownloaderTest {
 
         A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 14, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
 
-        GameRun tunic = new(new LocalDateTime(2024, 1, 14, 12, 12, 0).WithOffset(Offset.FromHours(-5)),
+        GameRun tunic = new(0,
+            new LocalDateTime(2024, 1, 14, 12, 12, 0).WithOffset(Offset.FromHours(-5)),
             Duration.FromMinutes(36),
             "TUNIC", "Any% Unrestricted — PC",
             [new Person(1, "Radicoon")],
@@ -49,7 +50,8 @@ public class EventDownloaderTest {
 
         A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 28, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
 
-        GameRun tunic = new(new LocalDateTime(2024, 1, 14, 12, 12, 0).WithOffset(Offset.FromHours(-5)),
+        GameRun tunic = new(0,
+            new LocalDateTime(2024, 1, 14, 12, 12, 0).WithOffset(Offset.FromHours(-5)),
             Duration.FromMinutes(36),
             "TUNIC", "Any% Unrestricted — PC",
             [new Person(1, "Radicoon")],
@@ -82,7 +84,8 @@ public class EventDownloaderTest {
 
         IReadOnlyList<GameRun> mockRuns = new List<GameRun> {
             // This is the only run that should be returned
-            new(now,
+            new(0,
+                now,
                 Duration.FromMinutes(10),
                 "Real run",
                 "To show the test works",
@@ -92,7 +95,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Sleep event
-            new(now,
+            new(1,
+                now,
                 Duration.FromHours(12) + Duration.FromMinutes(53),
                 "Sleep",
                 "Pillow Fight Boss Rush — GDQ Studio",
@@ -102,7 +106,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Long event
-            new(now,
+            new(2,
+                now,
                 Duration.FromHours(14) + Duration.FromMinutes(48),
                 "Day 1 Intermission",
                 "Intermission — Offline",
@@ -112,7 +117,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Short sleep
-            new(now,
+            new(3,
+                now,
                 Duration.FromSeconds(15),
                 "Sleep",
                 "get-some-rest-too% — GDQ Studio",
@@ -122,7 +128,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Tech Crew
-            new(now, Duration.FromMinutes(70),
+            new(4,
+                now, Duration.FromMinutes(70),
                 "The Checkpoint",
                 "Day 1 - Sunday — Live",
                 [new Person(367, "Tech Crew")],
@@ -131,7 +138,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Interview Crew
-            new(now, Duration.FromMinutes(42),
+            new(5,
+                now, Duration.FromMinutes(42),
                 "AGDQ 2024 Pre-Show",
                 "Pre-Show — GDQ",
                 [new Person(1434, "Interview Crew")],
@@ -140,7 +148,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Faith
-            new(now, Duration.FromMinutes(1), // actually longer, but long events are tested separately above
+            new(6,
+                now, Duration.FromMinutes(1), // actually longer, but long events are tested separately above
                 "Not Sleep",                  // Sleep name is tested separately above
                 "Sound Machine TAS — GDQ Studio",
                 [new Person(1884, "Faith")],
@@ -149,7 +158,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Everyone
-            new(now, Duration.FromMinutes(15),
+            new(7,
+                now, Duration.FromMinutes(15),
                 "Finale!",
                 "Finale% — GDQ",
                 [new Person(1885, "Everyone!")],
@@ -158,7 +168,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // Frame Fatales Interstitial Team
-            new(now, Duration.FromMinutes(30),
+            new(8,
+                now, Duration.FromMinutes(30),
                 "Preshow",
                 "Preshow — GDQ",
                 [new Person(2071, "Frame Fatales Interstitial Team")],
@@ -167,7 +178,8 @@ public class EventDownloaderTest {
                 new HashSet<string>(0)),
 
             // recap tag
-            new(now, Duration.FromMinutes(30),
+            new(9,
+                now, Duration.FromMinutes(30),
                 "The Red Bull Daily Recap",
                 "The Red Bull Daily Recap",
                 [

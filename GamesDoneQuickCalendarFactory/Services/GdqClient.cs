@@ -25,14 +25,14 @@ public interface IGdqClient {
 
 public class GdqClient(HttpClient httpClient): IGdqClient {
 
-    private static readonly Uri        SCHEDULE_URL   = new("https://tracker.gamesdonequick.com/tracker/donate/");
-    private static readonly UrlBuilder EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
-    private static readonly Duration   MAX_SETUP_TIME = Duration.FromHours(17);
+    private static readonly Uri        CURRENT_EVENT_REDIRECTOR = new("https://tracker.gamesdonequick.com/tracker/donate/");
+    private static readonly UrlBuilder EVENTS_API_URL           = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
+    private static readonly Duration   MAX_SETUP_TIME           = Duration.FromHours(17);
 
     private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
 
     public async Task<int> getCurrentEventId() {
-        using HttpResponseMessage eventIdResponse = await httpClient.Target(SCHEDULE_URL).Head();
+        using HttpResponseMessage eventIdResponse = await httpClient.Target(CURRENT_EVENT_REDIRECTOR).Head();
         return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.Segments[4].TrimEnd('/'));
     }
 
@@ -53,6 +53,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
             runs ??= new List<GameRun>((int) resultsCount.value!.Value);
             if (run is { startTime: { } startTime, endTime: { } endTime }) {
                 GameRun gameRun = new(
+                    id: run.id,
                     start: startTime,
                     // PAX East 2025 had each last run of the day as a 20-hour overnight run with an 18-hour setup time, instead of just ending at the correct time
                     duration: run.setupTime > MAX_SETUP_TIME ? run.actualRunTime : endTime - startTime,

@@ -1,4 +1,4 @@
-﻿using GamesDoneQuickCalendarFactory.Data.Marshal;
+using GamesDoneQuickCalendarFactory.Data.Marshal;
 using NodaTime;
 using System.Text.Json;
 

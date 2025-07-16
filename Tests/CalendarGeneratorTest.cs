@@ -22,6 +22,7 @@ public class CalendarGeneratorTest {
     public async Task generateCalendar() {
         Event @event = new("Awesome Games Done Quick 2024", "AGDQ2024", [
             new GameRun(
+                0,
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
                 Duration.FromMinutes(36),
                 "TUNIC",
@@ -32,6 +33,7 @@ public class CalendarGeneratorTest {
                 new HashSet<string> { "coop", "tas", "race" }),
 
             new GameRun(
+                1,
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
                 Duration.FromMinutes(33),
                 "Super Monkey Ball",
@@ -42,6 +44,7 @@ public class CalendarGeneratorTest {
                 new HashSet<string>(0)),
 
             new GameRun(
+                2,
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
                 Duration.FromHours(1) + Duration.FromMinutes(13),
                 "Donkey Kong Country",
@@ -52,6 +55,7 @@ public class CalendarGeneratorTest {
                 new HashSet<string>(0)),
 
             new GameRun(
+                3,
                 OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
                 Duration.FromHours(2) + Duration.FromMinutes(56),
                 "Final Fantasy V Pixel Remaster",
@@ -72,7 +76,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(35).ToIcalDuration(), "min run gap");
         actualEvent.Summary.Should().Be("TUNIC");
-        actualEvent.Uid.Should().Be("5/AGDQ2024/TUNIC/Any% Unrestricted — PC");
+        actualEvent.Uid.Should().Be("5/0");
         actualEvent.Description.Should().Be("Any% Unrestricted — PC\nRun by Radicoon\nCommentary by kevinregamey and silentdestroyer\nHosted by AttyJoe\nTagged co-op, race, tool-assisted");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -94,7 +98,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.FromMinutes(32).ToIcalDuration(), "min run gap");
         actualEvent.Summary.Should().Be("Super Monkey Ball");
-        actualEvent.Uid.Should().Be("5/AGDQ2024/Super Monkey Ball/Master — Wii");
+        actualEvent.Uid.Should().Be("5/1");
         actualEvent.Description.Should().Be("Master — Wii\nRun by Helix\nCommentary by limy and PeasSMB\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -105,7 +109,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("1:13:00").ToIcalDuration());
         actualEvent.Summary.Should().Be("Donkey Kong Country");
-        actualEvent.Uid.Should().Be("5/AGDQ2024/Donkey Kong Country/101% — SNES");
+        actualEvent.Uid.Should().Be("5/2");
         actualEvent.Description.Should().Be("101% — SNES\nRun by Tonkotsu\nCommentary by Glan and V0oid\nHosted by AttyJoe");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();
@@ -116,7 +120,7 @@ public class CalendarGeneratorTest {
         actualEvent.Start.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow().ToIcalDateTimeUtc());
         actualEvent.Duration.Should().Be(TimeSpan.Parse("2:56:0").ToIcalDuration());
         actualEvent.Summary.Should().Be("Final Fantasy V Pixel Remaster");
-        actualEvent.Uid.Should().Be("5/AGDQ2024/Final Fantasy V Pixel Remaster/Any% Cutscene Remover — PC");
+        actualEvent.Uid.Should().Be("5/3");
         actualEvent.Description.Should().Be("Any% Cutscene Remover — PC\nRun by Zic3\nCommentary by FoxyJira and WoadyB\nHosted by Prolix");
         actualEvent.IsAllDay.Should().BeFalse();
         actualEvent.Organizer.Should().BeNull();

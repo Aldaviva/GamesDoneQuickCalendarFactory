@@ -1,4 +1,4 @@
-﻿namespace GamesDoneQuickCalendarFactory.Data;
+namespace GamesDoneQuickCalendarFactory.Data;
 
 public class ValueHolderStruct<T>(T? initialValue = null) where T: struct {
 

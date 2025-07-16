@@ -1,4 +1,4 @@
-﻿namespace Tests.Helpers;
+namespace Tests.Helpers;
 
 public abstract class FakeHttpMessageHandler: HttpMessageHandler {
 
