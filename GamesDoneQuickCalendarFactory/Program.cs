@@ -50,14 +50,14 @@ webApp
     .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto })
     .UseOutputCache()
     .Use(async (context, next) => {
-        ICalendarPoller calendarPoller  = webApp.Services.GetRequiredService<ICalendarPoller>();
+        ICalendarPoller calendarPoller  = context.RequestServices.GetRequiredService<ICalendarPoller>();
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
         responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
         context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
 
         if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is { } mostRecentlyPolledCalendar) {
             responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
-            responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified;
+            responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
         }
         await next();
     });

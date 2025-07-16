@@ -1,4 +1,4 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Services;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
@@ -44,12 +44,11 @@ public class ServerTest: IDisposable {
         calendar.Events.Add(calendarEvent);
         calendarEvent.Summary     = "My Event";
         calendarEvent.Start       = new CalDateTime(2023, 4, 16, 1, 18, 0, "America/Los_Angeles");
-        calendarEvent.Duration    = TimeSpan.FromHours(1);
-        calendarEvent.IsAllDay    = false;
+        calendarEvent.Duration    = Duration.FromHours(1);
         calendarEvent.Organizer   = new Organizer { CommonName = "Ben Hutchison" };
         calendarEvent.Location    = "My location";
         calendarEvent.Description = "My description";
-        calendarEvent.DtStamp     = new CalDateTime("20230416T082040Z");
+        calendarEvent.DtStamp     = new CalDateTime(new DateTime(638867413687727147, DateTimeKind.Utc));
         calendarEvent.Uid         = "c9e08bcf-773a-4291-b0a4-dd7459ed13ba";
 
         A.CallTo(() => calendarGenerator.generateCalendar()).Returns(calendar);
@@ -60,13 +59,13 @@ public class ServerTest: IDisposable {
         string responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Be(Regex.Replace("""
                                                BEGIN:VCALENDAR
-                                               PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 4.0//EN
+                                               PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.0.0//EN
                                                VERSION:2.0
                                                BEGIN:VEVENT
                                                DESCRIPTION:My description
-                                               DTEND;TZID=America/Los_Angeles:20230416T021800
-                                               DTSTAMP:20230416T082040Z
+                                               DTSTAMP:20250628T210248Z
                                                DTSTART;TZID=America/Los_Angeles:20230416T011800
+                                               DURATION:PT1H
                                                LOCATION:My location
                                                ORGANIZER;CN=Ben Hutchison:
                                                SEQUENCE:0
