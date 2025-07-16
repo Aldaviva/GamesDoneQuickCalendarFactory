@@ -17,7 +17,7 @@ public static class Extensions {
     public static Event toGoogleEvent(this CalendarEvent calendarEvent) => new() {
         ICalUID      = calendarEvent.Uid,
         Start        = calendarEvent.Start!.toGoogleEventDateTime(),
-        End          = calendarEvent.End!.toGoogleEventDateTime(),
+        End          = calendarEvent.Start!.Add(calendarEvent.Duration!.Value).toGoogleEventDateTime(),
         Summary      = calendarEvent.Summary,
         Description  = calendarEvent.Description,
         Location     = calendarEvent.Location,

@@ -13,4 +13,12 @@ public class ExtensionsTest {
         actual.TimeZone.Should().Be("America/New_York");
     }
 
+    [Fact]
+    public void toGoogleEventDateTimeUtc() {
+        EventDateTime  actual   = new CalDateTime(2025, 9, 7, 17, 0, 0, "UTC").toGoogleEventDateTime();
+        DateTimeOffset expected = new(2025, 9, 7, 17, 0, 0, TimeSpan.Zero);
+        actual.DateTimeDateTimeOffset.Should().Be(expected);
+        actual.TimeZone.Should().Be("UTC");
+    }
+
 }
