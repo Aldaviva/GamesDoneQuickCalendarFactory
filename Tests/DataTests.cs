@@ -1,6 +1,6 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
-using GamesDoneQuickCalendarFactory.Services;
+using GamesDoneQuickCalendarFactory.Data.Marshal;
 using NodaTime;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -12,7 +12,7 @@ public class DataTests {
     [Fact]
     public void gdqEventTest() {
         using Stream jsonStream = File.OpenRead("Data/event.json");
-        GdqEvent?    actual     = JsonSerializer.Deserialize<GdqEvent>(jsonStream, GdqClient.JSON_SERIALIZER_OPTIONS);
+        GdqEvent?    actual     = JsonSerializer.Deserialize<GdqEvent>(jsonStream, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
         GdqEvent     expected   = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
 
         actual.Should().NotBeNull();
@@ -25,9 +25,9 @@ public class DataTests {
     public void gdqRunsTest() {
         using Stream  jsonStream = File.OpenRead("Data/runs.json");
         JsonNode      jsonRoot   = JsonNode.Parse(jsonStream)!;
-        IList<GdqRun> results    = jsonRoot["results"].Deserialize<IEnumerable<GdqRun>>(GdqClient.JSON_SERIALIZER_OPTIONS)!.ToList();
+        IList<GdqRun> results    = jsonRoot["results"].Deserialize<IEnumerable<GdqRun>>(JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS)!.ToList();
 
-        results[0].runners[0].stream.Should().BeNull();
+        results[0].runners[0].videoLocation.Should().BeNull();
 
         GdqRun run = results[1];
         run.id.Should().Be(5971);
@@ -41,13 +41,13 @@ public class DataTests {
         run.actualRunTime.Should().Be(Duration.FromMinutes(21) + Duration.FromSeconds(42));
 
         run.runners.Should().HaveCount(1);
-        Runner runner = run.runners[0];
+        GdqPerson runner = run.runners[0];
         runner.id.Should().Be(2042);
         runner.name.Should().Be("Radicoon");
-        runner.stream.Should().Be("https://www.twitch.tv/radicoon");
+        runner.videoLocation.Should().Be("https://www.twitch.tv/radicoon");
         runner.twitter.Should().Be("radicoon");
         runner.youtube.Should().BeEmpty();
-        runner.streamingPlatform.Should().Be(StreamingPlatform.TWITCH);
+        runner.videoPlatform.Should().Be(VideoPlatform.TWITCH);
         runner.pronouns.Should().BeEmpty();
 
         run.hosts.Should().HaveCount(1);

@@ -1,7 +1,8 @@
-using GamesDoneQuickCalendarFactory.Data;
+﻿using GamesDoneQuickCalendarFactory.Data;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
+using System.Collections.Frozen;
 using Unfucked;
 using Duration = NodaTime.Duration;
 
@@ -15,7 +16,8 @@ public interface ICalendarGenerator {
 
 public sealed class CalendarGenerator(IEventDownloader eventDownloader, State state, ILogger<CalendarGenerator> logger): ICalendarGenerator {
 
-    private static readonly Duration MIN_RUN_GAP = Duration.FromMinutes(1);
+    private static readonly Duration     MIN_RUN_GAP  = Duration.FromMinutes(1);
+    private static readonly ISet<string> IGNORED_TAGS = new HashSet<string> { "online", "studio" }.ToFrozenSet();
 
     public async Task<Calendar> generateCalendar() {
         logger.LogTrace("Downloading schedule from Games Done Quick website");
@@ -33,7 +35,11 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
                         .ToIcalDuration(),
                     Summary = run.name,
                     // having an Organizer makes Outlook show "this event has not been accepted"
-                    Description =
+                Description = run.description +
+                    $"\nRun by {run.runners.Select(getName).JoinHumanized()}" +
+                    $"{(run.commentators.Any() ? $"\nCommentary by {run.commentators.Select(getName).JoinHumanized()}" : string.Empty)}" +
+                    $"{(run.hosts.Any() ? $"\nHosted by {run.hosts.Select(getName).JoinHumanized()}" : string.Empty)}" +
+                    $"{(run.tags.Except(IGNORED_TAGS).ToList() is { Count: not 0 } tags ? $"\nTagged {tags.Select(formatTag).Order(StringComparer.CurrentCultureIgnoreCase).Join(", ")}" : string.Empty)}",
                         $"{run.description}\nRun by {run.runners.Select(getName).JoinHumanized()}{(run.commentators.Any() ? $"\nCommentary by {run.commentators.Select(getName).JoinHumanized()}" : string.Empty)}{(run.hosts.Any() ? $"\nHosted by {run.hosts.Select(getName).JoinHumanized()}" : string.Empty)}"
                 };
                 calendarEvent.Alarms.AddAll(runIndex == 0 ? [
@@ -62,5 +68,13 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
     }
 
     private static string getName(Person person) => person.name;
+
+    private static string formatTag(string rawTag) => rawTag switch {
+        "checkpoint_run" => "Checkpoint run",
+        "coop"           => "co-op",
+        "kaizo"          => "Kaizo",
+        "tas"            => "tool-assisted",
+        _                => rawTag.Replace('_', ' ')
+    };
 
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Net.Http.Headers;
 using NodaTime;
+using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Unfucked;
@@ -16,8 +17,8 @@ using Unfucked.HTTP;
 
 BomSquad.DefuseUtf8Bom();
 
-Encoding             calendarEncoding     = Encoding.UTF8;
-MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = calendarEncoding.WebName };
+Encoding             responseEncoding     = Encoding.UTF8;
+MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = responseEncoding.WebName };
 string[]             varyHeaderValue      = [HeaderNames.AcceptEncoding];
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -53,7 +54,8 @@ webApp
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
         responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
         context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
-        if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
+
+        if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is { } mostRecentlyPolledCalendar) {
             responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
             responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
         }
@@ -61,9 +63,18 @@ webApp
     });
 
 webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
-    if (calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
-        response.GetTypedHeaders().ContentType = icalendarContentType;
-        await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, calendarEncoding);
+    try {
+        if (await calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
+            response.GetTypedHeaders().ContentType = icalendarContentType;
+            await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, responseEncoding);
+        } else {
+            response.StatusCode = StatusCodes.Status204NoContent;
+        }
+    } catch (Exception e) when (e is not OutOfMemoryException) {
+        response.StatusCode  = StatusCodes.Status500InternalServerError;
+        response.ContentType = MediaTypeNames.Text.Plain;
+        await using StreamWriter bodyWriter = new(response.Body, responseEncoding);
+        await bodyWriter.WriteAsync(e.ToString());
     }
 });
 

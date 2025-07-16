@@ -9,7 +9,7 @@ namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface ICalendarPoller: IDisposable, IAsyncDisposable {
 
-    CalendarResponse? mostRecentlyPolledCalendar { get; }
+    Task<CalendarResponse?> mostRecentlyPolledCalendar { get; }
     TimeSpan getPollingInterval();
 
     event EventHandler<Calendar>? calendarChanged;
@@ -29,7 +29,7 @@ public class CalendarPoller: ICalendarPoller {
     private readonly Timer                   pollingTimer;
     private readonly SemaphoreSlim           pollingLock = new(1);
 
-    public CalendarResponse? mostRecentlyPolledCalendar { get; private set; }
+    public Task<CalendarResponse?> mostRecentlyPolledCalendar { get; private set; } = Task.FromResult<CalendarResponse?>(null);
 
     public event EventHandler<Calendar>? calendarChanged;
 
@@ -52,9 +52,16 @@ public class CalendarPoller: ICalendarPoller {
                 Calendar calendar      = await calendarGenerator.generateCalendar();
                 Instant  generatedDate = clock.GetCurrentInstant();
 
-                if (!calendar.EqualsPresorted(mostRecentlyPolledCalendar?.calendar)) {
-                    mostRecentlyPolledCalendar = new CalendarResponse(calendar, generatedDate);
-                    logger.LogInformation("GDQ schedule changed, new etag is {etag}", mostRecentlyPolledCalendar.etag);
+                CalendarResponse? previousCalendar = null;
+                try {
+                    previousCalendar = await mostRecentlyPolledCalendar;
+                } catch (Exception) { /* leave previousCalendar null */
+                }
+
+                if (!calendar.EqualsPresorted(previousCalendar?.calendar)) {
+                    CalendarResponse calendarResponse = new(calendar, generatedDate);
+                    mostRecentlyPolledCalendar = Task.FromResult<CalendarResponse?>(calendarResponse);
+                    logger.LogInformation("GDQ schedule changed, new etag is {etag}", calendarResponse.etag);
                     changedCalendar = calendar;
                 } else {
                     logger.LogTrace("GDQ schedule is unchanged");
@@ -71,6 +78,7 @@ public class CalendarPoller: ICalendarPoller {
                 }
             } catch (Exception e) when (e is not OutOfMemoryException) {
                 logger.LogError(e, "Failed to poll GDQ schedule, trying again later");
+                mostRecentlyPolledCalendar = Task.FromException<CalendarResponse?>(e);
             } finally {
                 pollingLock.Release();
             }

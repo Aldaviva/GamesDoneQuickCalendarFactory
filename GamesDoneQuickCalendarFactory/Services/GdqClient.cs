@@ -3,9 +3,6 @@ using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Data.Marshal;
 using NodaTime;
 using System.Runtime.CompilerServices;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using Unfucked;
 using Unfucked.HTTP;
 using Unfucked.HTTP.Config;
@@ -32,16 +29,7 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
     private static readonly UrlBuilder EVENTS_API_URL = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
     private static readonly Duration   MAX_SETUP_TIME = Duration.FromHours(17);
 
-    internal static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new(JsonSerializerDefaults.Web) {
-        Converters = {
-            EmptyToNullUriConverter.INSTANCE,
-            OffsetDateTimeConverter.INSTANCE,
-            DurationConverter.INSTANCE,
-            new JsonStringEnumConverter()
-        }
-    };
-
-    private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JSON_SERIALIZER_OPTIONS);
+    private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
 
     public async Task<int> getCurrentEventId() {
         using HttpResponseMessage eventIdResponse = await httpClient.Target(SCHEDULE_URL).Head();
@@ -57,12 +45,12 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         IList<GameRun>? runs         = null;
         Uri             runsUrl      = EVENTS_API_URL.Path(eventId).Path("runs");
-        var             resultsCount = new ValueHolderStruct<int>();
+        var             resultsCount = new ValueHolderStruct<long>();
         OffsetDateTime? tailStart    = null;
         bool            sorted       = true;
 
         await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
-            runs ??= new List<GameRun>(resultsCount.value!.Value);
+            runs ??= new List<GameRun>((int) resultsCount.value!.Value);
             if (run is { startTime: { } startTime, endTime: { } endTime }) {
                 GameRun gameRun = new(
                     start: startTime,
@@ -73,7 +61,12 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
                     runners: run.runners.Select(getPerson),
                     commentators: run.commentators.Select(getPerson),
                     hosts: run.hosts.Select(getPerson),
-                    tags: run.tags.Select(s => s.ToLowerInvariant()));
+                    tags: run.tags.Select(s => s.ToLowerInvariant()).ToHashSet());
+
+                if (gameRun.tags.Remove("new_highlighted")) {
+                    gameRun.tags.AddAll("highlight", "new_addition");
+                }
+
                 runs.Add(gameRun);
 
                 // The API returns runs sorted in ascending start time order, but guarantee it here so the faster equality check in CalendarPoller is correct
@@ -89,16 +82,16 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     private static Person getPerson(GdqPerson person) => new(person.id, person.name);
 
-    private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<int>? resultsCount = null, [EnumeratorCancellation] CancellationToken ct = default) {
-        JsonObject? page;
-        for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page["next"]?.GetValue<Uri?>()) {
-            page = await httpClient.Target(nextPageToDownload).Get<JsonObject>(ct);
+    private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<long>? resultsCount = null, [EnumeratorCancellation] CancellationToken ct = default) {
+        ResponseEnvelope<T>? page;
+        for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page.next) {
+            page = await httpClient.Target(nextPageToDownload).Get<ResponseEnvelope<T>>(ct);
 
             if (resultsCount is { value: null }) {
-                resultsCount.value = page["count"]!.GetValue<int>();
+                resultsCount.value = page.count;
             }
 
-            foreach (T result in page["results"]!.Deserialize<IEnumerable<T>>(JSON_SERIALIZER_OPTIONS)!) {
+            foreach (T result in page.results) {
                 yield return result;
             }
         }

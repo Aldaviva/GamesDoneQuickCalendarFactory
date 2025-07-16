@@ -1,4 +1,4 @@
-﻿using NodaTime;
+using NodaTime;
 
 namespace GamesDoneQuickCalendarFactory.Data;
 
@@ -10,7 +10,7 @@ public record GameRun(
     IEnumerable<Person> runners,
     IEnumerable<Person> commentators,
     IEnumerable<Person> hosts,
-    IEnumerable<string> tags
+    ISet<string> tags
 );
 
 public record Person(int id, string name);

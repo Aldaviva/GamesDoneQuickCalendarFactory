@@ -1,4 +1,4 @@
-﻿using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using NodaTime;
 using System.Collections.Frozen;
@@ -36,11 +36,11 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// <para><c>.results | map(.tags) | flatten() | uniq() | sort()</c></para>
     /// </summary>
     private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
-        "kickoff",
+        "kickoff", "flame_kickoff", "frost_kickoff",
         "preshow",
         "checkpoint",
         "chomp",
-        "recap",
+        "recap", "daily_recap",
         "sleep",
 
         // #34: Frame Fatales inconsistently uses "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs

@@ -60,7 +60,7 @@ public class GdqClientTest {
             [new Person(1434, "Interview Crew")],
             [],
             [],
-            []));
+            new HashSet<string>(0)));
 
         actual.ElementAt(1).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:12:00-05:00").GetValueOrThrow(),
@@ -70,7 +70,7 @@ public class GdqClientTest {
             [new Person(2042, "Radicoon")],
             [new Person(307, "kevinregamey"), new Person(306, "silentdestroyer")],
             [new Person(190, "AttyJoe")],
-            []));
+            new HashSet<string>(0)));
 
         actual.ElementAt(2).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T12:48:00-05:00").GetValueOrThrow(),
@@ -80,7 +80,7 @@ public class GdqClientTest {
             [new Person(1023, "Helix")],
             [new Person(308, "limy"), new Person(469, "PeasSMB")],
             [new Person(190, "AttyJoe")],
-            []));
+            new HashSet<string>(0)));
 
         actual.ElementAt(3).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T13:21:00-05:00").GetValueOrThrow(),
@@ -90,7 +90,7 @@ public class GdqClientTest {
             [new Person(1240, "Tonkotsu")],
             [new Person(310, "Glan"), new Person(309, "V0oid")],
             [new Person(190, "AttyJoe")],
-            []));
+            new HashSet<string>(0)));
 
         actual.ElementAt(138).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-20T21:04:00-05:00").GetValueOrThrow(),
@@ -100,7 +100,7 @@ public class GdqClientTest {
             [new Person(432, "Zic3")],
             [new Person(448, "FoxyJira"), new Person(449, "WoadyB")],
             [new Person(2, "Prolix")],
-            []));
+            new HashSet<string>(0)));
 
         actual.Last().Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2024-01-21T00:00:00-05:00").GetValueOrThrow(),
@@ -110,7 +110,7 @@ public class GdqClientTest {
             [new Person(367, "Tech Crew")],
             [],
             [],
-            []));
+            new HashSet<string>(0)));
     }
 
     [Fact]
@@ -133,7 +133,7 @@ public class GdqClientTest {
             [new Person(363, "altabiscuit")],
             [],
             [],
-            []));
+            new HashSet<string>(0)));
 
         actual.ElementAt(12).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2025-05-09T16:37:00-04:00").GetValueOrThrow(),
@@ -143,7 +143,7 @@ public class GdqClientTest {
             [new Person(924, "Msushi")],
             [],
             [],
-            []));
+            new HashSet<string>(0)));
 
         actual.ElementAt(18).Should().BeEquivalentTo(new GameRun(
             OffsetDateTimePattern.GeneralIso.Parse("2025-05-10T16:14:00-04:00").GetValueOrThrow(),
@@ -153,7 +153,7 @@ public class GdqClientTest {
             [new Person(3958, "ThePresidentNoir")],
             [],
             [],
-            []));
+            new HashSet<string>(0)));
     }
 
 }
