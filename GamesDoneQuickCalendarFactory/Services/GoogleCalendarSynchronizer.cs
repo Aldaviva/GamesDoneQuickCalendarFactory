@@ -3,6 +3,7 @@ using Google;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Http;
 using Google.Apis.Services;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Options;
@@ -42,11 +43,12 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
         this.logger         = logger;
 
         if (configuration.Value is { googleCalendarId: not null, googleServiceAccountEmailAddress: { } serviceAccount, googleServiceAccountPrivateKey: { } privateKey }) {
-            calendarService = new CalendarService(new BaseClientService.Initializer {
+            calendarService = new UnfuckedGoogleCalendarService(new BaseClientService.Initializer {
                 HttpClientInitializer = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccount) {
                     Scopes = [CalendarService.Scope.CalendarEvents]
                 }.FromPrivateKey(privateKey)),
-                ApplicationName = "Aldaviva/GamesDoneQuickCalendarFactory"
+                ApplicationName                 = "Aldaviva/GamesDoneQuickCalendarFactory",
+                DefaultExponentialBackOffPolicy = ExponentialBackOffPolicy.RecommendedOrDefault
             });
         }
     }
@@ -86,7 +88,7 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                     Event googleEvent = existingGoogleEventsByIcalUid[icsEvent.Uid!];
                     return icsEvent.Summary != googleEvent.Summary ||
                         !icsEvent.Start!.ToInstant().Equals(googleEvent.Start.DateTimeDateTimeOffset?.ToInstant()) ||
-                        !icsEvent.End!.ToInstant().Equals(googleEvent.End.DateTimeDateTimeOffset?.ToInstant()) ||
+                        !icsEvent.Start!.Add(icsEvent.Duration!.Value).ToInstant().Equals(googleEvent.End.DateTimeDateTimeOffset?.ToInstant()) ||
                         icsEvent.Location != googleEvent.Location ||
                         icsEvent.Description != googleEvent.Description;
                 }).ToList();
