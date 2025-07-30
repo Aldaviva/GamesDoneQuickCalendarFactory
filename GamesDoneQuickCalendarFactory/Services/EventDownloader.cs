@@ -48,27 +48,29 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
     public async Task<Event?> downloadSchedule() {
-        GdqEvent currentEvent;
         try {
-            currentEvent = await gdq.getCurrentEvent();
+            GdqEvent currentEvent = await gdq.getCurrentEvent();
+
+            IReadOnlyList<GameRun> runs = (await gdq.getEventRuns(currentEvent))
+                .Where(run =>
+                    !run.runners.IntersectBy(RUNNER_BLACKLIST, runner => runner.id).Any() &&
+                    !run.tags.Intersect(TAG_BLACKLIST).Any() &&
+                    !"Sleep".Equals(run.name, StringComparison.CurrentCultureIgnoreCase) &&
+                    run.duration < MAX_RUN_DURATION)
+                .ToList().AsReadOnly();
+
+            Instant latestRunEndTimeToInclude = clock.GetCurrentInstant() - MAX_EVENT_END_CLEANUP_DELAY;
+            if (runs.Any(run => (run.start + run.duration).ToInstant() > latestRunEndTimeToInclude)) {
+                return new Event(currentEvent.longName, currentEvent.shortName, runs);
+            } else {
+                // All runs ended too far in the past
+                return null;
+            }
         } catch (NotFoundException) {
-            // No schedule has been yet published for the next event. The official schedule URL redirects to a 404.
-            return null;
-        }
-
-        IReadOnlyList<GameRun> runs = (await gdq.getEventRuns(currentEvent))
-            .Where(run =>
-                !run.runners.IntersectBy(RUNNER_BLACKLIST, runner => runner.id).Any() &&
-                !run.tags.Intersect(TAG_BLACKLIST).Any() &&
-                !"Sleep".Equals(run.name, StringComparison.CurrentCultureIgnoreCase) &&
-                run.duration < MAX_RUN_DURATION)
-            .ToList().AsReadOnly();
-
-        Instant latestRunEndTimeToInclude = clock.GetCurrentInstant() - MAX_EVENT_END_CLEANUP_DELAY;
-        if (runs.Any(run => (run.start + run.duration).ToInstant() > latestRunEndTimeToInclude)) {
-            return new Event(currentEvent.longName, currentEvent.shortName, runs);
-        } else {
-            // All runs ended too far in the past
+            /*
+             * No schedule has been yet published for the next event.
+             * Either the official schedule URL redirects to a 404 (no upcoming event), or it has a valid event ID but no runs share that event ID (upcoming event with no runs).
+             */
             return null;
         }
     }

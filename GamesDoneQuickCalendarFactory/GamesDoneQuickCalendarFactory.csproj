@@ -5,7 +5,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm;linux-arm64</RuntimeIdentifiers>
-        <Version>2.7.19</Version>
+        <Version>2.7.20</Version>
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Authors>Ben Hutchison</Authors>
@@ -36,7 +36,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.7" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta5" />
-        <PackageReference Include="Unfucked" Version="0.0.1-beta.10" />
+        <PackageReference Include="Unfucked" Version="0.0.1-beta.12" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.2" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.6" />
         <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.11" />
