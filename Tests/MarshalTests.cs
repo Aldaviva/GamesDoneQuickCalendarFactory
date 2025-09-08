@@ -55,9 +55,11 @@ public class MarshalTests {
         { "\"0:0:0\"", Duration.Zero },
         { "\"0:0:1\"", Duration.FromSeconds(1) },
         { "\"0:1:2\"", Duration.FromMinutes(1) + Duration.FromSeconds(2) },
-        { "\"1:2\"", Duration.FromMinutes(1) + Duration.FromSeconds(2) },
+        { "\"0:1:2.3\"", Duration.FromMinutes(1) + Duration.FromSeconds(2) + Duration.FromMilliseconds(3) },
         { "\"1:2:3\"", Duration.FromHours(1) + Duration.FromMinutes(2) + Duration.FromSeconds(3) },
         { "\"01:02:03\"", Duration.FromHours(1) + Duration.FromMinutes(2) + Duration.FromSeconds(3) },
+        { "\"01:02:03.004\"", Duration.FromHours(1) + Duration.FromMinutes(2) + Duration.FromSeconds(3) + Duration.FromMilliseconds(4) },
+        { "\"12:34:56.789\"", Duration.FromHours(12) + Duration.FromMinutes(34) + Duration.FromSeconds(56) + Duration.FromMilliseconds(789) }
     };
 
     [Fact]

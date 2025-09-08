@@ -13,15 +13,11 @@ public class DurationConverter: JsonConverter<Duration> {
 
     public override Duration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         if (reader.TokenType == JsonTokenType.String && reader.GetString() is { } jsonString) {
-            if (jsonString == "0") {
-                return Duration.Zero;
+            ParseResult<Duration> parsed = COLON_PATTERN.Parse(jsonString);
+            if (parsed.Success) {
+                return parsed.Value;
             } else {
-                ParseResult<Duration> parsed = COLON_PATTERN.Parse(jsonString);
-                if (parsed.Success) {
-                    return parsed.Value;
-                } else {
-                    throw new FormatException($"Could not parse {jsonString} as an h:m:s duration", parsed.Exception);
-                }
+                throw new FormatException($"Could not parse {jsonString} as an h:m:s duration", parsed.Exception);
             }
         } else {
             throw new InvalidOperationException($"JSON token type must be {nameof(JsonTokenType.String)} to parse as {nameof(Duration)}, but was {reader.TokenType}.");
@@ -36,26 +32,33 @@ public class DurationConverter: JsonConverter<Duration> {
 
 public class ColonDelimitedDurationPattern: IPattern<Duration> {
 
-    private static readonly char[] SEPARATORS = [':', '.'];
-
     public ParseResult<Duration> Parse(string text) {
-        long[] split;
-        try {
-            split = text.Split(SEPARATORS, 4).Select(long.Parse).ToArray();
-        } catch (FormatException e) {
-            return ParseResult<Duration>.ForException(() => e);
+        ReadOnlySpan<char> remaining = text.AsSpan();
+        Duration           result    = Duration.AdditiveIdentity;
+        for (int groupIndex = 0; groupIndex <= 3; groupIndex++) {
+            Index groupEnd = groupIndex switch {
+                <= 2 => remaining.IndexOf(groupIndex == 2 ? '.' : ':') is var i && i != -1 ? i : ^0,
+                > 2  => ^0
+            };
+
+            int parsedNumber = int.Parse(remaining[..groupEnd]);
+
+            result += groupIndex switch {
+                0 => Duration.FromHours(parsedNumber),
+                1 => Duration.FromMinutes(parsedNumber),
+                2 => Duration.FromSeconds(parsedNumber),
+                3 => Duration.FromMilliseconds(parsedNumber),
+                _ => Duration.AdditiveIdentity
+            };
+
+            if (groupEnd.Equals(^0) || remaining.Length <= 1) {
+                break;
+            }
+
+            remaining = remaining[groupEnd..][1..];
         }
 
-        Duration? result = split.Length switch {
-            1 => Duration.FromSeconds(split[0]),
-            2 => Duration.FromMinutes(split[0]) + Duration.FromSeconds(split[1]),
-            3 => Duration.FromHours(split[0]) + Duration.FromMinutes(split[1]) + Duration.FromSeconds(split[2]),
-            4 => Duration.FromHours(split[0]) + Duration.FromMinutes(split[1]) + Duration.FromSeconds(split[2]) + Duration.FromMilliseconds(split[3]),
-            _ => null
-        };
-
-        return result != null ? ParseResult<Duration>.ForValue(result.Value)
-            : ParseResult<Duration>.ForException(() => new FormatException($"Could not parse {text} as a Noda Duration of the form h:m:s"));
+        return ParseResult<Duration>.ForValue(result);
     }
 
     public StringBuilder AppendFormat(Duration value, StringBuilder builder) {
