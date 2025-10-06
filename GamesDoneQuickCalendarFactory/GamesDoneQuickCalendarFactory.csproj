@@ -31,9 +31,9 @@
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3746" />
-        <PackageReference Include="Ical.Net" Version="5.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.8" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.8" />
+        <PackageReference Include="Ical.Net" Version="5.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.9" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta5" />
         <PackageReference Include="Unfucked" Version="0.0.1-beta.13" />

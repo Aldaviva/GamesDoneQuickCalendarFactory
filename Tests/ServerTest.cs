@@ -59,7 +59,7 @@ public class ServerTest: IDisposable {
         string responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Be(Regex.Replace("""
                                                BEGIN:VCALENDAR
-                                               PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.1.0//EN
+                                               PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.1.1//EN
                                                VERSION:2.0
                                                BEGIN:VEVENT
                                                DESCRIPTION:My description
@@ -78,7 +78,7 @@ public class ServerTest: IDisposable {
 
         MediaTypeHeaderValue? contentType = response.Content.Headers.ContentType;
         contentType.Should().NotBeNull();
-        contentType!.MediaType.Should().Be("text/calendar");
+        contentType.MediaType.Should().Be("text/calendar");
         contentType.CharSet.Should().Be("utf-8");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -102,7 +102,7 @@ public class ServerTest: IDisposable {
         JsonObject? response = await client.GetFromJsonAsync<JsonObject>("/badge.json");
 
         response.Should().NotBeNull();
-        response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
+        response["schemaVersion"]!.GetValue<int>().Should().Be(1);
         response["label"]!.GetValue<string>().Should().Be("agdq 2024");
         response["message"]!.GetValue<string>().Should().Be("145 runs");
         response["color"]!.GetValue<string>().Should().Be("success");
@@ -127,7 +127,7 @@ public class ServerTest: IDisposable {
         JsonObject? response = await client.GetFromJsonAsync<JsonObject>("/badge.json");
 
         response.Should().NotBeNull();
-        response!["schemaVersion"]!.GetValue<int>().Should().Be(1);
+        response["schemaVersion"]!.GetValue<int>().Should().Be(1);
         response["label"]!.GetValue<string>().Should().Be("gdq");
         response["message"]!.GetValue<string>().Should().Be("no event now");
         response["color"]!.GetValue<string>().Should().Be("inactive");
@@ -139,6 +139,7 @@ public class ServerTest: IDisposable {
     public void Dispose() {
         client.Dispose();
         webapp.Dispose();
+        GC.SuppressFinalize(this);
     }
 
 }

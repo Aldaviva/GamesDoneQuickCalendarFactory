@@ -38,7 +38,7 @@ public class EventDownloaderTest {
         Event? actual = await eventDownloader.downloadSchedule();
 
         actual.Should().NotBeNull();
-        actual!.shortTitle.Should().Be("AGDQ2024");
+        actual.shortTitle.Should().Be("AGDQ2024");
         actual.longTitle.Should().Be("Awesome Games Done Quick 2024");
         actual.runs.Should().Equal(tunic);
     }
@@ -82,7 +82,7 @@ public class EventDownloaderTest {
         OffsetDateTime now = SystemClock.Instance.GetCurrentInstant().WithOffset(Offset.Zero);
         A.CallTo(() => clock.GetCurrentInstant()).Returns(now.ToInstant());
 
-        IReadOnlyList<GameRun> mockRuns = new List<GameRun> {
+        IReadOnlyList<GameRun> mockRuns = [
             // This is the only run that should be returned
             new(0,
                 now,
@@ -190,7 +190,7 @@ public class EventDownloaderTest {
                 [new Person(2750, "THEKyleThomas")],
                 [],
                 Singleton.Set("recap"))
-        };
+        ];
 
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns(mockRuns);
 

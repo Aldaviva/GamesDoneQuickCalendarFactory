@@ -16,7 +16,7 @@ public class DataTests {
         GdqEvent     expected   = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
 
         actual.Should().NotBeNull();
-        actual!.id.Should().Be(expected.id);
+        actual.id.Should().Be(expected.id);
         actual.shortName.Should().Be(expected.shortName);
         actual.longName.Should().Be(expected.longName);
     }
