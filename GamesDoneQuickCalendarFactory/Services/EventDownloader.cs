@@ -23,6 +23,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
 
     private static readonly IReadOnlySet<int> RUNNER_BLACKLIST = new HashSet<int> {
         367,  // Tech Crew
+        885,  // GDQ Staff
         1434, // Interview Crew
         1884, // Faith (the Frame Fatales saber-toothed tiger mascot)
         1885, // Everyone!
