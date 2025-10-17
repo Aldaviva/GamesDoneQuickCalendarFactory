@@ -58,7 +58,9 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
                     // PAX East 2025 had each last run of the day as a 20-hour overnight run with an 18-hour setup time, instead of just ending at the correct time
                     duration: run.setupTime > MAX_SETUP_TIME ? run.actualRunTime : endTime - startTime,
                     name: run.gameName.EmptyToNull() ?? run.runName,
-                    description: ((List<string?>) [run.category.Replace(" - ", " \u2014 "), run.console.EmptyToNull(), run.gameReleaseYear?.ToString()]).Compact().Join(" \u2014 "),
+                    category: run.category.Replace(" - ", " \u2014 "),
+                    console: run.console,
+                    gameReleaseYear: run.gameReleaseYear,
                     runners: run.runners.Select(getPerson),
                     commentators: run.commentators.Select(getPerson),
                     hosts: run.hosts.Select(getPerson),

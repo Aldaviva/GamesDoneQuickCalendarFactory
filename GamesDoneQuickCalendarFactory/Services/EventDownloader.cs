@@ -48,6 +48,13 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
         // "opener", "finale"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
+    /// <summary>
+    /// GDQ Express at TwitchCon 2025 doesn't mark their daily openers or event finale with useful tags or runners (they do use the finale tag, but we can't use that because Frame Fatales uses that for their last real run).
+    /// </summary>
+    private static readonly IReadOnlySet<string> CONSOLE_BLACKLIST = new HashSet<string> {
+        "TwitchCon"
+    }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
+
     public async Task<Event?> downloadSchedule() {
         try {
             GdqEvent currentEvent = await gdq.getCurrentEvent();
@@ -56,6 +63,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
                 .Where(run =>
                     !run.runners.IntersectBy(RUNNER_BLACKLIST, runner => runner.id).Any() &&
                     !run.tags.Intersect(TAG_BLACKLIST).Any() &&
+                    !CONSOLE_BLACKLIST.Contains(run.console.ToLowerInvariant()) &&
                     !"Sleep".Equals(run.name, StringComparison.CurrentCultureIgnoreCase) &&
                     run.duration < MAX_RUN_DURATION)
                 .ToList().AsReadOnly();
