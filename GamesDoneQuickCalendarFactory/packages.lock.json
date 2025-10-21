@@ -76,11 +76,10 @@
       },
       "Unfucked.DI": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.9, )",
-        "resolved": "0.0.1-beta.9",
-        "contentHash": "0rrIrORahSR0HbVaZXgoI7Ybl0N8fuo+oKru2lntopEYbwcJO5157dkUsuESDOQQB59mu6Ogwcr/ZA0hJNOWcA==",
+        "requested": "[0.0.1-beta.10, )",
+        "resolved": "0.0.1-beta.10",
+        "contentHash": "uz6X2VeYUu3FOZW4XdeErVaP/NUKXuHglrBljmTty3IMJnL11EQKWzQQGSsBv6eBwo55FVv1vOLKv42aaYdpxg==",
         "dependencies": {
-          "JetBrains.Annotations": "2025.2.2",
           "Unfucked": "0.0.1-beta.15"
         }
       },
@@ -129,11 +128,6 @@
         "dependencies": {
           "Newtonsoft.Json": "13.0.3"
         }
-      },
-      "JetBrains.Annotations": {
-        "type": "Transitive",
-        "resolved": "2025.2.2",
-        "contentHash": "0X56ZRizuHdrnPpgXjWV7f2tQO1FlQg5O1967OGKnI/4ZRNOK642J8L7brM1nYvrxTTU5TP1yRyXLRLaXLPQ8A=="
       },
       "Microsoft.Extensions.Configuration": {
         "type": "Transitive",
