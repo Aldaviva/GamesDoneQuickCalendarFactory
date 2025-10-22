@@ -29,11 +29,12 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
         1885, // Everyone!
         2071, // Frame Fatales Interstitial Team
         2171, // Everyone
+        4202, // GDQueer In-Studio Team
     }.ToFrozenSet();
 
     /// <summary>
     /// <para>If a run has any of these tags, it will not appear in the calendar.</para>
-    /// <para>To compute the set of all tags in a given event, run this JSON Query on the /runs JSON object:</para>
+    /// <para>To compute the set of all tags in a given event, run this JSON Query on the runs.json object:</para>
     /// <para><c>.results | map(.tags) | flatten() | uniq() | sort()</c></para>
     /// </summary>
     private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
@@ -44,7 +45,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
         "recap", "daily_recap",
         "sleep",
 
-        // #34: Frame Fatales inconsistently uses "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs
+        // #34: Frame Fatales 2025 (event 55) inconsistently uses "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs
         // "opener", "finale"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
@@ -52,7 +53,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// GDQ Express at TwitchCon 2025 doesn't mark their daily openers or event finale with useful tags or runners (they do use the finale tag, but we can't use that because Frame Fatales uses that for their last real run).
     /// </summary>
     private static readonly IReadOnlySet<string> CONSOLE_BLACKLIST = new HashSet<string> {
-        "TwitchCon"
+        "TwitchCon",
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
     public async Task<Event?> downloadSchedule() {
