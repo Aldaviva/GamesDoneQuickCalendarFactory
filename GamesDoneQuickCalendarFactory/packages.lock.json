@@ -61,9 +61,9 @@
       },
       "Unfucked": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.15, )",
-        "resolved": "0.0.1-beta.15",
-        "contentHash": "Uti7ptj3MPmQTQfuKJ25njSbfc0cPPU2GqH7PP4XREXQwLSsmr/NIEhTIgP/EecqhwEUGE5vr2s4GngKT27abQ=="
+        "requested": "[0.0.1-beta.16, )",
+        "resolved": "0.0.1-beta.16",
+        "contentHash": "/O/G6JfNShUgkBbTJ5qqySd44GaswKQRWz5SIjw2x5fYCrfH3LkLabKpBfxc8R7X6PQqvSgyR4elelLm843V/Q=="
       },
       "Unfucked.DateTime": {
         "type": "Direct",
@@ -85,12 +85,12 @@
       },
       "Unfucked.HTTP": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.15, )",
-        "resolved": "0.0.1-beta.15",
-        "contentHash": "SQslrg3w3GGN1LM2Fdtjm30ruA8oyiDY3yK0lLE8ezM6KPgurSrfm/puQ+TtHcME0fIGNqLzisxbmr90rZ0Ghg==",
+        "requested": "[0.0.1-beta.16, )",
+        "resolved": "0.0.1-beta.16",
+        "contentHash": "g804os2brGW0SIXzeT9kSLLvBza0xc3q+RIy9oPdqeWkzuNdRX1DNkoZBUuxTCnzdQNZ0AycNO5bil58ZoaiOw==",
         "dependencies": {
           "System.Text.Json": "8.0.6",
-          "Unfucked": "0.0.1-beta.15"
+          "Unfucked": "0.0.1-beta.16"
         }
       },
       "Unfucked.ICS": {
