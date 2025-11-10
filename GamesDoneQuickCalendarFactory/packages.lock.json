@@ -95,11 +95,11 @@
       },
       "Unfucked.ICS": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.2, )",
-        "resolved": "0.0.1-beta.2",
-        "contentHash": "Jx/RCzKh53A0AXhT7/3Au0J8MjJg2rpmCpTGEx5mAV5VRpvCCNZaLKwnPNkegXhQp6jOhjdu0JNAWK3EqO3jdg==",
+        "requested": "[0.0.1-beta.3, )",
+        "resolved": "0.0.1-beta.3",
+        "contentHash": "NuWz+7sGJhSB4sn4eJ/W/2c7vSS5Ieo77hmyPdM1ZbFyaooETrsZQF3UT2Y323YW5H4g3OYq1EtoOdihi/WiXQ==",
         "dependencies": {
-          "Ical.Net": "5.0.0",
+          "Ical.Net": "5.1.1",
           "NodaTime": "3.2.2"
         }
       },
