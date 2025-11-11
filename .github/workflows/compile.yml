@@ -30,13 +30,13 @@ jobs:
           domain: ${{github.repository_owner}}
       
       - name: Restore
-        run: dotnet restore --locked-mode --verbosity normal
+        run: dotnet restore --locked-mode
 
       - name: Build
         run: dotnet build ${{ env.ProjectName }} --runtime ${{ matrix.targetPlatform }} --no-restore --configuration Release --no-self-contained
 
       - name: Publish
-        run: dotnet publish ${{ env.ProjectName }} --runtime ${{ matrix.targetPlatform }} --no-build --configuration Release -p:PublishSingleFile=true --no-self-contained --verbosity normal
+        run: dotnet publish ${{ env.ProjectName }} --runtime ${{ matrix.targetPlatform }} --no-build --configuration Release -p:PublishSingleFile=true --no-self-contained
 
       - name: Test
         shell: bash

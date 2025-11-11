@@ -63,7 +63,7 @@
         "type": "Direct",
         "requested": "[0.0.1-beta.3, )",
         "resolved": "0.0.1-beta.3",
-        "contentHash": "swqABGJjavfK7aSQdDHvKb3P3OJQT120b2Csq78XXA9mRUhRMzW2wZ+Ud76kXuAZBqvJWUaiMr8rShfceaMixg==",
+        "contentHash": "2PlUC2CP87gwAn+TiI++1W6mzZaqtcfnG3XWIu4hEhmn12Nklv5jKUdDEN5trVHsfqizft7vlfmnvOMlf97xMA==",
         "dependencies": {
           "NodaTime": "3.2.2"
         }
@@ -72,9 +72,9 @@
         "type": "Direct",
         "requested": "[0.0.1-beta.11, )",
         "resolved": "0.0.1-beta.11",
-        "contentHash": "i+KkHEEjCGahb0aicr9whTCq8+baHAFT8zuUOwwl1Kx7kSbQu0gyQbF/KfgWO5anTbVpVC1WXdj4S8OOj+47ew==",
+        "contentHash": "xDH9JqkwU+nkXLCknDKOlo0vXdNS8zfvZcQZJraBJJYdjf5c0UBxKDBl7SyJnbIhtkFm/ms/XIVQ12Z+eW78oA==",
         "dependencies": {
-          "Unfucked": "0.0.1-beta.25"
+          "Unfucked": "0.0.1-beta.20"
         }
       },
       "Unfucked.HTTP": {
@@ -91,7 +91,7 @@
         "type": "Direct",
         "requested": "[0.0.1-beta.3, )",
         "resolved": "0.0.1-beta.3",
-        "contentHash": "iFdnzrXm0rtHOiLRcBefP0rdxWh/E3Fkt/sdUr4laly2hTqPJpLvLhbSorWvN5zjL4Uo+gtTuxZtjUtnYWoRvQ==",
+        "contentHash": "NuWz+7sGJhSB4sn4eJ/W/2c7vSS5Ieo77hmyPdM1ZbFyaooETrsZQF3UT2Y323YW5H4g3OYq1EtoOdihi/WiXQ==",
         "dependencies": {
           "Ical.Net": "5.1.1",
           "NodaTime": "3.2.2"
