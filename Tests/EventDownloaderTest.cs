@@ -73,7 +73,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task missingSchedule() {
-        A.CallTo(() => gdq.getCurrentEvent()).ThrowsAsync(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null, new HttpResponseMessage().Headers, null)));
+        A.CallTo(() => gdq.getCurrentEvent()).ThrowsAsync(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null, null, null, null, null)));
 
         Event? actual = await eventDownloader.downloadSchedule();
 
