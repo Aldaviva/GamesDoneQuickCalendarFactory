@@ -30,7 +30,7 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.69.0.3746" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.72.0.3953" />
         <PackageReference Include="Ical.Net" Version="5.1.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.10" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.10" />
