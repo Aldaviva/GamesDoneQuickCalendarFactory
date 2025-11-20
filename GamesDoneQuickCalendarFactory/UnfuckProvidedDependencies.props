@@ -1,0 +1,42 @@
+<Project>
+
+    <!-- .NET and ASP.NET Core Runtime provided dependencies, to prevent FileNotFoundException caused by latestVersion rollForward with PublishSingleFile when runtime version > dependency version -->
+    <ItemGroup Label="Provided" Condition="'$(_IsPublishing)' == 'true'">
+        <!-- ASP.NET Core Runtime -->
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.Abstractions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.Binder" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.CommandLine" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.FileExtensions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.Json" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Configuration.UserSecrets" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.DependencyInjection" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Diagnostics" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Diagnostics.Abstractions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.FileProviders.Abstractions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.FileProviders.Physical" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.FileSystemGlobbing" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Hosting" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging.Configuration" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging.Console" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging.Debug" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging.EventLog" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Logging.EventSource" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Options" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="Microsoft.Extensions.Primitives" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="System.Diagnostics.EventLog" />
+        
+        <!-- .NET Runtime -->
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="System.Diagnostics.DiagnosticSource" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="System.IO.Pipelines" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="System.Text.Encodings.Web" />
+        <PackageReference ExcludeAssets="runtime" PrivateAssets="all" Version="*" Include="System.Text.Json" />
+    </ItemGroup>
+
+</Project>
