@@ -13,6 +13,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
 using Unfucked;
+using Unfucked.DateTime;
 using Unfucked.HTTP;
 
 BomSquad.DefuseUtf8Bom();
@@ -40,7 +41,7 @@ builder.Services
     .AddSingleton<ICalendarPoller, CalendarPoller>()
     .AddSingleton<IGoogleCalendarSynchronizer, GoogleCalendarSynchronizer>()
     .AddSingleton<IClock>(SystemClock.Instance)
-    .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromHours(1) }) { Timeout = TimeSpan.FromSeconds(30) });
+    .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 30 });
 
 builder.Services.AddSingleton(await State.load("state.json"));
 
@@ -55,7 +56,7 @@ webApp
         responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
         context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
 
-        if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is { } mostRecentlyPolledCalendar) {
+        if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is {} mostRecentlyPolledCalendar) {
             responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
             responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
         }
@@ -64,7 +65,7 @@ webApp
 
 webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
     try {
-        if (await calendarPoller.mostRecentlyPolledCalendar is { } mostRecentlyPolledCalendar) {
+        if (await calendarPoller.mostRecentlyPolledCalendar is {} mostRecentlyPolledCalendar) {
             response.GetTypedHeaders().ContentType = icalendarContentType;
             await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, responseEncoding);
         } else {
@@ -79,7 +80,7 @@ webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller cale
 });
 
 webApp.MapGet("/badge.json", [OutputCache] async ([FromServices] IEventDownloader eventDownloader) =>
-await eventDownloader.downloadSchedule() is { } schedule
+await eventDownloader.downloadSchedule() is {} schedule
     ? new ShieldsBadgeResponse(
         label: shortNamePattern().Replace(schedule.shortTitle, " ").ToLower(), // add spaces to abbreviation
         message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",

@@ -58,23 +58,23 @@ public class ServerTest: IDisposable {
 
         string responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Be(Regex.Replace("""
-                                               BEGIN:VCALENDAR
-                                               PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.1.2//EN
-                                               VERSION:2.0
-                                               BEGIN:VEVENT
-                                               DESCRIPTION:My description
-                                               DTSTAMP:20250628T210248Z
-                                               DTSTART;TZID=America/Los_Angeles:20230416T011800
-                                               DURATION:PT1H
-                                               LOCATION:My location
-                                               ORGANIZER;CN=Ben Hutchison:
-                                               SEQUENCE:0
-                                               SUMMARY:My Event
-                                               UID:c9e08bcf-773a-4291-b0a4-dd7459ed13ba
-                                               END:VEVENT
-                                               END:VCALENDAR
+            BEGIN:VCALENDAR
+            PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.2.0//EN
+            VERSION:2.0
+            BEGIN:VEVENT
+            DESCRIPTION:My description
+            DTSTAMP:20250628T210248Z
+            DTSTART;TZID=America/Los_Angeles:20230416T011800
+            DURATION:PT1H
+            LOCATION:My location
+            ORGANIZER;CN=Ben Hutchison:
+            SEQUENCE:0
+            SUMMARY:My Event
+            UID:c9e08bcf-773a-4291-b0a4-dd7459ed13ba
+            END:VEVENT
+            END:VCALENDAR
 
-                                               """, @"(?<!\r)\n", "\r\n"));
+            """, @"(?<!\r)\n", "\r\n"));
 
         MediaTypeHeaderValue? contentType = response.Content.Headers.ContentType;
         contentType.Should().NotBeNull();

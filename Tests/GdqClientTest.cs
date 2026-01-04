@@ -1,6 +1,7 @@
 using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Services;
+using Microsoft.Extensions.Logging.Abstractions;
 using NodaTime;
 using NodaTime.Text;
 using System.Net.Http.Headers;
@@ -15,7 +16,7 @@ public class GdqClientTest {
     private readonly GdqClient           gdq;
 
     public GdqClientTest() {
-        gdq = new GdqClient(new HttpClient(httpMessageHandler));
+        gdq = new GdqClient(new HttpClient(httpMessageHandler), NullLogger<GdqClient>.Instance);
     }
 
     [Fact]
@@ -43,7 +44,7 @@ public class GdqClientTest {
     [Fact]
     public async Task getEventRuns() {
         await using Stream runsStream = File.OpenRead("Data/runs.json");
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/runs"),
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/runs/"),
             A<CancellationToken>._)).Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
         GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
@@ -134,7 +135,7 @@ public class GdqClientTest {
     [Fact]
     public async Task getEventRunsWithOvernightSetupTimes() {
         await using Stream runsStream = File.OpenRead("Data/runs-with-overnight-setup-times.json");
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/57/runs"),
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/57/runs/"),
             A<CancellationToken>._)).Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
         GdqEvent gdqEvent = new(57, "SpeedAtPAXEast25", "Speedrun Stage @ PAX East 25");

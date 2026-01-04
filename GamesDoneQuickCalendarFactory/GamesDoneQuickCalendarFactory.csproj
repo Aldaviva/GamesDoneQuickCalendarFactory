@@ -9,7 +9,7 @@
         <Product>Games Done Quick Calendar Factory</Product>
         <AssemblyTitle>Games Done Quick Calendar Factory</AssemblyTitle>
         <Authors>Ben Hutchison</Authors>
-        <Copyright>© 2025 $(Authors)</Copyright>
+        <Copyright>© 2026 $(Authors)</Copyright>
         <Company>$(Authors)</Company>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -30,11 +30,11 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.72.0.3953" />
-        <PackageReference Include="Ical.Net" Version="5.1.2" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.73.0.3993" />
+        <PackageReference Include="Ical.Net" Version="5.2.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
-        <PackageReference Include="NodaTime" Version="3.2.2" />
+        <PackageReference Include="NodaTime" Version="3.3.0" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta5" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.3" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.12" />

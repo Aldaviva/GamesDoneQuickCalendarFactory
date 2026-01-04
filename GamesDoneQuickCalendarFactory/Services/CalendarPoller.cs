@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using NodaTime;
 using NodaTime.Extensions;
 using Unfucked;
+using Unfucked.DateTime;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
@@ -20,7 +21,7 @@ public interface ICalendarPoller: IDisposable, IAsyncDisposable {
 
 public class CalendarPoller: ICalendarPoller {
 
-    private static readonly TimeSpan OUT_OF_EVENT_POLLING_INTERVAL = TimeSpan.FromHours(1);
+    private static readonly TimeSpan OUT_OF_EVENT_POLLING_INTERVAL = (Hours) 1;
 
     private readonly ICalendarGenerator      calendarGenerator;
     private readonly IOptions<Configuration> config;

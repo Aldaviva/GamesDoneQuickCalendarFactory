@@ -2,6 +2,7 @@ using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using NodaTime;
 using System.Collections.Frozen;
+using Unfucked.DateTime;
 using Unfucked.HTTP.Exceptions;
 
 namespace GamesDoneQuickCalendarFactory.Services;
@@ -14,12 +15,12 @@ public interface IEventDownloader {
 
 public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
 
-    private static readonly Duration MAX_RUN_DURATION = Duration.FromHours(11);
+    private static readonly Duration MAX_RUN_DURATION = (Hours) 11;
 
     /// <summary>
     /// If there are no calendar events ending in the last 1 day, and no upcoming events, hide all those old past events.
     /// </summary>
-    private static readonly Duration MAX_EVENT_END_CLEANUP_DELAY = Duration.FromDays(1);
+    private static readonly Duration MAX_EVENT_END_CLEANUP_DELAY = (Days) 1;
 
     private static readonly IReadOnlySet<int> RUNNER_BLACKLIST = new HashSet<int> {
         367,  // Tech Crew

@@ -4,6 +4,7 @@ using GamesDoneQuickCalendarFactory.Data.Marshal;
 using NodaTime;
 using System.Runtime.CompilerServices;
 using Unfucked;
+using Unfucked.DateTime;
 using Unfucked.HTTP;
 using Unfucked.HTTP.Config;
 
@@ -23,17 +24,19 @@ public interface IGdqClient {
 
 }
 
-public class GdqClient(HttpClient httpClient): IGdqClient {
+public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqClient {
 
     private static readonly Uri        CURRENT_EVENT_REDIRECTOR = new("https://tracker.gamesdonequick.com/tracker/donate/");
     private static readonly UrlBuilder EVENTS_API_URL           = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
-    private static readonly Duration   MAX_SETUP_TIME           = Duration.FromHours(17);
+    private static readonly Duration   MAX_SETUP_TIME           = (Hours) 17;
 
     private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
 
     public async Task<int> getCurrentEventId() {
-        using HttpResponseMessage eventIdResponse = await httpClient.Target(CURRENT_EVENT_REDIRECTOR).Head();
-        return Convert.ToInt32(eventIdResponse.RequestMessage!.RequestUri!.Segments[4].TrimEnd('/'));
+        using HttpResponseMessage eventIdResponse          = await httpClient.Target(CURRENT_EVENT_REDIRECTOR).Head();
+        Uri?                      eventSpecificDonationUrl = eventIdResponse.RequestMessage?.RequestUri;
+        logger.Trace("Current event ID comes from {url}", eventSpecificDonationUrl);
+        return Convert.ToInt32(eventSpecificDonationUrl!.Segments[4].TrimEnd('/'));
     }
 
     public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENTS_API_URL).Path(eventId).Get<GdqEvent>();
@@ -44,18 +47,18 @@ public class GdqClient(HttpClient httpClient): IGdqClient {
 
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         IList<GameRun>? runs         = null;
-        Uri             runsUrl      = EVENTS_API_URL.Path(eventId).Path("runs");
+        Uri             runsUrl      = EVENTS_API_URL.Path(eventId).Path("runs/");
         var             resultsCount = new ValueHolderStruct<long>();
         OffsetDateTime? tailStart    = null;
         bool            sorted       = true;
 
         await foreach (GdqRun run in downloadAllPages<GdqRun>(runsUrl, resultsCount)) {
             runs ??= new List<GameRun>((int) resultsCount.value!.Value);
-            if (run is { startTime: { } startTime, endTime: { } endTime }) {
+            if (run is { startTime: {} startTime, endTime: {} endTime }) {
                 GameRun gameRun = new(
                     id: run.id,
                     start: startTime,
-                    // PAX East 2025 had each last run of the day as a 20-hour overnight run with an 18-hour setup time, instead of just ending at the correct time
+                    // PAX East 2025 had the last appointment of each day as a fake 20-hour overnight run with an 18-hour setup time, instead of just ending at the correct time
                     duration: run.setupTime > MAX_SETUP_TIME ? run.actualRunTime : endTime - startTime,
                     name: run.gameName.EmptyToNull() ?? run.runName,
                     category: run.category.Replace(" - ", " \u2014 "),

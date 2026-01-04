@@ -3,6 +3,7 @@ using NodaTime.Text;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Unfucked.DateTime;
 
 namespace GamesDoneQuickCalendarFactory.Data.Marshal;
 
@@ -12,7 +13,7 @@ public class DurationConverter: JsonConverter<Duration> {
     private static readonly IPattern<Duration> COLON_PATTERN = new ColonDelimitedDurationPattern();
 
     public override Duration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        if (reader.TokenType == JsonTokenType.String && reader.GetString() is { } jsonString) {
+        if (reader.TokenType == JsonTokenType.String && reader.GetString() is {} jsonString) {
             ParseResult<Duration> parsed = COLON_PATTERN.Parse(jsonString);
             if (parsed.Success) {
                 return parsed.Value;
@@ -44,10 +45,10 @@ public class ColonDelimitedDurationPattern: IPattern<Duration> {
             int parsedNumber = int.Parse(remaining[..groupEnd]);
 
             result += groupIndex switch {
-                0 => Duration.FromHours(parsedNumber),
-                1 => Duration.FromMinutes(parsedNumber),
-                2 => Duration.FromSeconds(parsedNumber),
-                3 => Duration.FromMilliseconds(parsedNumber),
+                0 => (Hours) parsedNumber,
+                1 => (Minutes) parsedNumber,
+                2 => (Seconds) parsedNumber,
+                3 => (Milliseconds) parsedNumber,
                 _ => Duration.AdditiveIdentity
             };
 
