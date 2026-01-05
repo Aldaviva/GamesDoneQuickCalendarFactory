@@ -7,8 +7,8 @@ namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 
 /// <summary>A playthrough of a game</summary>
 /// <param name="id">unique numeric identifier for this run</param>
-/// <param name="runName">Usually the same as <paramref name="gameName"/>, but if this is a bonus game, <paramref name="runName"/> will have a <c>BONUS GAME 1- </c> prefix.</param>
-/// <param name="gameName">Starting with SGDQ 2025, this is usually <see cref="string.Empty"/>. Previously, the same as <paramref name="runName"/>, but if this is a bonus game, <paramref name="gameName"/> won't have the <c>BONUS GAME 1- </c> prefix.</param>
+/// <param name="runName">Usually the same as <paramref name="runNameWithBadFormatting"/>, but if this is a bonus game, <paramref name="runName"/> used to have a <c>BONUS GAME 1- </c> prefix.</param>
+/// <param name="runNameWithBadFormatting">May contain extra whitespace like linefeeds. Starting with SGDQ 2025, this is usually <see cref="string.Empty"/>. Previously, the same as <paramref name="runName"/>, but if this is a bonus game, <paramref name="runNameWithBadFormatting"/> won't have the <c>BONUS GAME 1- </c> prefix.</param>
 /// <param name="category">The type or rule set of the run, such as 100% or Any%.</param>
 /// <param name="console">The hardware the game is running on, such as PC or PS5, or the empty string.</param>
 /// <param name="gameReleaseYear">The year the game came out, or null.</param>
@@ -17,7 +17,7 @@ namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 public record GdqRun(
     int id,
     [property: JsonPropertyName("name")] string runName,
-    [property: JsonPropertyName("display_name")] string gameName,
+    [property: JsonPropertyName("display_name")] string runNameWithBadFormatting,
     string category,
     string console,
     [property: JsonPropertyName("release_year")] int? gameReleaseYear,

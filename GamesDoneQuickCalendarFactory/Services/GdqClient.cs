@@ -27,7 +27,7 @@ public interface IGdqClient {
 public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqClient {
 
     private static readonly Uri        CURRENT_EVENT_REDIRECTOR = new("https://tracker.gamesdonequick.com/tracker/donate/");
-    private static readonly UrlBuilder EVENTS_API_URL           = new("https://tracker.gamesdonequick.com/tracker/api/v2/events");
+    private static readonly UrlBuilder EVENT_URL                = UrlBuilder.FromTemplate("https://tracker.gamesdonequick.com/tracker/api/v2/events/{eventId}/");
     private static readonly Duration   MAX_SETUP_TIME           = (Hours) 17;
 
     private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
@@ -39,7 +39,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
         return Convert.ToInt32(eventSpecificDonationUrl!.Segments[4].TrimEnd('/'));
     }
 
-    public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENTS_API_URL).Path(eventId).Get<GdqEvent>();
+    public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENT_URL).ResolveTemplate("eventId", eventId).Get<GdqEvent>();
 
     public async Task<GdqEvent> getCurrentEvent() => await getEvent(await getCurrentEventId());
 
@@ -47,7 +47,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
 
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         IList<GameRun>? runs         = null;
-        Uri             runsUrl      = EVENTS_API_URL.Path(eventId).Path("runs/");
+        Uri             runsUrl      = EVENT_URL.Path("runs/").ResolveTemplate("eventId", eventId);
         var             resultsCount = new ValueHolderStruct<long>();
         OffsetDateTime? tailStart    = null;
         bool            sorted       = true;
@@ -60,7 +60,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
                     start: startTime,
                     // PAX East 2025 had the last appointment of each day as a fake 20-hour overnight run with an 18-hour setup time, instead of just ending at the correct time
                     duration: run.setupTime > MAX_SETUP_TIME ? run.actualRunTime : endTime - startTime,
-                    name: run.gameName.EmptyToNull() ?? run.runName,
+                    name: (run.runName.EmptyToNull() ?? run.runNameWithBadFormatting).Replace("\\n", " "),
                     category: run.category.Replace(" - ", " \u2014 "),
                     console: run.console,
                     gameReleaseYear: run.gameReleaseYear,

@@ -32,7 +32,7 @@ public class DataTests {
         GdqRun run = results[1];
         run.id.Should().Be(5971);
         run.runName.Should().Be("TUNIC");
-        run.gameName.Should().Be("TUNIC");
+        run.runNameWithBadFormatting.Should().Be("TUNIC");
         run.category.Should().Be("Any% Unrestricted");
         run.console.Should().Be("PC");
         run.gameReleaseYear.Should().Be(2022);

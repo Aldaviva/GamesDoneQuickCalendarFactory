@@ -25,7 +25,8 @@ public class GdqClientTest {
             .Returns(new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://tracker.gamesdonequick.com/tracker/ui/events/46/donate") });
 
         await using Stream eventStream = File.OpenRead("Data/event.json");
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46"), A<CancellationToken>._))
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/"),
+                A<CancellationToken>._))
             .Returns(new HttpResponseMessage {
                 Content = new StreamContent(eventStream) {
                     Headers = {
