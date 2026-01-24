@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Net.Http.Headers;
 using NodaTime;
+using RuntimeUpgrade.Notifier;
+using RuntimeUpgrade.Notifier.Data;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -89,6 +91,12 @@ await eventDownloader.downloadSchedule() is {} schedule
     : new ShieldsBadgeResponse("gdq", "no event now", "inactive", false, Resources.gdqDpadBadgeLogo));
 
 await webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
+
+using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifier {
+    LoggerFactory   = webApp.Services.GetRequiredService<ILoggerFactory>(),
+    RestartStrategy = RestartStrategy.AutoRestartService,
+    ExitStrategy    = new HostedLifetimeExit(webApp)
+};
 
 await webApp.RunAsync();
 
