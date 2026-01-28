@@ -17,8 +17,19 @@ public interface ICalendarGenerator {
 
 public sealed class CalendarGenerator(IEventDownloader eventDownloader, State state, ILogger<CalendarGenerator> logger): ICalendarGenerator {
 
-    private static readonly Duration             MIN_RUN_GAP = (Minutes) 1;
-    private static readonly IReadOnlySet<string> HIDDEN_TAGS = new HashSet<string> { "online", "studio" }.ToFrozenSet(); // #50: preserve opener, finale, and bonus tags
+    private static readonly Duration MIN_RUN_GAP = (Minutes) 1;
+
+    /// <summary>
+    /// Runs with these tags will be shown, but without these tags.
+    /// </summary>
+    /// <seealso cref="EventDownloader.TAG_BLACKLIST"/>
+    private static readonly IReadOnlySet<string> HIDDEN_TAGS = new HashSet<string> {
+        "online",
+        "studio",
+        "btb_studio",
+        "gdqx",
+        "science"
+    }.Select(s => s.ToLowerInvariant()).ToFrozenSet(); // #50: preserve opener, finale, and bonus tags
 
     public async Task<Calendar> generateCalendar() {
         logger.LogTrace("Downloading schedule from Games Done Quick website");

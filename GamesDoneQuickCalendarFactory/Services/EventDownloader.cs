@@ -31,6 +31,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
         2071, // Frame Fatales Interstitial Team
         2171, // Everyone
         4202, // GDQueer In-Studio Team
+        4283, // Back to Black Crew
     }.ToFrozenSet();
 
     /// <summary>
@@ -38,13 +39,16 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// <para>To compute the set of all tags in a given event, run this JSON Query on the runs.json object:</para>
     /// <para><c>.results | map(.tags) | flatten() | uniq() | sort()</c></para>
     /// </summary>
+    /// <seealso cref="CalendarGenerator.HIDDEN_TAGS"/>
     private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
-        "kickoff", "flame_kickoff", "frost_kickoff",
+        "kickoff", "flame_kickoff", "frost_kickoff", "btb_kickoff",
         "preshow",
         "checkpoint",
         "chomp",
-        "recap", "daily_recap",
+        "recap",
+        "rundown",
         "sleep",
+        "btb_finale",
 
         // #34: Frame Fatales 2025 (event 55) inconsistently uses "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs
         // "opener", "finale"

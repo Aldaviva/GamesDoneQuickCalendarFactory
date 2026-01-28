@@ -13,7 +13,7 @@ namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 /// <param name="console">The hardware the game is running on, such as PC or PS5, or the empty string.</param>
 /// <param name="gameReleaseYear">The year the game came out, or null.</param>
 /// <param name="actualRunTime">Before a run ends, this is the estimated duration, but after a run ends, this changes to the actual duration. To get the original estimated duration even after the run ends, use <paramref name="endTime"/><c>-</c><paramref name="startTime"/>.</param>
-/// <param name="tags"><para>Zero or more of <c>awful</c>, <c>bingo</c>, <c>bonus</c>, <c>checkpoint</c>, <c>checkpoint_run</c>, <c>chomp</c>, <c>coop</c>, <c>daily_recap</c>, <c>finale</c>, <c>flame_kickoff</c>, <c>frost_kickoff</c>, <c>horror</c>, <c>kaizo</c>, <c>kickoff</c>, <c>mystery</c>, <c>new_addition</c>, <c>new_highlighted</c>, <c>online</c>, <c>opener</c>, <c>preshow</c>, <c>race</c>, <c>randomizer</c>, <c>recap</c>, <c>relay</c>, <c>rhythm</c>, <c>showcase</c>, <c>silly</c>, <c>sleep</c>, <c>studio</c>, <c>tas</c>, and <c>tournament</c> (taken on 2025-07-10 from all runs in all events, but there can be more in the future). Can be empty, but never null.</para><para>JSON Query for an array of runs: <c>map(.tags) | flatten() | uniq() | sort()</c></para></param>
+/// <param name="tags"><para>Zero or more of <c>awful</c>, <c>bingo</c>, <c>bonus</c>, <c>btb_finale</c>, <c>btb_kickoff</c>, <c>btb_studio</c>, <c>checkpoint</c>, <c>checkpoint_run</c>, <c>chomp</c>, <c>coop</c>, <c>finale</c>, <c>flame_kickoff</c>, <c>frost_kickoff</c>, <c>gdqx</c>, <c>horror</c>, <c>kaizo</c>, <c>kickoff</c>, <c>mystery</c>, <c>new_addition</c>, <c>new_highlighted</c>, <c>online</c>, <c>opener</c>, <c>preshow</c>, <c>race</c>, <c>randomizer</c>, <c>recap</c>, <c>relay</c>, <c>rhythm</c>, <c>rundown</c>, <c>science</c>, <c>showcase</c>, <c>silly</c>, <c>sleep</c>, <c>studio</c>, <c>tas</c>, and <c>tournament</c> (taken on 2026-01-28 from all runs in all events, but there can be more in the future). Can be empty, but never null.</para><para>JSON Query for an array of runs: <c>map(.tags) | flatten() | uniq() | sort()</c></para></param>
 public record GdqRun(
     int id,
     [property: JsonPropertyName("name")] string runName,
@@ -29,4 +29,11 @@ public record GdqRun(
     [property: JsonPropertyName("setup_time")] Duration setupTime,
     [property: JsonPropertyName("run_time")] Duration actualRunTime,
     IReadOnlyList<string> tags
-);
+) {
+
+    /// <summary>
+    /// The marathon event that contains this run, such as AGDQ2026, or <c>null</c> when fetching the runs in a given event instead of all runs.
+    /// </summary>
+    public GdqEvent? @event { get; init; }
+
+}
