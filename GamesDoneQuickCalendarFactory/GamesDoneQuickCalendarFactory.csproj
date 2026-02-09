@@ -30,7 +30,7 @@
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
         <PackageReference Include="Google.Apis.Calendar.v3" Version="1.73.0.3993" />
-        <PackageReference Include="Ical.Net" Version="5.2.0" />
+        <PackageReference Include="Ical.Net" Version="5.2.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
         <PackageReference Include="NodaTime" Version="3.3.0" />
