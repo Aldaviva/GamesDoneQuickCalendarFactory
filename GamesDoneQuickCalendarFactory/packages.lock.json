@@ -20,16 +20,16 @@
       },
       "Ical.Net": {
         "type": "Direct",
-        "requested": "[5.2.0, )",
-        "resolved": "5.2.0",
-        "contentHash": "19UKfqV87yewhwGrSqiySwqcY7//R6VQmDaer/Qe3bWqyR9JP8A1jtb2j7JhKCFP4ycQmO0ZaWIEasIjZdwF4Q==",
+        "requested": "[5.2.1, )",
+        "resolved": "5.2.1",
+        "contentHash": "zHjl8M24IX1kNlB2zX7c2clyTdD5C+PplmyiMHJ0kMlt0ng2TMfNNKO4u7hNV86oITujLiJ6y/+ATcI7bbmjAw==",
         "dependencies": {
           "NodaTime": "3.2.2"
         }
       },
       "Microsoft.Extensions.Hosting.Systemd": {
         "type": "Direct",
-        "requested": "[8.0.1, )",
+        "requested": "[8.0.1, 9.0.0)",
         "resolved": "8.0.1",
         "contentHash": "URto937K9+hiTUMt6mIj/cfILi0YbI4MbNKBUvE0quE1Hx84GeOK9rIG2kYkp2R5SpQqMAxHJ89xrv50oAuc6A==",
         "dependencies": {
@@ -38,7 +38,7 @@
       },
       "Microsoft.Extensions.Hosting.WindowsServices": {
         "type": "Direct",
-        "requested": "[8.0.1, )",
+        "requested": "[8.0.1, 9.0.0)",
         "resolved": "8.0.1",
         "contentHash": "5p0tjMDpr8tgzjBdu9Rzk8lUU/PaR1D3Us52XZypl85QTxfAjthR1+YywB3GsGc+FOZWdpuEDsV8kZisEC2Hng==",
         "dependencies": {

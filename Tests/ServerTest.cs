@@ -59,7 +59,7 @@ public class ServerTest: IDisposable {
         string responseBody = await response.Content.ReadAsStringAsync();
         responseBody.Should().Be(Regex.Replace("""
             BEGIN:VCALENDAR
-            PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.2.0//EN
+            PRODID:-//github.com/ical-org/ical.net//NONSGML ical.net 5.2.1//EN
             VERSION:2.0
             BEGIN:VEVENT
             DESCRIPTION:My description
@@ -74,7 +74,7 @@ public class ServerTest: IDisposable {
             END:VEVENT
             END:VCALENDAR
 
-            """, @"(?<!\r)\n", "\r\n"));
+            """, @"(?<!\r)\n", "\r\n"), "this test needs to be updated every Ical.Net release");
 
         MediaTypeHeaderValue? contentType = response.Content.Headers.ContentType;
         contentType.Should().NotBeNull();
