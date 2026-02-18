@@ -45,8 +45,6 @@ builder.Services
     .AddSingleton<IClock>(SystemClock.Instance)
     .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 30 });
 
-builder.Services.AddSingleton(await State.load("state.json"));
-
 await using WebApplication webApp = builder.Build();
 
 webApp

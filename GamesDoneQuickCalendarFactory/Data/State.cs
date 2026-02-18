@@ -4,14 +4,14 @@ namespace GamesDoneQuickCalendarFactory.Data;
 
 public record State {
 
-    public ulong googleCalendarUidCounter { get; set; } = 5;
+    public ulong googleCalendarUidCounter { get; set; }
 
     public static async Task<State> load(string filename) {
         State? loaded = null;
         try {
             await using Stream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read);
             loaded = await JsonSerializer.DeserializeAsync<State>(fileStream);
-        } catch (Exception e) when (e is not OutOfMemoryException) { }
+        } catch (Exception e) when (e is not OutOfMemoryException) {}
         return loaded ?? new State();
     }
 

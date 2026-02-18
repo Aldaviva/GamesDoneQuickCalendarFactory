@@ -29,20 +29,23 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
     private readonly CalendarService?                    calendarService;
     private readonly ICalendarPoller                     calendarPoller;
-    private readonly State                               state;
+    private readonly string                              stateFilename;
     private readonly IOptions<Configuration>             configuration;
     private readonly ILogger<GoogleCalendarSynchronizer> logger;
     private readonly SemaphoreSlim                       gcalClientLock = new(1);
 
+    private State                      state;
     private IDictionary<string, Event> existingGoogleEventsByIcalUid = null!;
 
-    public GoogleCalendarSynchronizer(ICalendarPoller calendarPoller, State state, IOptions<Configuration> configuration, ILogger<GoogleCalendarSynchronizer> logger) {
+    // public string stateFilename { get; set; } = "state.json";
+
+    public GoogleCalendarSynchronizer(ICalendarPoller calendarPoller, IHostEnvironment hostEnvironment, IOptions<Configuration> configuration, ILogger<GoogleCalendarSynchronizer> logger) {
         this.calendarPoller = calendarPoller;
-        this.state          = state;
         this.configuration  = configuration;
         this.logger         = logger;
+        stateFilename       = ((IEnumerable<string>) [hostEnvironment.ContentRootPath, "."]).Select(dir => Path.Combine(dir, "state.json")).OrderByDescending(File.Exists).First();
 
-        if (configuration.Value is { googleCalendarId: not null, googleServiceAccountEmailAddress: { } serviceAccount, googleServiceAccountPrivateKey: { } privateKey }) {
+        if (configuration.Value is { googleCalendarId: not null, googleServiceAccountEmailAddress: {} serviceAccount, googleServiceAccountPrivateKey: {} privateKey }) {
             calendarService = new UnfuckedGoogleCalendarService(new BaseClientService.Initializer {
                 HttpClientInitializer = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccount) {
                     Scopes = [CalendarService.Scope.CalendarEvents]
@@ -55,6 +58,7 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
     public async Task start() {
         if (calendarService != null) {
+            state = await State.load(stateFilename);
             string googleCalendarId = configuration.Value.googleCalendarId!;
 
             Events googleCalendarEvents = await Retrier.Attempt(async _ => {
@@ -124,7 +128,7 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
         } catch (GoogleApiException e) when (e.HttpStatusCode == HttpStatusCode.Conflict) {
             ulong oldCounter = state.googleCalendarUidCounter;
             ulong newCounter = ++state.googleCalendarUidCounter;
-            await state.save("state.json");
+            await state.save(stateFilename);
             logger.LogWarning(e,
                 "Google Calendar failed to delete an old event and had a conflict when we later tried to recreate it with the same iCal UID, generating new UIDs with counter {new} instead of {old}",
                 newCounter, oldCounter);
