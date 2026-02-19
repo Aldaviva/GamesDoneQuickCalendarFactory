@@ -34,7 +34,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="[8.0.1,9)" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="[8.0.1,9)" />
         <PackageReference Include="NodaTime" Version="3.3.0" />
-        <PackageReference Include="RuntimeUpgradeNotifier" Version="1.0.1" />
+        <PackageReference Include="RuntimeUpgradeNotifier" Version="1.1.0" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta5" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.3" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.12" />

@@ -55,12 +55,12 @@
       },
       "RuntimeUpgradeNotifier": {
         "type": "Direct",
-        "requested": "[1.0.1, )",
-        "resolved": "1.0.1",
-        "contentHash": "fp5rTVPiydk388RjL6Xa37ANXHrrVkU18zfnccIfHwPZRmsHKwd0e2Wb6eP/Nfkyt2Gj41kRx89Xh8YRB4hFEg==",
+        "requested": "[1.1.0, )",
+        "resolved": "1.1.0",
+        "contentHash": "w6I8CmVI/+uMgOKR6SvP8Kvs7Dm088w0aAiniI+3YjP3IxDJ1t7UEAqImJ0AivSUpsyYCpMtfQreaTPZdG+LOg==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
-          "System.Management": "10.0.0"
+          "System.Management": "10.0.3"
         }
       },
       "ThrottleDebounce": {
@@ -418,8 +418,8 @@
       },
       "System.CodeDom": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "QWERdKi/tQAx+MbrPxTGcpchqMANnVXNiv2r2tILBBB38E74buD+fABSUhozZ1G9kjbadFB0m+HPFMkhJPeFvA=="
+        "resolved": "10.0.3",
+        "contentHash": "+G1mBhHJp8taiDcHK1gmckOZ884n9JeIrS1dzFYZhSa8oTiIF+EagIyAyCOQzdBbbES7eb9AkjGBlUZqqoCaeg=="
       },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
@@ -428,10 +428,10 @@
       },
       "System.Management": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "resolved": "10.0.3",
+        "contentHash": "VyK/nnG1ZgwP/wY8HGrNrdha7kenyI+bkfE0miywiRaWVwqtenuYshA6pmP6Xm7lPsTE2ZRZ+BkzmUVg/VZtTg==",
         "dependencies": {
-          "System.CodeDom": "10.0.0"
+          "System.CodeDom": "10.0.3"
         }
       },
       "System.ServiceProcess.ServiceController": {
@@ -461,10 +461,10 @@
       },
       "System.Management": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "resolved": "10.0.3",
+        "contentHash": "VyK/nnG1ZgwP/wY8HGrNrdha7kenyI+bkfE0miywiRaWVwqtenuYshA6pmP6Xm7lPsTE2ZRZ+BkzmUVg/VZtTg==",
         "dependencies": {
-          "System.CodeDom": "10.0.0"
+          "System.CodeDom": "10.0.3"
         }
       },
       "System.ServiceProcess.ServiceController": {
@@ -484,10 +484,10 @@
       },
       "System.Management": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "resolved": "10.0.3",
+        "contentHash": "VyK/nnG1ZgwP/wY8HGrNrdha7kenyI+bkfE0miywiRaWVwqtenuYshA6pmP6Xm7lPsTE2ZRZ+BkzmUVg/VZtTg==",
         "dependencies": {
-          "System.CodeDom": "10.0.0"
+          "System.CodeDom": "10.0.3"
         }
       },
       "System.ServiceProcess.ServiceController": {
@@ -507,10 +507,10 @@
       },
       "System.Management": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "resolved": "10.0.3",
+        "contentHash": "VyK/nnG1ZgwP/wY8HGrNrdha7kenyI+bkfE0miywiRaWVwqtenuYshA6pmP6Xm7lPsTE2ZRZ+BkzmUVg/VZtTg==",
         "dependencies": {
-          "System.CodeDom": "10.0.0"
+          "System.CodeDom": "10.0.3"
         }
       },
       "System.ServiceProcess.ServiceController": {
@@ -530,10 +530,10 @@
       },
       "System.Management": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "resolved": "10.0.3",
+        "contentHash": "VyK/nnG1ZgwP/wY8HGrNrdha7kenyI+bkfE0miywiRaWVwqtenuYshA6pmP6Xm7lPsTE2ZRZ+BkzmUVg/VZtTg==",
         "dependencies": {
-          "System.CodeDom": "10.0.0"
+          "System.CodeDom": "10.0.3"
         }
       },
       "System.ServiceProcess.ServiceController": {
@@ -553,10 +553,10 @@
       },
       "System.Management": {
         "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "LE3rDZoPzulou78Tsq+3ALhUs4vatQ03v2QWbYVIenVPneUH/+LTUmHyyl098OxIFLQI6sNkZs8YHbUnT/sm3A==",
+        "resolved": "10.0.3",
+        "contentHash": "VyK/nnG1ZgwP/wY8HGrNrdha7kenyI+bkfE0miywiRaWVwqtenuYshA6pmP6Xm7lPsTE2ZRZ+BkzmUVg/VZtTg==",
         "dependencies": {
-          "System.CodeDom": "10.0.0"
+          "System.CodeDom": "10.0.3"
         }
       },
       "System.ServiceProcess.ServiceController": {

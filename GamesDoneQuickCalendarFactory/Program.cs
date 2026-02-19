@@ -48,6 +48,8 @@ builder.Services
     .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
         .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS));
 
+builder.Services.AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
+
 await using WebApplication webApp = builder.Build();
 
 webApp
