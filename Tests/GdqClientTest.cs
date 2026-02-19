@@ -1,5 +1,6 @@
 using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
+using GamesDoneQuickCalendarFactory.Data.Marshal;
 using GamesDoneQuickCalendarFactory.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using NodaTime;
@@ -7,6 +8,7 @@ using NodaTime.Text;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using Unfucked.HTTP;
+using Unfucked.HTTP.Config;
 
 namespace Tests;
 
@@ -16,7 +18,8 @@ public class GdqClientTest {
     private readonly GdqClient           gdq;
 
     public GdqClientTest() {
-        gdq = new GdqClient(new HttpClient(httpMessageHandler), NullLogger<GdqClient>.Instance);
+        gdq = new GdqClient(new UnfuckedHttpClient(httpMessageHandler).Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS),
+            NullLogger<GdqClient>.Instance);
     }
 
     [Fact]

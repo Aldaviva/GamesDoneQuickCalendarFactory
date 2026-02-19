@@ -42,7 +42,7 @@ public class CalendarPoller: ICalendarPoller {
         this.logger            = logger;
         this.clock             = clock;
 
-        pollingTimer = new Timer(async _ => await pollCalendar(), null, OUT_OF_EVENT_POLLING_INTERVAL, OUT_OF_EVENT_POLLING_INTERVAL);
+        pollingTimer = new Timer(async void (_) => await pollCalendar(), null, OUT_OF_EVENT_POLLING_INTERVAL, OUT_OF_EVENT_POLLING_INTERVAL);
     }
 
     public async Task pollCalendar() {
@@ -50,14 +50,9 @@ public class CalendarPoller: ICalendarPoller {
         if (await pollingLock.WaitAsync(0)) { // don't allow parallel polls, and if one is already running, skip the new iteration
             try {
                 logger.LogDebug("Polling GDQ schedule");
-                Calendar calendar      = await calendarGenerator.generateCalendar();
-                Instant  generatedDate = clock.GetCurrentInstant();
-
-                CalendarResponse? previousCalendar = null;
-                try {
-                    previousCalendar = await mostRecentlyPolledCalendar;
-                } catch (Exception) { /* leave previousCalendar null */
-                }
+                Calendar          calendar         = await calendarGenerator.generateCalendar();
+                Instant           generatedDate    = clock.GetCurrentInstant();
+                CalendarResponse? previousCalendar = await mostRecentlyPolledCalendar.ResultOrNullForException();
 
                 if (!calendar.EqualsPresorted(previousCalendar?.calendar)) {
                     CalendarResponse calendarResponse = new(calendar, generatedDate);
@@ -79,7 +74,7 @@ public class CalendarPoller: ICalendarPoller {
                 }
             } catch (Exception e) when (e is not OutOfMemoryException) {
                 logger.LogError(e, "Failed to poll GDQ schedule, trying again later");
-                mostRecentlyPolledCalendar = Task.FromException<CalendarResponse?>(e);
+                mostRecentlyPolledCalendar = mostRecentlyPolledCalendar.IsCompletedSuccessfully ? mostRecentlyPolledCalendar : Task.FromException<CalendarResponse?>(e);
             } finally {
                 pollingLock.Release();
             }

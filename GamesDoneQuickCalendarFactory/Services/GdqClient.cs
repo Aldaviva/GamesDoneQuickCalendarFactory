@@ -6,16 +6,18 @@ using System.Runtime.CompilerServices;
 using Unfucked;
 using Unfucked.DateTime;
 using Unfucked.HTTP;
-using Unfucked.HTTP.Config;
+using Unfucked.HTTP.Exceptions;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface IGdqClient {
 
+    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
     Task<int> getCurrentEventId();
 
     Task<GdqEvent> getEvent(int eventId);
 
+    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
     Task<GdqEvent> getCurrentEvent();
 
     Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent);
@@ -30,8 +32,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
     private static readonly UrlBuilder EVENT_URL                = UrlBuilder.FromTemplate("https://tracker.gamesdonequick.com/tracker/api/v2/events/{eventId}/");
     private static readonly Duration   MAX_SETUP_TIME           = (Hours) 17;
 
-    private readonly HttpClient httpClient = httpClient.Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
-
+    /// <inheritdoc />
     public async Task<int> getCurrentEventId() {
         using HttpResponseMessage eventIdResponse          = await httpClient.Target(CURRENT_EVENT_REDIRECTOR).Head();
         Uri?                      eventSpecificDonationUrl = eventIdResponse.RequestMessage?.RequestUri;
@@ -41,6 +42,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
 
     public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENT_URL).ResolveTemplate("eventId", eventId).Get<GdqEvent>();
 
+    /// <inheritdoc />
     public async Task<GdqEvent> getCurrentEvent() => await getEvent(await getCurrentEventId());
 
     public Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent) => getEventRuns(gdqEvent.id);

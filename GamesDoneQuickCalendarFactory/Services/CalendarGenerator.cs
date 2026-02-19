@@ -3,14 +3,17 @@ using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using System.Collections.Frozen;
+using ThrottleDebounce.Retry;
 using Unfucked;
 using Unfucked.DateTime;
+using Unfucked.HTTP.Exceptions;
 using Duration = NodaTime.Duration;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface ICalendarGenerator {
 
+    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
     Task<Calendar> generateCalendar();
 
 }
@@ -31,9 +34,15 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
         "science"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet(); // #50: preserve opener, finale, and bonus tags
 
+    private readonly RetryOptions retryOptions = new() {
+        IsRetryAllowed     = (e, _) => e is ProcessingException or ServerErrorException,
+        MaxOverallDuration = (Minutes) 1
+    };
+
+    /// <inheritdoc />
     public async Task<Calendar> generateCalendar() {
         logger.LogTrace("Downloading schedule from Games Done Quick website");
-        Event?   gdqEvent = await eventDownloader.downloadSchedule();
+        Event?   gdqEvent = await Retrier.Attempt(async _ => await eventDownloader.downloadSchedule(), retryOptions);
         Calendar calendar = new() { Method = CalendarMethods.Publish };
 
         if (gdqEvent != null) {

@@ -1,6 +1,7 @@
 using Bom.Squad;
 using GamesDoneQuickCalendarFactory;
 using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data.Marshal;
 using GamesDoneQuickCalendarFactory.Services;
 using Ical.Net.Serialization;
 using Microsoft.AspNetCore.Http.Headers;
@@ -17,6 +18,7 @@ using System.Text.RegularExpressions;
 using Unfucked;
 using Unfucked.DateTime;
 using Unfucked.HTTP;
+using Unfucked.HTTP.Config;
 
 BomSquad.DefuseUtf8Bom();
 
@@ -43,7 +45,8 @@ builder.Services
     .AddSingleton<ICalendarPoller, CalendarPoller>()
     .AddSingleton<IGoogleCalendarSynchronizer, GoogleCalendarSynchronizer>()
     .AddSingleton<IClock>(SystemClock.Instance)
-    .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 30 });
+    .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
+        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS));
 
 await using WebApplication webApp = builder.Build();
 

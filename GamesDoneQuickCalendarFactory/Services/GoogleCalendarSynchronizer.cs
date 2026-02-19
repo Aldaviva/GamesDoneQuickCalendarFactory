@@ -37,8 +37,6 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
     private State                      state;
     private IDictionary<string, Event> existingGoogleEventsByIcalUid = null!;
 
-    // public string stateFilename { get; set; } = "state.json";
-
     public GoogleCalendarSynchronizer(ICalendarPoller calendarPoller, IHostEnvironment hostEnvironment, IOptions<Configuration> configuration, ILogger<GoogleCalendarSynchronizer> logger) {
         this.calendarPoller = calendarPoller;
         this.configuration  = configuration;
@@ -66,18 +64,16 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                 EventsResource.ListRequest listRequest = calendarService.Events.List(googleCalendarId);
                 listRequest.MaxResults = MAX_EVENTS_PER_PAGE;
                 return await listRequest.ExecuteAsync();
-            }, new RetryOptions { Delay = Delays.Exponential(new Seconds(1), max: new Seconds(300)) });
+            }, new RetryOptions { Delay = Delays.Exponential((Seconds) 1, max: (Minutes) 5) });
 
             existingGoogleEventsByIcalUid = googleCalendarEvents.Items.ToDictionary(googleEvent => googleEvent.ICalUID);
             logger.LogDebug("Found {count:N0} existing events in Google Calendar", existingGoogleEventsByIcalUid.Values.Count);
 
-            calendarPoller.calendarChanged += sync;
+            calendarPoller.calendarChanged += async (_, newCalendar) => await sync(newCalendar);
         }
 
         await calendarPoller.pollCalendar();
     }
-
-    private async void sync(object? sender, Calendar newCalendar) => await sync(newCalendar);
 
     private async Task sync(Calendar newCalendar) {
         try {
@@ -137,7 +133,6 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
     }
 
     public void Dispose() {
-        calendarPoller.calendarChanged -= sync;
         calendarService?.Dispose();
         GC.SuppressFinalize(this);
     }

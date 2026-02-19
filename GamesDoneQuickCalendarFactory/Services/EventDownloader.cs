@@ -9,6 +9,7 @@ namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface IEventDownloader {
 
+    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
     Task<Event?> downloadSchedule();
 
 }
@@ -22,7 +23,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// </summary>
     private static readonly Duration MAX_EVENT_END_CLEANUP_DELAY = (Days) 1;
 
-    private static readonly IReadOnlySet<int> RUNNER_BLACKLIST = new HashSet<int> {
+    private static readonly FrozenSet<int> RUNNER_BLACKLIST = new HashSet<int> {
         367,  // Tech Crew
         885,  // GDQ Staff
         1434, // Interview Crew
@@ -40,7 +41,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// <para><c>.results | map(.tags) | flatten() | uniq() | sort()</c></para>
     /// </summary>
     /// <seealso cref="CalendarGenerator.HIDDEN_TAGS"/>
-    private static readonly IReadOnlySet<string> TAG_BLACKLIST = new HashSet<string> {
+    private static readonly FrozenSet<string> TAG_BLACKLIST = new HashSet<string> {
         "kickoff", "flame_kickoff", "frost_kickoff", "btb_kickoff",
         "preshow",
         "checkpoint",
@@ -57,10 +58,11 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// <summary>
     /// GDQ Express at TwitchCon 2025 doesn't mark their daily openers or event finale with useful tags or runners (they do use the finale tag, but we can't use that because Frame Fatales uses that for their last real run).
     /// </summary>
-    private static readonly IReadOnlySet<string> CONSOLE_BLACKLIST = new HashSet<string> {
+    private static readonly FrozenSet<string> CONSOLE_BLACKLIST = new HashSet<string> {
         "TwitchCon",
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
+    /// <inheritdoc />
     public async Task<Event?> downloadSchedule() {
         try {
             GdqEvent currentEvent = await gdq.getCurrentEvent();
