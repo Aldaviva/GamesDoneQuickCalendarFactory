@@ -58,12 +58,12 @@ webApp
     .Use(async (context, next) => {
         ICalendarPoller calendarPoller  = context.RequestServices.GetRequiredService<ICalendarPoller>();
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
-        responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
-        context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
 
         if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is {} mostRecentlyPolledCalendar) {
-            responseHeaders.ETag         = mostRecentlyPolledCalendar.etag;
-            responseHeaders.LastModified = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
+            responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
+            context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
+            responseHeaders.ETag                       = mostRecentlyPolledCalendar.etag;
+            responseHeaders.LastModified               = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
         }
         await next();
     });
@@ -93,7 +93,8 @@ await eventDownloader.downloadSchedule() is {} schedule
         logoSvg: Resources.gdqDpadBadgeLogo)
     : new ShieldsBadgeResponse("gdq", "no event now", "inactive", false, Resources.gdqDpadBadgeLogo));
 
-await webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
+// #84: don't await, because Windows will time out this service startup if the Internet is down (server won boot race against modem and router), so the service will be stopped with no retry
+_ = webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 
 using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifier {
     LoggerFactory   = webApp.Services.GetRequiredService<ILoggerFactory>(),
