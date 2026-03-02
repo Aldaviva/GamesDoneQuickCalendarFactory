@@ -89,9 +89,9 @@
       },
       "Unfucked.HTTP": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.23, )",
-        "resolved": "0.0.1-beta.23",
-        "contentHash": "geuK3+hdMjf40/JtUaAtAh9rkxdAN3dFr40GjVhFr6ivNhr/JTMwDZiaEWppn4vr1XRzLRxLFic4oHL1arjU3g==",
+        "requested": "[0.0.1-beta.24, )",
+        "resolved": "0.0.1-beta.24",
+        "contentHash": "PsAhJyNUILNzqOXp+c526TzX9sl63LO375uhRgov/x1yE7ncwFEfA74MJCSijvj1i/v3hQ90N2V3+c47LPnT8g==",
         "dependencies": {
           "System.Text.Json": "8.0.6",
           "Unfucked": "0.0.1-beta.31"
