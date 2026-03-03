@@ -10,9 +10,9 @@
       },
       "Google.Apis.Calendar.v3": {
         "type": "Direct",
-        "requested": "[1.73.0.3993, )",
-        "resolved": "1.73.0.3993",
-        "contentHash": "P2b2QhOke3mq00SW4UXOAltTk9UpWqQfNaxqdKgppa8IMH016psdZHjqyVHGk5XHYDS1801jEKqWGfjg68xIew==",
+        "requested": "[1.73.0.4063, )",
+        "resolved": "1.73.0.4063",
+        "contentHash": "6D4oUsd0rlS5y78RVxY4vw8/4raoZ9+o97lu5qKRlVhyrJ+NkGAayPY5PiJy1YL2jKHATY7z5bId0tqq+fmypw==",
         "dependencies": {
           "Google.Apis": "1.73.0",
           "Google.Apis.Auth": "1.73.0"
@@ -49,9 +49,9 @@
       },
       "NodaTime": {
         "type": "Direct",
-        "requested": "[3.3.0, )",
-        "resolved": "3.3.0",
-        "contentHash": "zmUEQPp9yXyGAqWSBhxfwdDhRh4EV04lvYn4P5bUb6dTz1m5AXTYaeSLQ447YLPI2Ge5VGFj20G2DWg5gtiXZg=="
+        "requested": "[3.3.1, )",
+        "resolved": "3.3.1",
+        "contentHash": "7zkTEqmakybTTuDuifpnzl5s8MkmpAdyvoqIPIO2+M2ThF8ixavPcPt1afPfFyCI+A6t3ySujgpGq/5iWc4/RQ=="
       },
       "RuntimeUpgradeNotifier": {
         "type": "Direct",
@@ -89,9 +89,9 @@
       },
       "Unfucked.HTTP": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.23, )",
-        "resolved": "0.0.1-beta.23",
-        "contentHash": "geuK3+hdMjf40/JtUaAtAh9rkxdAN3dFr40GjVhFr6ivNhr/JTMwDZiaEWppn4vr1XRzLRxLFic4oHL1arjU3g==",
+        "requested": "[0.0.1-beta.24, )",
+        "resolved": "0.0.1-beta.24",
+        "contentHash": "PsAhJyNUILNzqOXp+c526TzX9sl63LO375uhRgov/x1yE7ncwFEfA74MJCSijvj1i/v3hQ90N2V3+c47LPnT8g==",
         "dependencies": {
           "System.Text.Json": "8.0.6",
           "Unfucked": "0.0.1-beta.31"

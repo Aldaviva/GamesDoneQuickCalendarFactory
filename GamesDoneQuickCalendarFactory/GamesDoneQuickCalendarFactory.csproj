@@ -29,16 +29,16 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.73.0.3993" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.73.0.4063" />
         <PackageReference Include="Ical.Net" Version="5.2.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="[8.0.1,9)" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="[8.0.1,9)" />
-        <PackageReference Include="NodaTime" Version="3.3.0" />
+        <PackageReference Include="NodaTime" Version="3.3.1" />
         <PackageReference Include="RuntimeUpgradeNotifier" Version="1.1.0" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta5" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.3" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.12" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.23" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.24" />
         <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.3" />
     </ItemGroup>
 
