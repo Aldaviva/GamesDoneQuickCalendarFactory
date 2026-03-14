@@ -104,7 +104,7 @@ using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifie
 
 await webApp.RunAsync();
 
-internal partial class Program {
+internal sealed partial class Program {
 
     [GeneratedRegex(@"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])")]
     private static partial Regex shortNamePattern();

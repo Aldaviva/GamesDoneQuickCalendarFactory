@@ -23,7 +23,7 @@ public interface IGoogleCalendarSynchronizer: IDisposable {
 
 }
 
-public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
+public sealed class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
     private const int MAX_EVENTS_PER_PAGE = 2500; // week-long GDQ events usually comprise about 150 runs
 
@@ -100,7 +100,7 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
                 logger.LogDebug("Creating {count:N0} new events in Google Calendar", eventsToCreate.Count());
                 foreach (CalendarEvent eventToCreate in eventsToCreate) {
-                    Event googleEventToCreate = eventToCreate.toGoogleEvent();
+                    Event googleEventToCreate = eventToCreate.asGoogleEvent;
                     try {
                         existingGoogleEventsByIcalUid[googleEventToCreate.ICalUID] = await calendarService!.Events.Insert(googleEventToCreate, googleCalendarId).ExecuteAsync();
                         logger.LogTrace("Created event {summary} in Google Calendar", eventToCreate.Summary);
@@ -113,14 +113,14 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                 logger.LogDebug("Updating {count:N0} outdated events in Google Calendar", eventsToUpdate.Count());
                 foreach (CalendarEvent eventToUpdate in eventsToUpdate) {
                     existingGoogleEventsByIcalUid[eventToUpdate.Uid!] =
-                        await calendarService!.Events.Update(eventToUpdate.toGoogleEvent(), googleCalendarId, existingGoogleEventsByIcalUid[eventToUpdate.Uid!].Id).ExecuteAsync();
+                        await calendarService!.Events.Update(eventToUpdate.asGoogleEvent, googleCalendarId, existingGoogleEventsByIcalUid[eventToUpdate.Uid!].Id).ExecuteAsync();
                     logger.LogTrace("Updated event {summary} in Google Calendar", eventToUpdate.Summary);
                 }
             } finally {
                 gcalClientLock.Release();
             }
         } catch (GoogleApiException e) when (e.HttpStatusCode == HttpStatusCode.Conflict) {
-            ulong oldCounter = state!.googleCalendarUidCounter;
+            ulong oldCounter = state.googleCalendarUidCounter;
             ulong newCounter = ++state.googleCalendarUidCounter;
             await state.save();
             logger.LogWarning(e,
@@ -132,7 +132,6 @@ public class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
     public void Dispose() {
         calendarService?.Dispose();
-        GC.SuppressFinalize(this);
     }
 
 }

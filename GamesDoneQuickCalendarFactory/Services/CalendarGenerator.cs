@@ -1,4 +1,5 @@
 using GamesDoneQuickCalendarFactory.Data;
+using GamesDoneQuickCalendarFactory.Data.GDQ;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
@@ -26,12 +27,16 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
     /// Runs with these tags will be shown, but without these tags.
     /// </summary>
     /// <seealso cref="EventDownloader.TAG_BLACKLIST"/>
+    /// <seealso cref="GdqRun.tags"/>
     private static readonly IReadOnlySet<string> HIDDEN_TAGS = new HashSet<string> {
         "online",
         "studio",
         "btb_studio",
         "gdqx",
-        "science"
+        "science",
+        "cw_lights",
+        "cw_motion",
+        "speedrun"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet(); // #50: preserve opener, finale, and bonus tags
 
     private readonly RetryOptions retryOptions = new() {

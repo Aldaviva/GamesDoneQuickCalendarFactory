@@ -12,10 +12,10 @@ namespace GamesDoneQuickCalendarFactory.Services;
 /// <para><see href="https://developers.google.com/workspace/calendar/api/guides/quota"/></para>
 /// <para><see href="https://cloud.google.com/storage/docs/retry-strategy"/></para>
 /// </summary>
-public class UnfuckedGoogleCalendarService: CalendarService {
+public sealed class UnfuckedGoogleCalendarService: CalendarService {
 
-    public UnfuckedGoogleCalendarService() { }
-    public UnfuckedGoogleCalendarService(Initializer initializer): base(initializer) { }
+    public UnfuckedGoogleCalendarService() {}
+    public UnfuckedGoogleCalendarService(Initializer initializer): base(initializer) {}
 
     protected override BackOffHandler CreateBackOffHandler() => new(new BackOffHandler.Initializer(new ExponentialBackOff()) {
         HandleUnsuccessfulResponseFunc = response => BackOffHandler.Initializer.DefaultHandleUnsuccessfulResponseFunc(response)

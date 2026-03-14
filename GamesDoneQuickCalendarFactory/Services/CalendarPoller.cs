@@ -19,7 +19,7 @@ public interface ICalendarPoller: IDisposable, IAsyncDisposable {
 
 }
 
-public class CalendarPoller: ICalendarPoller {
+public sealed class CalendarPoller: ICalendarPoller {
 
     private static readonly TimeSpan OUT_OF_EVENT_POLLING_INTERVAL = (Hours) 1;
 
@@ -92,12 +92,10 @@ public class CalendarPoller: ICalendarPoller {
 
     public void Dispose() {
         pollingTimer.Dispose();
-        GC.SuppressFinalize(this);
     }
 
     public async ValueTask DisposeAsync() {
         await pollingTimer.DisposeAsync();
-        GC.SuppressFinalize(this);
     }
 
 }

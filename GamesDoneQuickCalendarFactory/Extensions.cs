@@ -10,20 +10,28 @@ namespace GamesDoneQuickCalendarFactory;
 
 public static class Extensions {
 
-    [Pure]
-    public static EventDateTime toGoogleEventDateTime(this CalDateTime dateTime) => new() { DateTimeDateTimeOffset = dateTime.ToZonedDateTime().ToDateTimeOffset(), TimeZone = dateTime.TimeZoneName };
+    extension(CalDateTime dateTime) {
 
-    [Pure]
-    public static Event toGoogleEvent(this CalendarEvent calendarEvent) => new() {
-        ICalUID      = calendarEvent.Uid,
-        Start        = calendarEvent.Start!.toGoogleEventDateTime(),
-        End          = calendarEvent.Start!.Add(calendarEvent.Duration!.Value).toGoogleEventDateTime(),
-        Summary      = calendarEvent.Summary,
-        Description  = calendarEvent.Description,
-        Location     = calendarEvent.Location,
-        Visibility   = "public",
-        Transparency = "transparent" // show me as available
-    };
+        [Pure]
+        public EventDateTime asGoogleEventDateTime => new() { DateTimeDateTimeOffset = dateTime.ToZonedDateTime().ToDateTimeOffset(), TimeZone = dateTime.TimeZoneName };
+
+    }
+
+    extension(CalendarEvent calendarEvent) {
+
+        [Pure]
+        public Event asGoogleEvent => new() {
+            ICalUID      = calendarEvent.Uid,
+            Start        = calendarEvent.Start!.asGoogleEventDateTime,
+            End          = calendarEvent.Start!.Add(calendarEvent.Duration!.Value).asGoogleEventDateTime,
+            Summary      = calendarEvent.Summary,
+            Description  = calendarEvent.Description,
+            Location     = calendarEvent.Location,
+            Visibility   = "public",
+            Transparency = "transparent" // show me as available
+        };
+
+    }
 
     /// <summary>
     /// Checks if two calendars have equal lists of events. Both calendars' event lists must already be sorted the same (such as ascending start time) for vastly improved CPU and memory usage compared to <see cref="Calendar.Equals(Ical.Net.CalendarObject)"/>.

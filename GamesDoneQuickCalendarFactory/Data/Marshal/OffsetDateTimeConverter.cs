@@ -5,13 +5,13 @@ using System.Text.Json.Serialization;
 
 namespace GamesDoneQuickCalendarFactory.Data.Marshal;
 
-public class OffsetDateTimeConverter: JsonConverter<OffsetDateTime> {
+public sealed class OffsetDateTimeConverter: JsonConverter<OffsetDateTime> {
 
     public static readonly  OffsetDateTimeConverter INSTANCE = new();
     private static readonly OffsetDateTimePattern   PATTERN  = OffsetDateTimePattern.GeneralIso;
 
     public override OffsetDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
-        if (reader.TokenType == JsonTokenType.String && reader.GetString() is { } jsonString) {
+        if (reader.TokenType == JsonTokenType.String && reader.GetString() is {} jsonString) {
             ParseResult<OffsetDateTime> parsed = PATTERN.Parse(jsonString);
             if (parsed.Success) {
                 return parsed.Value;

@@ -7,7 +7,7 @@ namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 /// <param name="twitter">Handle/username on Twitter</param>
 /// <param name="youtube">Handle on YouTube</param>
 /// <param name="videoPlatform">The service that <paramref name="videoLocation"/> is hosted on, defaults to <see cref="VideoPlatform.TWITCH"/> even if <paramref name="videoLocation"/> is <c>null</c>.</param>
-public record GdqPerson(
+public sealed record GdqPerson(
     int id,
     string name,
     [property: JsonPropertyName("stream")] Uri? videoLocation,

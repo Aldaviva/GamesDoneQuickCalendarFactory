@@ -2,7 +2,7 @@ using System.Text.Json;
 
 namespace GamesDoneQuickCalendarFactory.Data;
 
-public record State {
+public sealed record State {
 
     public ulong googleCalendarUidCounter { get; set; }
 

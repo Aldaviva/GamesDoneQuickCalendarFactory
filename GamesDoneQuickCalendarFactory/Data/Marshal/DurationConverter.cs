@@ -7,10 +7,10 @@ using Unfucked.DateTime;
 
 namespace GamesDoneQuickCalendarFactory.Data.Marshal;
 
-public class DurationConverter: JsonConverter<Duration> {
+public sealed class DurationConverter: JsonConverter<Duration> {
 
-    public static readonly  DurationConverter  INSTANCE      = new();
-    private static readonly IPattern<Duration> COLON_PATTERN = new ColonDelimitedDurationPattern();
+    public static readonly  DurationConverter             INSTANCE      = new();
+    private static readonly ColonDelimitedDurationPattern COLON_PATTERN = new();
 
     public override Duration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         if (reader.TokenType == JsonTokenType.String && reader.GetString() is {} jsonString) {
@@ -31,7 +31,7 @@ public class DurationConverter: JsonConverter<Duration> {
 
 }
 
-public class ColonDelimitedDurationPattern: IPattern<Duration> {
+public sealed class ColonDelimitedDurationPattern: IPattern<Duration> {
 
     public ParseResult<Duration> Parse(string text) {
         ReadOnlySpan<char> remaining = text.AsSpan();

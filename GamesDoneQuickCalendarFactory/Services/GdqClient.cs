@@ -26,7 +26,7 @@ public interface IGdqClient {
 
 }
 
-public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqClient {
+public sealed class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqClient {
 
     private static readonly Uri        CURRENT_EVENT_REDIRECTOR = new("https://tracker.gamesdonequick.com/tracker/donate/");
     private static readonly UrlBuilder EVENT_URL                = UrlBuilder.FromTemplate("https://tracker.gamesdonequick.com/tracker/api/v2/events/{eventId}/");
@@ -48,7 +48,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
     public Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent) => getEventRuns(gdqEvent.id);
 
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
-        IList<GameRun>? runs         = null;
+        List<GameRun>?  runs         = null;
         Uri             runsUrl      = EVENT_URL.Path("runs/").ResolveTemplate("eventId", eventId);
         var             resultsCount = new ValueHolderStruct<long>();
         OffsetDateTime? tailStart    = null;
@@ -90,6 +90,8 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
 
     private static Person getPerson(GdqPerson person) => new(person.id, person.name);
 
+#pragma warning disable Ex0105 // undocumentable due to limits of static analyzer on async generator methods
+
     private async IAsyncEnumerable<T> downloadAllPages<T>(Uri firstPageUrl, ValueHolderStruct<long>? resultsCount = null, [EnumeratorCancellation] CancellationToken ct = default) {
         ResponseEnvelope<T>? page;
         for (Uri? nextPageToDownload = firstPageUrl; nextPageToDownload != null; nextPageToDownload = page.next) {
@@ -104,5 +106,7 @@ public class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqCl
             }
         }
     }
+
+#pragma warning restore Ex0105
 
 }

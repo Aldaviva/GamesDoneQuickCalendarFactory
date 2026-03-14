@@ -3,7 +3,7 @@ using Unfucked.DateTime;
 
 namespace GamesDoneQuickCalendarFactory.Data;
 
-public class Configuration {
+public sealed class Configuration {
 
     public TimeSpan cacheDuration { get; init; } = (Minutes) 1;
 

@@ -7,7 +7,7 @@ public class ExtensionsTest {
 
     [Fact]
     public void toGoogleEventDateTime() {
-        EventDateTime  actual   = new CalDateTime(2024, 7, 1, 11, 27, 0, "America/New_York").toGoogleEventDateTime();
+        EventDateTime  actual   = new CalDateTime(2024, 7, 1, 11, 27, 0, "America/New_York").asGoogleEventDateTime;
         DateTimeOffset expected = new(2024, 7, 1, 11, 27, 0, TimeSpan.FromHours(-4));
         actual.DateTimeDateTimeOffset.Should().Be(expected);
         actual.TimeZone.Should().Be("America/New_York");
@@ -15,7 +15,7 @@ public class ExtensionsTest {
 
     [Fact]
     public void toGoogleEventDateTimeUtc() {
-        EventDateTime  actual   = new CalDateTime(2025, 9, 7, 17, 0, 0, "UTC").toGoogleEventDateTime();
+        EventDateTime  actual   = new CalDateTime(2025, 9, 7, 17, 0, 0, "UTC").asGoogleEventDateTime;
         DateTimeOffset expected = new(2025, 9, 7, 17, 0, 0, TimeSpan.Zero);
         actual.DateTimeDateTimeOffset.Should().Be(expected);
         actual.TimeZone.Should().Be("UTC");

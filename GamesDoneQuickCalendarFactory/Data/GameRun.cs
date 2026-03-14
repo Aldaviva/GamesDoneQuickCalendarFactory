@@ -2,7 +2,7 @@ using NodaTime;
 
 namespace GamesDoneQuickCalendarFactory.Data;
 
-public record GameRun(
+public sealed record GameRun(
     int id,
     OffsetDateTime start,
     Duration duration,
@@ -16,4 +16,4 @@ public record GameRun(
     ISet<string> tags
 );
 
-public record Person(int id, string name);
+public sealed record Person(int id, string name);

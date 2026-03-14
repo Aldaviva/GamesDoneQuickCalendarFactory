@@ -14,7 +14,7 @@ public interface IEventDownloader {
 
 }
 
-public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
+public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
 
     private static readonly Duration MAX_RUN_DURATION = (Hours) 11;
 
@@ -41,6 +41,7 @@ public class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloader {
     /// <para><c>.results | map(.tags) | flatten() | uniq() | sort()</c></para>
     /// </summary>
     /// <seealso cref="CalendarGenerator.HIDDEN_TAGS"/>
+    /// <seealso cref="GdqRun.tags"/>
     private static readonly FrozenSet<string> TAG_BLACKLIST = new HashSet<string> {
         "kickoff", "flame_kickoff", "frost_kickoff", "btb_kickoff",
         "preshow",
