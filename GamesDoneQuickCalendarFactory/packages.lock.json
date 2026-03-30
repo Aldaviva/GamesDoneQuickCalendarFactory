@@ -80,11 +80,11 @@
       },
       "Unfucked.DI": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.12, )",
-        "resolved": "0.0.1-beta.12",
-        "contentHash": "gKKhu+bGce8G/hhNsrriKzwxQXbfksR6FN6yPdssWsykIcqmuGIPFBpTODiGV81Rr8bQ4mUJizSsoS0MpXia2g==",
+        "requested": "[0.0.1-beta.14, )",
+        "resolved": "0.0.1-beta.14",
+        "contentHash": "tz7VC+KWJsdcNCJGF9vxtvWNxuA0w4APxawlxfIBRGWYG2fYpupRhFtn+Z2GONVtxsmFcjQH317dbHluVLendw==",
         "dependencies": {
-          "Unfucked": "0.0.1-beta.26"
+          "Unfucked": "0.0.1-beta.34"
         }
       },
       "Unfucked.HTTP": {
@@ -449,8 +449,8 @@
       },
       "Unfucked": {
         "type": "Transitive",
-        "resolved": "0.0.1-beta.31",
-        "contentHash": "9+AWHhH2Bv6ZE8DY2Mt09tvX8nJfqolrGV/J+5x5zDOHqqX7iudNjiLnC6wguUnv26w5WL6HM+JU2jR7oABazw=="
+        "resolved": "0.0.1-beta.34",
+        "contentHash": "arwav9Lt8kbWJxEQXcgQE6ntX0XYxbmcVapVH5mEKbEgBkxR9TwWODgbbR4q7aVNmqdvI8YKQZLGsBvipk8PJw=="
       }
     },
     "net8.0/linux-arm": {
