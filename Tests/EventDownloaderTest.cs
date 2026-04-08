@@ -73,7 +73,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task missingSchedule() {
-        A.CallTo(() => gdq.getCurrentEvent()).ThrowsAsync(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null, null, null, null, null)));
+        A.CallTo(() => gdq.getCurrentEvent()).ThrowsAsync(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null)));
 
         Event? actual = await eventDownloader.downloadSchedule();
 
@@ -215,7 +215,7 @@ public class EventDownloaderTest {
                 ],
                 [new Person(2750, "THEKyleThomas")],
                 [],
-                Singleton.Set("recap"))
+                ISet<string>.Singleton("recap"))
         ];
 
         A.CallTo(() => gdq.getEventRuns(gdqEvent)).Returns(mockRuns);

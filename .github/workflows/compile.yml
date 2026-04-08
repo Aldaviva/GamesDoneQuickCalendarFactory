@@ -21,11 +21,14 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Unfuck Git
+        run: git config set --global core.autocrlf false
+
       - name: Clone
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
           
       - name: Initialize test reporting
-        uses: testspace-com/setup-testspace@v1
+        uses: testspace-com/setup-testspace@5fc620521eddeba83c1c0dd58f5a524adf474c93
         with:
           domain: ${{github.repository_owner}}
       
@@ -61,7 +64,7 @@ jobs:
         run: exit ${{ env.TEST_EXIT_CODE }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.ProjectName }}-${{ matrix.targetPlatform }}
           path: |
@@ -83,7 +86,7 @@ jobs:
 
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ${{ env.ProjectName }}-win-x64
 

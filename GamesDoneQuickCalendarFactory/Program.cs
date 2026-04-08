@@ -22,9 +22,7 @@ using Unfucked.HTTP.Config;
 
 BomSquad.DefuseUtf8Bom();
 
-Encoding             responseEncoding     = Encoding.UTF8;
-MediaTypeHeaderValue icalendarContentType = new("text/calendar") { Charset = responseEncoding.WebName };
-string[]             varyHeaderValue      = [HeaderNames.AcceptEncoding];
+string[] varyHeaderValue = [HeaderNames.AcceptEncoding];
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
@@ -48,7 +46,7 @@ builder.Services
     .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
         .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS));
 
-builder.Services.AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
+builder.Services.AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(static dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
 
 await using WebApplication webApp = builder.Build();
 
@@ -59,7 +57,7 @@ webApp
         ICalendarPoller calendarPoller  = context.RequestServices.GetRequiredService<ICalendarPoller>();
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
 
-        if (await calendarPoller.mostRecentlyPolledCalendar.ResultOrNullForException() is {} mostRecentlyPolledCalendar) {
+        if (await calendarPoller.mostRecentlyPolledCalendar.ExceptionsToNull() is {} mostRecentlyPolledCalendar) {
             responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
             context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
             responseHeaders.ETag                       = mostRecentlyPolledCalendar.etag;
@@ -68,23 +66,23 @@ webApp
         await next();
     });
 
-webApp.MapGet("/", [OutputCache] async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
+webApp.MapGet("/", [OutputCache] static async Task ([FromServices] ICalendarPoller calendarPoller, HttpResponse response) => {
     try {
         if (await calendarPoller.mostRecentlyPolledCalendar is {} mostRecentlyPolledCalendar) {
-            response.GetTypedHeaders().ContentType = icalendarContentType;
-            await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, responseEncoding);
+            response.GetTypedHeaders().ContentType = ICALENDAR_CONTENT_TYPE;
+            await new CalendarSerializer().SerializeAsync(mostRecentlyPolledCalendar.calendar, response.Body, Encoding.UTF8);
         } else {
             response.StatusCode = StatusCodes.Status204NoContent;
         }
     } catch (Exception e) when (e is not OutOfMemoryException) {
         response.StatusCode  = StatusCodes.Status500InternalServerError;
         response.ContentType = MediaTypeNames.Text.Plain;
-        await using StreamWriter bodyWriter = new(response.Body, responseEncoding);
+        await using StreamWriter bodyWriter = new(response.Body, Encoding.UTF8);
         await bodyWriter.WriteAsync(e.ToString());
     }
 });
 
-webApp.MapGet("/badge.json", [OutputCache] async ([FromServices] IEventDownloader eventDownloader) =>
+webApp.MapGet("/badge.json", [OutputCache] static async ([FromServices] IEventDownloader eventDownloader) =>
 await eventDownloader.downloadSchedule() is {} schedule
     ? new ShieldsBadgeResponse(
         label: shortNamePattern().Replace(schedule.shortTitle, " ").ToLower(), // add spaces to abbreviation
@@ -105,6 +103,8 @@ using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifie
 await webApp.RunAsync();
 
 internal sealed partial class Program {
+
+    private static readonly MediaTypeHeaderValue ICALENDAR_CONTENT_TYPE = new("text/calendar") { Charset = Encoding.UTF8.WebName };
 
     [GeneratedRegex(@"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])")]
     private static partial Regex shortNamePattern();

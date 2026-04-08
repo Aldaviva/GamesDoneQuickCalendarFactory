@@ -61,7 +61,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
                         .Compact().Min().ToIcalDuration(),
                     Summary = run.name,
                     // having an Organizer makes Outlook show "this event has not been accepted"
-                    Description = ((IEnumerable<string?>) [run.category, run.console.EmptyToNull(), run.gameReleaseYear?.ToString()]).Compact().Join(" \u2014 ") +
+                    Description = ((IEnumerable<string?>) [run.category, run.console.EmptyToNull, run.gameReleaseYear?.ToString()]).Compact().Join(" \u2014 ") +
                         $"\nRun by {run.runners.Select(getName).JoinHumanized()}" +
                         $"{(run.commentators.Any() ? $"\nCommentary by {run.commentators.Select(getName).JoinHumanized()}" : string.Empty)}" +
                         $"{(run.hosts.Any() ? $"\nHosted by {run.hosts.Select(getName).JoinHumanized()}" : string.Empty)}" +
