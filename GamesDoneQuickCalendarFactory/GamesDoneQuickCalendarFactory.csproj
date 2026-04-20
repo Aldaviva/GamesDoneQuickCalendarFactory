@@ -36,10 +36,10 @@
         <PackageReference Include="NodaTime" Version="3.3.1" />
         <PackageReference Include="RuntimeUpgradeNotifier" Version="1.1.0" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta6" />
-        <PackageReference Include="Unfucked" Version="0.0.1-beta.39" />
+        <PackageReference Include="Unfucked" Version="0.0.1-beta.40" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.5" />
         <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.15" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.29" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.30" />
         <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.3" />
     </ItemGroup>
 
