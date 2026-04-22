@@ -57,7 +57,7 @@ webApp
         ICalendarPoller calendarPoller  = context.RequestServices.GetRequiredService<ICalendarPoller>();
         ResponseHeaders responseHeaders = context.Response.GetTypedHeaders();
 
-        if (await calendarPoller.mostRecentlyPolledCalendar.ExceptionsToNull() is {} mostRecentlyPolledCalendar) {
+        if (await calendarPoller.mostRecentlyPolledCalendar.ExceptionToNull() is {} mostRecentlyPolledCalendar) {
             responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
             context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
             responseHeaders.ETag                       = mostRecentlyPolledCalendar.etag;

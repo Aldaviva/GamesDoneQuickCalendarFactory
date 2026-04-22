@@ -52,7 +52,7 @@ public sealed class CalendarPoller: ICalendarPoller {
                 logger.LogDebug("Polling GDQ schedule");
                 Calendar          calendar         = await calendarGenerator.generateCalendar();
                 Instant           generatedDate    = clock.GetCurrentInstant();
-                CalendarResponse? previousCalendar = await mostRecentlyPolledCalendar.ExceptionsToNull();
+                CalendarResponse? previousCalendar = await mostRecentlyPolledCalendar.ExceptionToNull();
 
                 if (!calendar.EqualsPresorted(previousCalendar?.calendar)) {
                     CalendarResponse calendarResponse = new(calendar, generatedDate);

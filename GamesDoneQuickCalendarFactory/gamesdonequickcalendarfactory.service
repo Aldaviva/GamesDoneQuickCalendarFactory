@@ -1,12 +1,8 @@
-# Copy this file to /etc/systemd/system/
-#
-# Install:           sudo systemctl daemon-reload
+# Install:           sudo cp gamesdonequickcalendarfactory.service /etc/systemd/system/ && sudo systemctl daemon-reload
 # Enable auto-start: sudo systemctl enable gamesdonequickcalendarfactory.service
 # Start:             sudo systemctl start gamesdonequickcalendarfactory.service
 # Check status:      systemctl status gamesdonequickcalendarfactory.service
 # Read logs:         journalctl -f -u gamesdonequickcalendarfactory.service
-#
-# Source: https://devblogs.microsoft.com/dotnet/net-core-and-systemd/
 
 [Unit]
 Description=Games Done Quick Calendar Factory
@@ -16,6 +12,7 @@ Type=notify
 ExecStart=/usr/local/bin/gamesdonequickcalendarfactory
 WorkingDirectory=/usr/local/bin/
 Restart=on-failure
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target
