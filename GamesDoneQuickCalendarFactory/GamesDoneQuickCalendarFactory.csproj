@@ -33,7 +33,7 @@
         <PackageReference Include="Ical.Net" Version="5.2.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="[8.0.1,9)" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="[8.0.1,9)" />
-        <PackageReference Include="NodaTime" Version="3.3.1" />
+        <PackageReference Include="NodaTime" Version="3.3.2" />
         <PackageReference Include="RuntimeUpgradeNotifier" Version="1.1.0" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta6" />
         <PackageReference Include="Unfucked" Version="0.0.1-beta.41" />
