@@ -20,9 +20,9 @@
       },
       "Ical.Net": {
         "type": "Direct",
-        "requested": "[5.2.1, )",
-        "resolved": "5.2.1",
-        "contentHash": "zHjl8M24IX1kNlB2zX7c2clyTdD5C+PplmyiMHJ0kMlt0ng2TMfNNKO4u7hNV86oITujLiJ6y/+ATcI7bbmjAw==",
+        "requested": "[5.2.2, )",
+        "resolved": "5.2.2",
+        "contentHash": "UkVwHSOiIwMD7s/GaCsgdxxKAwi5uG+kWmfMJcyB9PotZkXzH4Q3KDMyO1cU9OQH7/p3cvlpdObIxtAl9Zx2tg==",
         "dependencies": {
           "NodaTime": "3.2.2"
         }
