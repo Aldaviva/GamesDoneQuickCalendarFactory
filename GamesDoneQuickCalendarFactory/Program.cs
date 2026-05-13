@@ -26,7 +26,7 @@ string[] varyHeaderValue = [HeaderNames.AcceptEncoding];
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
-    .UseWindowsService()
+    .UseWindowsService(static options => options.ServiceName = nameof(GamesDoneQuickCalendarFactory))
     .UseSystemd();
 
 builder.Logging.AddUnfuckedConsole();
@@ -91,7 +91,7 @@ await eventDownloader.downloadSchedule() is {} schedule
         logoSvg: Resources.gdqDpadBadgeLogo)
     : new ShieldsBadgeResponse("gdq", "no event now", "inactive", false, Resources.gdqDpadBadgeLogo));
 
-// #84: don't await, because Windows will time out this service startup if the Internet is down (server won boot race against modem and router), so the service will be stopped with no retry
+// #84: don't await, because Windows will time out this service startup if the Internet connection is down (server won boot race against modem and router), so the service will be stopped with no retry
 _ = webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 
 using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifier {
