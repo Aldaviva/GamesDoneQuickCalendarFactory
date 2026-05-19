@@ -74,11 +74,11 @@
       },
       "Unfucked.DateTime": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.5, )",
-        "resolved": "0.0.1-beta.5",
-        "contentHash": "mKtinBBTEcdPNaoY35QwVbXjNrIRbEl14Rel5P81lHXmCVctirYMkxJDgzf0CaFS5AUdFLtym3B1D6YxQ5OJrw==",
+        "requested": "[0.0.1-beta.6, )",
+        "resolved": "0.0.1-beta.6",
+        "contentHash": "1of0zJGbbDMhSPZQavmz9n+NhPomcT2uz7+2arsivJKypqwt0oU4ybHhZfa9kZrZ62MT1GHisljn47wRytnITA==",
         "dependencies": {
-          "NodaTime": "3.3.1"
+          "NodaTime": "3.3.2"
         }
       },
       "Unfucked.DI": {
