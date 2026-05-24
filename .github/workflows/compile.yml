@@ -94,23 +94,13 @@ jobs:
         env:
           SSH_USER_PRIVATE_KEY: ${{ secrets.SSH_USER_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          touch ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-
-          touch user.priv
-          chmod 600 user.priv
-          echo "$SSH_USER_PRIVATE_KEY" > user.priv
+        run: umask 077; mkdir -p ~/.ssh; echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts; echo "$SSH_USER_PRIVATE_KEY" > ~/.ssh/id_ed25519
         
       - name: Stop server
-        run: ssh -i user.priv ${{ vars.SSH_AUTHORITY }} Stop-Service GamesDoneQuickCalendarFactory
+        run: ssh ${{ vars.SSH_AUTHORITY }} Stop-Service ${{ env.ProjectName }}
 
       - name: Upload artifact to server
-        run: scp -i user.priv ${{ env.ProjectName }}.exe ${{ vars.SSH_AUTHORITY }}:${{ vars.EXE_INSTALLATION_PATH }}
+        run: scp ${{ env.ProjectName }}.exe ${{ vars.SSH_AUTHORITY }}:${{ vars.EXE_INSTALLATION_PATH }}
 
       - name: Start server
-        run: ssh -i user.priv ${{ vars.SSH_AUTHORITY }} Start-Service GamesDoneQuickCalendarFactory
+        run: ssh ${{ vars.SSH_AUTHORITY }} Start-Service ${{ env.ProjectName }}

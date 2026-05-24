@@ -52,7 +52,7 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
         "sleep",
         "btb_finale",
 
-        // #34: Frame Fatales 2025 (event 55) inconsistently uses "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs
+        // #34: Frost Fatales 2025 (event 55) inconsistently used "opener" and "finale" to tag the first and last runs of an event, not the first and last interstitials like GDQ and BTB events do, so fall back to runner ID blocking to avoid hiding real runs
         // "opener", "finale"
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 

@@ -81,7 +81,7 @@ public class GdqClientTest {
             [new Person(2042, "Radicoon")],
             [new Person(307, "kevinregamey"), new Person(306, "silentdestroyer")],
             [new Person(190, "AttyJoe")],
-            new HashSet<string>(0)));
+            new HashSet<string> { "tag 1", "tag 2" }));
 
         actual.ElementAt(2).Should().BeEquivalentTo(new GameRun(
             5972,

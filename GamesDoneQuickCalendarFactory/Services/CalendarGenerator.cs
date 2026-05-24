@@ -41,7 +41,8 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
 
     private readonly RetryOptions retryOptions = new() {
         IsRetryAllowed     = (e, _) => e is ProcessingException or ServerErrorException,
-        MaxOverallDuration = (Minutes) 1
+        MaxOverallDuration = (Minutes) 1,
+        AfterFailure       = (e, _) => logger.Warn(e, "Failed to download calendar")
     };
 
     /// <inheritdoc />
@@ -98,7 +99,6 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
     private static string formatTag(string rawTag) => rawTag switch {
         "checkpoint_run" => "Checkpoint run",
         "coop"           => "co-op",
-        "kaizo"          => "Kaizo",
         "tas"            => "tool-assisted",
         _                => rawTag.Replace('_', ' ')
     };

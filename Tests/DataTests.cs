@@ -39,6 +39,7 @@ public class DataTests {
         run.startTime.Should().Be(new OffsetDateTime(new LocalDateTime(2024, 1, 14, 12, 12, 0), Offset.FromHours(-5)));
         run.endTime.Should().Be(new OffsetDateTime(new LocalDateTime(2024, 1, 14, 12, 48, 0), Offset.FromHours(-5)));
         run.actualRunTime.Should().Be(Duration.FromMinutes(21) + Duration.FromSeconds(42));
+        run.tags.Should().Equal("Tag 1", "Tag 2");
 
         run.runners.Should().HaveCount(1);
         GdqPerson runner = run.runners[0];

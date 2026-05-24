@@ -89,7 +89,7 @@
             "setup_time" : "0:14:18",
             "starttime" : "2024-01-14T12:12:00-05:00",
             "type" : "speedrun",
-            "tags": [],
+            "tags": ["Tag 1", "Tag 2"],
             "video_links" : [
                 {
                     "id" : 3,

@@ -17,6 +17,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Unfucked;
 using Unfucked.DateTime;
+using Unfucked.DI;
 using Unfucked.HTTP;
 using Unfucked.HTTP.Config;
 
@@ -37,14 +38,14 @@ builder.Configuration.AlsoSearchForJsonFilesInExecutableDirectory();
 builder.Services
     .Configure<Configuration>(builder.Configuration)
     .AddOutputCache()
-    .AddSingleton<ICalendarGenerator, CalendarGenerator>()
-    .AddSingleton<IEventDownloader, EventDownloader>()
-    .AddSingleton<IGdqClient, GdqClient>()
-    .AddSingleton<ICalendarPoller, CalendarPoller>()
-    .AddSingleton<IGoogleCalendarSynchronizer, GoogleCalendarSynchronizer>()
-    .AddSingleton<IClock>(SystemClock.Instance)
-    .AddSingleton<HttpClient>(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
-        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS));
+    .AddSingleton<CalendarGenerator>(SuperRegistration.Interfaces)
+    .AddSingleton<EventDownloader>(SuperRegistration.Interfaces)
+    .AddSingleton<GdqClient>(SuperRegistration.Interfaces)
+    .AddSingleton<CalendarPoller>(SuperRegistration.Interfaces)
+    .AddSingleton<GoogleCalendarSynchronizer>(SuperRegistration.Interfaces)
+    .AddSingleton(SystemClock.Instance, SuperRegistration.Interfaces)
+    .AddSingleton(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
+        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), SuperRegistration.Superclasses);
 
 builder.Services.AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(static dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
 
