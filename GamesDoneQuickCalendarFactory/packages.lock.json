@@ -55,9 +55,9 @@
       },
       "RuntimeUpgradeNotifier": {
         "type": "Direct",
-        "requested": "[1.2.0-beta.1, )",
-        "resolved": "1.2.0-beta.1",
-        "contentHash": "XjzNBeuz2sGsDTbUnCmdACv+q2p0KNpeDNDHenTaijUy90l+mGkL22pIZLI6HUfh5jdBHGAXAjqmt2SfDJqx4g==",
+        "requested": "[1.2.0-beta.2, )",
+        "resolved": "1.2.0-beta.2",
+        "contentHash": "8QFobdVH5a7xDi19+pTBzuaSHIAqSOVEIcdzRgY38YHLAuEC0Z8k+1DaoMDEL9PZ1ytXKAwKkFzyzmUwN5I/1A==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
           "System.Management": "10.0.8"
