@@ -10,19 +10,19 @@
       },
       "Google.Apis.Calendar.v3": {
         "type": "Direct",
-        "requested": "[1.74.0.4073, )",
-        "resolved": "1.74.0.4073",
-        "contentHash": "6HJHia34FzfWqcHalP7s1tRMHM9Duog2GaX1SE7scrzZGToN42Sz8287oenqqTBu+rTB3zBQrXiyNbGnwN6USw==",
+        "requested": "[1.75.0.4182, )",
+        "resolved": "1.75.0.4182",
+        "contentHash": "i225LDth54jyZd19uSXY6cUgvA7J0fVmzS9OYRBXtbZR/3dOF3zTaaxYQCbvlRyilCCg6b17IZmWZo+HdWgTRw==",
         "dependencies": {
-          "Google.Apis": "1.74.0",
-          "Google.Apis.Auth": "1.74.0"
+          "Google.Apis": "1.75.0",
+          "Google.Apis.Auth": "1.75.0"
         }
       },
       "Ical.Net": {
         "type": "Direct",
-        "requested": "[5.2.2, )",
-        "resolved": "5.2.2",
-        "contentHash": "UkVwHSOiIwMD7s/GaCsgdxxKAwi5uG+kWmfMJcyB9PotZkXzH4Q3KDMyO1cU9OQH7/p3cvlpdObIxtAl9Zx2tg==",
+        "requested": "[5.2.3, )",
+        "resolved": "5.2.3",
+        "contentHash": "zROvmrRPKqND0e0Bt/wSY+d8iYtL4+sP9mORyjT/ySBiIDfik4iovTjS+L9PFg+zoXfkJ5eBTHK2lX9c7lganw==",
         "dependencies": {
           "NodaTime": "3.2.2"
         }
@@ -55,9 +55,9 @@
       },
       "RuntimeUpgradeNotifier": {
         "type": "Direct",
-        "requested": "[1.2.0-beta.1, )",
-        "resolved": "1.2.0-beta.1",
-        "contentHash": "XjzNBeuz2sGsDTbUnCmdACv+q2p0KNpeDNDHenTaijUy90l+mGkL22pIZLI6HUfh5jdBHGAXAjqmt2SfDJqx4g==",
+        "requested": "[1.2.0-beta.2, )",
+        "resolved": "1.2.0-beta.2",
+        "contentHash": "8QFobdVH5a7xDi19+pTBzuaSHIAqSOVEIcdzRgY38YHLAuEC0Z8k+1DaoMDEL9PZ1ytXKAwKkFzyzmUwN5I/1A==",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
           "System.Management": "10.0.8"
@@ -83,54 +83,54 @@
       },
       "Unfucked.DI": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.17, )",
-        "resolved": "0.0.1-beta.17",
-        "contentHash": "looboubXUilAm2EH9vT1a0v2PxhpNJ/Qv9SBJKx1ehRl0/5qWcobwF5oxSS7/jOFe3yT5mQKou1Jk2IB7bXNHw==",
+        "requested": "[0.0.1-beta.18, )",
+        "resolved": "0.0.1-beta.18",
+        "contentHash": "K4i77wX92fON0vJcP51Bano7GgO8RIip207xqEZgWUWajKGxaU7LYwNxhAD4HY39vvtfCqUtV84VYu0Gt7KTPA==",
         "dependencies": {
-          "Unfucked": "0.0.1-beta.45"
+          "Unfucked": "0.0.1-beta.46"
         }
       },
       "Unfucked.HTTP": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.30, )",
-        "resolved": "0.0.1-beta.30",
-        "contentHash": "fxy4YbkQuKMopnRaPdwMT3y2jDzz0okL/Ia+4yXbNKChDn2rLxS0Fe8rIIjDGBNLlfOW/zWcc9v0t7bxf3jHTw==",
+        "requested": "[0.0.1-beta.31, )",
+        "resolved": "0.0.1-beta.31",
+        "contentHash": "ui1dSqAk1ikK9Y2IRCFswYOx6mXVQEUqauz+kgbFDlvdnnsgmklxcSDywQiCl3ujSEAUachUqvW84jsbbHQYzA==",
         "dependencies": {
-          "Unfucked": "0.0.1-beta.40"
+          "Unfucked": "0.0.1-beta.47"
         }
       },
       "Unfucked.ICS": {
         "type": "Direct",
-        "requested": "[0.0.1-beta.3, )",
-        "resolved": "0.0.1-beta.3",
-        "contentHash": "NuWz+7sGJhSB4sn4eJ/W/2c7vSS5Ieo77hmyPdM1ZbFyaooETrsZQF3UT2Y323YW5H4g3OYq1EtoOdihi/WiXQ==",
+        "requested": "[0.0.1-beta.4, )",
+        "resolved": "0.0.1-beta.4",
+        "contentHash": "ZEtezFfDTtl7hwxATLE4pF8uYBt7tBkU2UuzCIoHsqKmuIeM1q1blGdDzMdcv5hHuMXSNcd0ihGBloiUT65+sA==",
         "dependencies": {
-          "Ical.Net": "5.1.1",
-          "NodaTime": "3.2.2"
+          "Ical.Net": "5.2.3",
+          "NodaTime": "3.3.2"
         }
       },
       "Google.Apis": {
         "type": "Transitive",
-        "resolved": "1.74.0",
-        "contentHash": "Z6hSkmRD6V8/raSBqn/EsPpNop6suaLaGE9DbSY3yRE5G47l4zYqrJgapcLARk2Z3TsQUDmWz+w/tob3wuVt3g==",
+        "resolved": "1.75.0",
+        "contentHash": "ZqODi2IvyTBezeGztemXv6U/+VinyqxxPiyoW2CZbzIrUp+a35Rt5tzUjXHPXK9nA1YQi/w8ABpYQpBm31ditw==",
         "dependencies": {
-          "Google.Apis.Core": "1.74.0"
+          "Google.Apis.Core": "1.75.0"
         }
       },
       "Google.Apis.Auth": {
         "type": "Transitive",
-        "resolved": "1.74.0",
-        "contentHash": "43H4foh3zfWgboK8QnJjIfPQuBiS794TxqQLDfeE3erQSluKmEN0qeDuwxLTpSr9Mtwj76S4LWxPneuSbC6fNg==",
+        "resolved": "1.75.0",
+        "contentHash": "hzuGwUBIQYdFkChXm62E5Suxe+q5PHt2uE5EunGBco2j01uQJGlUgzNujZvGHMlAIEHaytzhdn3v3v52ZPgv2Q==",
         "dependencies": {
-          "Google.Apis": "1.74.0",
-          "Google.Apis.Core": "1.74.0",
+          "Google.Apis": "1.75.0",
+          "Google.Apis.Core": "1.75.0",
           "System.Management": "7.0.2"
         }
       },
       "Google.Apis.Core": {
         "type": "Transitive",
-        "resolved": "1.74.0",
-        "contentHash": "gWOIiks6yo2TRliIyy10V18BJOO2BfUSPJFiTW6Tfap4tm3hFj7nvYU3XIfwzAxwoIy6nsBoqVDt9iBDSXrvYQ==",
+        "resolved": "1.75.0",
+        "contentHash": "7AuI44XP4LzMFiOjdk4GCtCxJTIWZcjrXLeGjLYYSpTHHbiPkvm76XNym7zPOnD90sIg+zdTulg+I6D5W5spTQ==",
         "dependencies": {
           "Newtonsoft.Json": "13.0.4"
         }
@@ -451,8 +451,8 @@
       },
       "Unfucked": {
         "type": "Transitive",
-        "resolved": "0.0.1-beta.45",
-        "contentHash": "ozDq2xiqqLNwH0PeDNg6i8wiUSL+whio9/fIKADgxasUA2UvPz3VJmLY1aE/KdNkMkyrFv72K+FolJu7L6YmQA=="
+        "resolved": "0.0.1-beta.47",
+        "contentHash": "3Wg5ANX1FrAIKqZ+CYxWcP5zNr2WxPBqJxSndjXb9Zz4dkB2setxTAigdcaG0JLv1O4UrjhEcFgHLksmzH6VUQ=="
       }
     },
     "net8.0/linux-arm": {

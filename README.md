@@ -13,6 +13,8 @@ All future GDQ events will also appear in this exact same ICS file when their sc
 
 The calendar is updated once per minute while a GDQ event is running, and less frequently the rest of the year.
 
+You can either use my hosted service, or host this webapp yourself on any server with [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download) 8 or later.
+
 ![AGDQ 2023 schedule in Vivaldi](https://pbs.twimg.com/media/Fl2xjasaEAATpQC?format=jpg&name=large)
 
 <!-- MarkdownTOC autolink="true" bracket="round" autoanchor="false" levels="1,2,3,4" bullets="-" -->
