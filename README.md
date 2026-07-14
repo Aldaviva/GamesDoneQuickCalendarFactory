@@ -7,7 +7,7 @@ Converts the official [Games Done Quick schedule](https://gamesdonequick.com/sch
 
 Each run in the current GDQ event will appear as a calendar appointment comprising the run's name, estimated start and end time, category, the game's hardware platform and release year, runners, commentators, and host.
 
-Every type of GDQ event with a published schedule is included: the mainline events Awesome Games Done Quick and Summer Games Done Quick; community events [Frost Fatales, Flame Fatales](https://gamesdonequick.com/site/framefatales), and [Back to Black](https://gamesdonequick.com/site/blackinaflash); and small tie-in events like PAX, TwitchCon, and Disaster Relief. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded because it runs year-round and its schedule is a messy, unparsable spreadsheet.
+Every type of GDQ event with a published schedule is included: the large events Awesome Games Done Quick and Summer Games Done Quick; medium events [Frost Fatales, Flame Fatales](https://gamesdonequick.com/site/framefatales), and [Back to Black](https://gamesdonequick.com/site/blackinaflash); and small events like PAX and TwitchCon. The [Hotfix](https://gamesdonequick.com/hotfix) series of shows is excluded because it runs almost every day of the year and uses a different schedule.
 
 All future GDQ events will also appear in this exact same ICS file when their schedules are revealed &mdash; you don't have to resubscribe to different ICS files every few months, just subscribe once to this single calendar URL and let it update forever. This is especially helpful if you forget when GDQ starts and it sneaks up on you, causing you to miss the beginning of the event.
 
@@ -43,7 +43,7 @@ You can either use my hosted service, or host this webapp yourself on any server
 1. Open [Vivaldi Settings](https://help.vivaldi.com/article/settings/)
 1. Go to the 📅 Calendar section
 1. In the Calendar Accounts section, click the `+` button
-1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts) and click Continue
+1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts), then click Continue
 1. Choose a Name, such as `Games Done Quick` or `GDQ`
 1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Click the **Add Account** button
@@ -62,11 +62,10 @@ You can either use my hosted service, or host this webapp yourself on any server
 ### Microsoft Outlook
 
 #### Outlook for Windows
-1. Open Outlook
-1. Go to the 📅 Calendar section
+1. Open the Outlook 📅 Calendar section
 1. Open the **+ Add** or **+ Open Calendar** menu
 1. Select 🌐 **From Internet…**
-1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics) and click OK
+1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click OK
 1. Optionally, click Advanced and choose a Folder Name, such as `Games Done Quick` or `GDQ`, then click OK
 1. Click the **Yes** button
 
@@ -88,8 +87,7 @@ You can either use my hosted service, or host this webapp yourself on any server
 1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
 
 ### Mozilla Thunderbird
-1. Open Thunderbird
-1. Go to the 📅 Calendar space
+1. Open the Thunderbird 📅 Calendar space
 1. Click ☰ (Thunderbird Menu) › + New › Calendar…
 1. Choose **On the Network**, then click Next
 1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
@@ -98,9 +96,8 @@ You can either use my hosted service, or host this webapp yourself on any server
 1. Click **Subscribe**
 
 ### Apple Calendar
-1. Open 📅 Calendar
-1. Go to File › New Calendar Subscription…
-1. Set the Calendar URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics) and click Subscribe
+1. In Calendar, click File › New Calendar Subscription…
+1. Set the Calendar URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click **Subscribe**
 1. Choose a name, such as `Games Done Quick` or `GDQ`
+1. Check Auto-refresh to change the update frequency, because GDQ schedules are updated often during events as run durations differ from estimates
 1. To optionally preserve the default reminders, uncheck Remove Alerts
-1. To change the update frequency, check Auto-refresh. GDQ schedules shift during events.

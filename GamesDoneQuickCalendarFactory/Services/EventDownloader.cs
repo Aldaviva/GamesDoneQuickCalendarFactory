@@ -33,6 +33,7 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
         2171, // Everyone
         4202, // GDQueer In-Studio Team
         4283, // Back to Black Crew
+        4530, // GDQ (used at gamescom)
     }.ToFrozenSet();
 
     /// <summary>
@@ -57,7 +58,7 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
     /// <summary>
-    /// GDQ Express at TwitchCon 2025 doesn't mark their daily openers or event finale with useful tags or runners (they do use the finale tag, but we can't use that because Frame Fatales uses that for their last real run).
+    /// GDQ Express at TwitchCon 2025 doesn't mark their daily openers or event finale with useful tags or runners (they do use the "finale" tag, but we can't use that because Frame Fatales uses that for their last real run).
     /// </summary>
     private static readonly FrozenSet<string> CONSOLE_BLACKLIST = new HashSet<string> {
         "TwitchCon",

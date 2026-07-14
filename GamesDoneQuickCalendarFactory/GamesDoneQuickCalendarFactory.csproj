@@ -29,11 +29,11 @@
 
     <ItemGroup>
         <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.75.0.4182" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.75.0.4200" />
         <PackageReference Include="Ical.Net" Version="5.2.3" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="[8.0.1,9)" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="[8.0.1,9)" />
-        <PackageReference Include="NodaTime" Version="3.3.2" />
+        <PackageReference Include="NodaTime" Version="3.3.3" />
         <PackageReference Include="RuntimeUpgradeNotifier" Version="1.2.0-beta.2" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0-beta6" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.6" />

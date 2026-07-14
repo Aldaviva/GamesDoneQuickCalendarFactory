@@ -3,11 +3,16 @@ using GamesDoneQuickCalendarFactory;
 using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.Marshal;
 using GamesDoneQuickCalendarFactory.Services;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Http;
+using Google.Apis.Services;
 using Ical.Net.Serialization;
 using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using NodaTime;
 using RuntimeUpgrade.Notifier;
@@ -21,6 +26,7 @@ using Unfucked.DI;
 using Unfucked.HTTP;
 using Unfucked.HTTP.Config;
 
+Version.PrintProgramVersionAndExitIfRequested();
 BomSquad.DefuseUtf8Bom();
 
 string[] varyHeaderValue = [HeaderNames.AcceptEncoding];
@@ -45,9 +51,17 @@ builder.Services
     .AddSingleton<GoogleCalendarSynchronizer>(SuperRegistration.Interfaces)
     .AddSingleton(SystemClock.Instance, SuperRegistration.Interfaces)
     .AddSingleton(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
-        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), SuperRegistration.Superclasses);
-
-builder.Services.AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(static dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
+        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), SuperRegistration.Superclasses)
+    .AddSingleton<CalendarService>(ctx => ctx.GetRequiredService<IOptions<Configuration>>().Value is
+        { googleCalendarId: not null, googleServiceAccountEmailAddress: {} serviceAccount, googleServiceAccountPrivateKey: {} privateKey }
+        ? new UnfuckedGoogleCalendarService(new BaseClientService.Initializer {
+            HttpClientInitializer = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccount) {
+                Scopes = [CalendarService.Scope.CalendarEvents]
+            }.FromPrivateKey(privateKey)),
+            ApplicationName                 = "Aldaviva/GamesDoneQuickCalendarFactory",
+            DefaultExponentialBackOffPolicy = ExponentialBackOffPolicy.RecommendedOrDefault
+        }) : null!)
+    .AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(static dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
 
 await using WebApplication webApp = builder.Build();
 
@@ -86,7 +100,7 @@ webApp.MapGet("/", [OutputCache] static async Task ([FromServices] ICalendarPoll
 webApp.MapGet("/badge.json", [OutputCache] static async ([FromServices] IEventDownloader eventDownloader) =>
 await eventDownloader.downloadSchedule() is {} schedule
     ? new ShieldsBadgeResponse(
-        label: shortNamePattern().Replace(schedule.shortTitle, " ").ToLower(), // add spaces to abbreviation
+        label: getBadgeName(schedule.shortTitle),
         message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",
         color: "success",
         logoSvg: Resources.gdqDpadBadgeLogo)
@@ -95,10 +109,15 @@ await eventDownloader.downloadSchedule() is {} schedule
 // #84: don't await, because Windows will time out this service startup if the Internet connection is down (server won boot race against modem and router), so the service will be stopped with no retry
 _ = webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 
+/*
+ * Only useful on Linux.
+ * On Windows, the ASP.NET Core Runtime installer will automatically restart services that were using it, without needing RuntimeUpgradeNotifier.
+ * If this fails on Windows, install the .NET Hosting Bundle rather than separately installing the ASP.NET Core Runtime and the .NET Runtime, for more atomic upgrades.
+ */
 using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifier {
-    LoggerFactory   = webApp.Services.GetRequiredService<ILoggerFactory>(),
     RestartStrategy = RestartStrategy.AutoRestartService,
-    ExitStrategy    = new HostedLifetimeExit(webApp)
+    ExitStrategy    = new HostedLifetimeExit(webApp),
+    LoggerFactory   = webApp.Services.GetRequiredService<ILoggerFactory>()
 };
 
 await webApp.RunAsync();
@@ -106,6 +125,11 @@ await webApp.RunAsync();
 internal sealed partial class Program {
 
     private static readonly MediaTypeHeaderValue ICALENDAR_CONTENT_TYPE = new("text/calendar") { Charset = Encoding.UTF8.WebName };
+
+    /// <summary>add spaces to abbreviation between CamelCase words or numbers</summary>
+    /// <param name="eventShortName">e.g. <c>SGDQ2026</c></param>
+    /// <returns>e.g. <c>sgdq 2026</c></returns>
+    public static string getBadgeName(string eventShortName) => shortNamePattern().Replace(eventShortName, " ").ToLower();
 
     [GeneratedRegex(@"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])")]
     private static partial Regex shortNamePattern();

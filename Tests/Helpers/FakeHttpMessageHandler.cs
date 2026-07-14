@@ -17,6 +17,7 @@ public abstract class FakeHttpMessageHandler: HttpMessageHandler {
     }
 
     // ReSharper disable once InconsistentNaming - named after an existing method that isn't mine
+    // ReSharper disable once MemberCanBeProtected.Global
     public abstract Task<HttpResponseMessage> SendAsync(HttpRequestMessage request);
 
 }

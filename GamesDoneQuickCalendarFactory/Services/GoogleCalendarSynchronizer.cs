@@ -1,10 +1,7 @@
 using GamesDoneQuickCalendarFactory.Data;
 using Google;
-using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
-using Google.Apis.Http;
-using Google.Apis.Services;
 using Ical.Net.CalendarComponents;
 using Microsoft.Extensions.Options;
 using NodaTime.Extensions;
@@ -17,49 +14,33 @@ using Event = Google.Apis.Calendar.v3.Data.Event;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
-public interface IGoogleCalendarSynchronizer: IDisposable {
+public interface IGoogleCalendarSynchronizer {
 
     Task start();
 
 }
 
-public sealed class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
+public sealed class GoogleCalendarSynchronizer(
+    ICalendarPoller calendarPoller,
+    CalendarService? googleCalendar,
+    State state,
+    IOptions<Configuration> configuration,
+    ILogger<GoogleCalendarSynchronizer> logger
+): IGoogleCalendarSynchronizer {
 
     private const int MAX_EVENTS_PER_PAGE = 2500; // week-long GDQ events usually comprise about 150 runs
 
-    private readonly CalendarService?                    calendarService;
-    private readonly ICalendarPoller                     calendarPoller;
-    private readonly IOptions<Configuration>             configuration;
-    private readonly ILogger<GoogleCalendarSynchronizer> logger;
-    private readonly SemaphoreSlim                       gcalClientLock = new(1);
-    private readonly State                               state;
+    private readonly SemaphoreSlim gcalClientLock = new(1);
 
     private IDictionary<string, Event> existingGoogleEventsByIcalUid = null!;
 
-    public GoogleCalendarSynchronizer(ICalendarPoller calendarPoller, State state, IOptions<Configuration> configuration, ILogger<GoogleCalendarSynchronizer> logger) {
-        this.calendarPoller = calendarPoller;
-        this.state          = state;
-        this.configuration  = configuration;
-        this.logger         = logger;
-
-        if (configuration.Value is { googleCalendarId: not null, googleServiceAccountEmailAddress: {} serviceAccount, googleServiceAccountPrivateKey: {} privateKey }) {
-            calendarService = new UnfuckedGoogleCalendarService(new BaseClientService.Initializer {
-                HttpClientInitializer = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccount) {
-                    Scopes = [CalendarService.Scope.CalendarEvents]
-                }.FromPrivateKey(privateKey)),
-                ApplicationName                 = "Aldaviva/GamesDoneQuickCalendarFactory",
-                DefaultExponentialBackOffPolicy = ExponentialBackOffPolicy.RecommendedOrDefault
-            });
-        }
-    }
-
     public async Task start() {
-        if (calendarService != null) {
+        if (googleCalendar != null) {
             string googleCalendarId = configuration.Value.googleCalendarId!;
 
             Events googleCalendarEvents = await Retrier.Attempt(async _ => {
                 logger.LogDebug("Downloading existing events from Google Calendar {calendarId}", googleCalendarId);
-                EventsResource.ListRequest listRequest = calendarService.Events.List(googleCalendarId);
+                EventsResource.ListRequest listRequest = googleCalendar.Events.List(googleCalendarId);
                 listRequest.MaxResults = MAX_EVENTS_PER_PAGE;
                 return await listRequest.ExecuteAsync();
             }, new RetryOptions { Delay = Delays.Exponential((Seconds) 1, max: (Minutes) 5) });
@@ -93,7 +74,7 @@ public sealed class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
 
                 logger.LogDebug("Deleting {count:N0} orphaned events from Google Calendar", eventsToDelete.Count());
                 foreach (Event eventToDelete in eventsToDelete) {
-                    await calendarService!.Events.Delete(googleCalendarId, eventToDelete.Id).ExecuteAsync();
+                    await googleCalendar!.Events.Delete(googleCalendarId, eventToDelete.Id).ExecuteAsync();
                     existingGoogleEventsByIcalUid.Remove(eventToDelete.ICalUID);
                     logger.LogTrace("Deleted event {summary} from Google Calendar", eventToDelete.Summary);
                 }
@@ -102,7 +83,7 @@ public sealed class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                 foreach (CalendarEvent eventToCreate in eventsToCreate) {
                     Event googleEventToCreate = eventToCreate.asGoogleEvent;
                     try {
-                        existingGoogleEventsByIcalUid[googleEventToCreate.ICalUID] = await calendarService!.Events.Insert(googleEventToCreate, googleCalendarId).ExecuteAsync();
+                        existingGoogleEventsByIcalUid[googleEventToCreate.ICalUID] = await googleCalendar!.Events.Insert(googleEventToCreate, googleCalendarId).ExecuteAsync();
                         logger.LogTrace("Created event {summary} in Google Calendar", eventToCreate.Summary);
                     } catch (GoogleApiException e) {
                         logger.LogError(e, "Failed to create event {summary} in Google Calendar (iCalUID={uid})", googleEventToCreate.Summary, googleEventToCreate.ICalUID);
@@ -113,7 +94,7 @@ public sealed class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                 logger.LogDebug("Updating {count:N0} outdated events in Google Calendar", eventsToUpdate.Count());
                 foreach (CalendarEvent eventToUpdate in eventsToUpdate) {
                     existingGoogleEventsByIcalUid[eventToUpdate.Uid!] =
-                        await calendarService!.Events.Update(eventToUpdate.asGoogleEvent, googleCalendarId, existingGoogleEventsByIcalUid[eventToUpdate.Uid!].Id).ExecuteAsync();
+                        await googleCalendar!.Events.Update(eventToUpdate.asGoogleEvent, googleCalendarId, existingGoogleEventsByIcalUid[eventToUpdate.Uid!].Id).ExecuteAsync();
                     logger.LogTrace("Updated event {summary} in Google Calendar", eventToUpdate.Summary);
                 }
             } finally {
@@ -128,10 +109,6 @@ public sealed class GoogleCalendarSynchronizer: IGoogleCalendarSynchronizer {
                 newCounter, oldCounter);
             await calendarPoller.pollCalendar();
         }
-    }
-
-    public void Dispose() {
-        calendarService?.Dispose();
     }
 
 }

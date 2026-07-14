@@ -1,9 +1,9 @@
+// ReSharper disable InconsistentNaming - named after methods that aren't mine
+
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
-
-// ReSharper disable InconsistentNaming - named after methods that aren't mine
 
 namespace Tests.Helpers;
 
