@@ -13,7 +13,7 @@ All future GDQ events will also appear in this exact same ICS file when their sc
 
 The calendar is updated once per minute while a GDQ event is running, and less frequently the rest of the year.
 
-You can either use my hosted service, or host this webapp yourself on any server with [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download) 8 or later.
+You can either use my hosted service with the instructions below, or host this webapp yourself on any server with [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download) 8 or later.
 
 ![AGDQ 2023 schedule in Vivaldi](https://pbs.twimg.com/media/Fl2xjasaEAATpQC?format=jpg&name=large)
 
@@ -36,18 +36,17 @@ You can either use my hosted service, or host this webapp yourself on any server
 ## Subscribing
 
 ### Any iCalendar client
-
 1. Subscribe to the iCalendar URL [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics). No authentication is required.
 
 ### Vivaldi
 1. Open [Vivaldi Settings](https://help.vivaldi.com/article/settings/)
 1. Go to the 📅 Calendar section
-1. In the Calendar Accounts section, click the `+` button
-1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts), then click Continue
+1. In the Calendar Accounts section, click **+**
+1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts), then click **Continue**
 1. Choose a Name, such as `Games Done Quick` or `GDQ`
 1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
-1. Click the **Add Account** button
-1. Click the **Save Account** button
+1. Click **Add Account**
+1. Click **Save Account**
 
 ### Google Calendar
 1. Go to this project's [shared public calendar](https://calendar.google.com/calendar/u/0?cid=ZThmNDEwMmU3MjFlMmExNDAwZjc4NmExMWU2MjlkZGQ4YTlhOGY5ODRiZjFmMjg4NGI5NmFmYjBhYWM2Zjk0N0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t)
@@ -62,12 +61,12 @@ You can either use my hosted service, or host this webapp yourself on any server
 ### Microsoft Outlook
 
 #### Outlook for Windows
-1. Open the Outlook 📅 Calendar section
+1. Go to the Outlook 📅 Calendar section
 1. Open the **+ Add** or **+ Open Calendar** menu
 1. Select 🌐 **From Internet…**
-1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click OK
-1. Optionally, click Advanced and choose a Folder Name, such as `Games Done Quick` or `GDQ`, then click OK
-1. Click the **Yes** button
+1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click **OK**
+1. Optionally, click Advanced and choose a Folder Name, such as `Games Done Quick` or `GDQ`, then click **OK**
+1. Click **Yes**
 
 #### Outlook on the web
 1. Sign in to [Outlook on the web](https://outlook.office.com/calendar)
@@ -76,7 +75,7 @@ You can either use my hosted service, or host this webapp yourself on any server
 1. Go to the **⚇ Subscribe from web** navigation section
 1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Choose a calendar name, such as `Games Done Quick` or `GDQ`
-1. Click the **Import** button
+1. Click **Import**
 
 #### Outlook for Android
 1. Sign in to [Outlook on the web](https://outlook.office.com/calendar) with the same Office 365, Exchange, or Outlook.com&#47;Hotmail account with which you are signed into Outlook for Android
@@ -87,9 +86,9 @@ You can either use my hosted service, or host this webapp yourself on any server
 1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
 
 ### Mozilla Thunderbird
-1. Open the Thunderbird 📅 Calendar space
+1. Go to the Thunderbird 📅 Calendar space
 1. Click ☰ (Thunderbird Menu) › + New › Calendar…
-1. Choose **On the Network**, then click Next
+1. Choose **On the Network**, then click **Next**
 1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Check **This location doesn't require credentials**
 1. Click **Find Calendars**
@@ -100,4 +99,5 @@ You can either use my hosted service, or host this webapp yourself on any server
 1. Set the Calendar URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click **Subscribe**
 1. Choose a name, such as `Games Done Quick` or `GDQ`
 1. Check Auto-refresh to change the update frequency, because GDQ schedules are updated often during events as run durations differ from estimates
-1. To optionally preserve the default reminders, uncheck Remove Alerts
+1. To optionally preserve the default reminders, uncheck **Remove Alerts**
+1. ClicK **OK**
