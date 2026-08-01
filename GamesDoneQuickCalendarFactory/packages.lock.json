@@ -72,6 +72,12 @@
           "Microsoft.CSharp": "4.7.0"
         }
       },
+      "Unfucked": {
+        "type": "Direct",
+        "requested": "[0.0.1-beta.51, )",
+        "resolved": "0.0.1-beta.51",
+        "contentHash": "wJPARB+FlXg1aHSNVK4rKUKQavG4oB6vwHLDUFy94vJor9gRvvxE4vfFhQy0Zgrt+2KfcNJzXJWyeb3/163ZXg=="
+      },
       "Unfucked.DateTime": {
         "type": "Direct",
         "requested": "[0.0.1-beta.6, )",
@@ -448,11 +454,6 @@
         "dependencies": {
           "System.Diagnostics.EventLog": "8.0.1"
         }
-      },
-      "Unfucked": {
-        "type": "Transitive",
-        "resolved": "0.0.1-beta.50",
-        "contentHash": "0rMvVIhB9RNv88XdKBMRb7AVK0CHb8fk22TwFyPjQ7YXAKuQxpjGgMBIQn+TCJQx48KtFEUC5gU1lzByezhprQ=="
       }
     },
     "net8.0/linux-arm": {
