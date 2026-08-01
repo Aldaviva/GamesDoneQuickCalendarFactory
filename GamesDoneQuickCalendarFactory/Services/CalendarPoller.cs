@@ -1,10 +1,4 @@
-using GamesDoneQuickCalendarFactory.Data;
-using Ical.Net;
-using Microsoft.Extensions.Options;
-using NodaTime;
 using NodaTime.Extensions;
-using Unfucked;
-using Unfucked.DateTime;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 

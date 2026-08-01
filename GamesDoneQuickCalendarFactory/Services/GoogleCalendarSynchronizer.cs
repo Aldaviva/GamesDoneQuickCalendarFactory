@@ -1,14 +1,8 @@
-using GamesDoneQuickCalendarFactory.Data;
 using Google;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
-using Ical.Net.CalendarComponents;
-using Microsoft.Extensions.Options;
 using NodaTime.Extensions;
 using System.Net;
-using ThrottleDebounce.Retry;
-using Unfucked;
-using Unfucked.DateTime;
 using Calendar = Ical.Net.Calendar;
 using Event = Google.Apis.Calendar.v3.Data.Event;
 

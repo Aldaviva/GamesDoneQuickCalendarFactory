@@ -1,10 +1,9 @@
 using Google.Apis.Calendar.v3.Data;
-using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using Ical.Net.Proxies;
 using System.Diagnostics.Contracts;
-using Unfucked;
 using Calendar = Ical.Net.Calendar;
+using Event = Google.Apis.Calendar.v3.Data.Event;
 
 namespace GamesDoneQuickCalendarFactory;
 

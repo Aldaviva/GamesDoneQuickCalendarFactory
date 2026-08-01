@@ -1,8 +1,4 @@
 using Bom.Squad;
-using GamesDoneQuickCalendarFactory;
-using GamesDoneQuickCalendarFactory.Data;
-using GamesDoneQuickCalendarFactory.Data.Marshal;
-using GamesDoneQuickCalendarFactory.Services;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Http;
@@ -12,19 +8,12 @@ using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
-using NodaTime;
 using RuntimeUpgrade.Notifier;
 using RuntimeUpgrade.Notifier.Data;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
-using Unfucked;
-using Unfucked.DateTime;
-using Unfucked.DI;
-using Unfucked.HTTP;
-using Unfucked.HTTP.Config;
 
 Version.PrintProgramVersionAndExitIfRequested();
 BomSquad.DefuseUtf8Bom();
@@ -49,6 +38,9 @@ builder.Services
     .AddSingleton<GdqClient>(SuperRegistration.Interfaces)
     .AddSingleton<CalendarPoller>(SuperRegistration.Interfaces)
     .AddSingleton<GoogleCalendarSynchronizer>(SuperRegistration.Interfaces)
+    .AddSingleton<DonationCurrentEventIdFetcher>(SuperRegistration.Interfaces)
+    .AddSingleton<ScheduleWebPageCurrentEventIdFetcher>(SuperRegistration.Interfaces)
+    .AddSingleton<EventsApiCurrentEventIdFetcher>(SuperRegistration.Interfaces)
     .AddSingleton(SystemClock.Instance, SuperRegistration.Interfaces)
     .AddSingleton(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
         .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), SuperRegistration.Superclasses)

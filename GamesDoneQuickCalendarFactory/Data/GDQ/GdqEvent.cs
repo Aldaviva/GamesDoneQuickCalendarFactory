@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 
 /// <summary>
@@ -11,5 +9,6 @@ namespace GamesDoneQuickCalendarFactory.Data.GDQ;
 public sealed record GdqEvent(
     int id,
     [property: JsonPropertyName("short")] string shortName,
-    [property: JsonPropertyName("name")] string longName
+    [property: JsonPropertyName("name")] string longName,
+    [property: JsonPropertyName("datetime")] OffsetDateTime expectedStartTime
 );

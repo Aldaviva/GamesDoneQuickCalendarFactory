@@ -1,6 +1,3 @@
-using Unfucked;
-using Unfucked.DateTime;
-
 namespace GamesDoneQuickCalendarFactory.Data;
 
 public sealed class Configuration {

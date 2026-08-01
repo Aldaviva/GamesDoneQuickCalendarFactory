@@ -1,15 +1,10 @@
-using GamesDoneQuickCalendarFactory.Data;
-using GamesDoneQuickCalendarFactory.Data.GDQ;
-using NodaTime;
 using System.Collections.Frozen;
-using Unfucked.DateTime;
-using Unfucked.HTTP.Exceptions;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface IEventDownloader {
 
-    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
+    /// <exception cref="CalendarFactoryException.CurrentEventFetchError">timeout or other network IO error from GDQ servers</exception>
     Task<Event?> downloadSchedule();
 
 }
@@ -66,9 +61,9 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
 
     /// <inheritdoc />
     public async Task<Event?> downloadSchedule() {
-        try {
-            GdqEvent currentEvent = await gdq.getCurrentEvent();
+        if (await gdq.getCurrentEvent() is not {} currentEvent) return null; // Successfully determined that no event is currently running or upcoming
 
+        try {
             IReadOnlyList<GameRun> runs = (await gdq.getEventRuns(currentEvent))
                 .Where(run =>
                     !run.runners.IntersectBy(RUNNER_BLACKLIST, runner => runner.id).Any() &&
@@ -86,10 +81,7 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
                 return null;
             }
         } catch (NotFoundException) {
-            /*
-             * No schedule has been yet published for the next event.
-             * Either the official schedule URL redirects to a 404 (no upcoming event), or it has a valid event ID but no runs share that event ID (upcoming event with no runs).
-             */
+            // No runs have been inserted yet for the next event, even though the event itself exists.
             return null;
         }
     }

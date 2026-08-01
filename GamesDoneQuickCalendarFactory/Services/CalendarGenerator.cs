@@ -1,13 +1,5 @@
-using GamesDoneQuickCalendarFactory.Data;
-using GamesDoneQuickCalendarFactory.Data.GDQ;
-using Ical.Net;
-using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
 using System.Collections.Frozen;
-using ThrottleDebounce.Retry;
-using Unfucked;
-using Unfucked.DateTime;
-using Unfucked.HTTP.Exceptions;
 using Duration = NodaTime.Duration;
 
 namespace GamesDoneQuickCalendarFactory.Services;
@@ -40,7 +32,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet(); // #50: preserve opener, finale, and bonus tags
 
     private readonly RetryOptions retryOptions = new() {
-        IsRetryAllowed     = (e, _) => e is ProcessingException or ServerErrorException,
+        IsRetryAllowed     = (e, _) => e is ProcessingException or ServerErrorException or CalendarFactoryException { InnerException: ProcessingException or ServerErrorException },
         MaxOverallDuration = (Minutes) 1,
         AfterFailure       = (e, _) => logger.Warn(e, "Failed to download calendar")
     };
@@ -54,7 +46,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
         if (gdqEvent != null) {
             calendar.Events.AddRange(gdqEvent.runs.Select((run, runIndex) => {
                 CalendarEvent calendarEvent = new() {
-                    Uid = $"{state.googleCalendarUidCounter}/{run.id}",
+                    Uid   = $"{state.googleCalendarUidCounter}/{run.id}",
                     // UTC works better than trying to coerce the OffsetDateTime into a ZonedDateTime, because NodaTime will pick a zone like UTC-5 instead of America/New_York (which makes sense), but UTC-5 is a fake, non-Olsen zone ID made up by NodaTime, which Vivaldi doesn't apply correctly and render the times as if they were local time, leading to events starting 3 hours too early for subscribers in America/Los_Angeles. Alternatively, we could map offsets and dates to more well-known zones like America/New_York, or use the zone specified in the GdqEvent.timezone property except I don't know if Vivaldi handles US/Eastern
                     Start = run.start.ToIcalDateTimeUtc(),
                     // ensure at least 1 minute gap between runs, to make calendars look nicer
@@ -72,7 +64,7 @@ public sealed class CalendarGenerator(IEventDownloader eventDownloader, State st
                 if (runIndex == 0) {
                     calendarEvent.Alarms.AddAll(
                         new Alarm {
-                            Action = AlarmAction.Display,
+                            Action      = AlarmAction.Display,
                             // RFC-5545 valarm documentation is wrong, trigger actually specifies a duration AFTER the start (by default) of the event to display the alarm, not BEFORE, so the timespan must be negative to trigger before (https://icalendar.org/iCalendar-RFC-5545/3-6-6-alarm-component.html)
                             Trigger     = new Trigger(((Duration) (Days) (-7)).ToIcalDuration()),
                             Description = $"{gdqEvent.longTitle} is coming up next week"

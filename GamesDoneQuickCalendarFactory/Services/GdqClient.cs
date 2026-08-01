@@ -1,24 +1,16 @@
-using GamesDoneQuickCalendarFactory.Data;
-using GamesDoneQuickCalendarFactory.Data.GDQ;
-using GamesDoneQuickCalendarFactory.Data.Marshal;
-using NodaTime;
-using System.Runtime.CompilerServices;
-using Unfucked;
-using Unfucked.DateTime;
-using Unfucked.HTTP;
-using Unfucked.HTTP.Exceptions;
+using System.Runtime.ExceptionServices;
 
 namespace GamesDoneQuickCalendarFactory.Services;
 
 public interface IGdqClient {
 
-    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
-    Task<int> getCurrentEventId();
+    /// <exception cref="CalendarFactoryException.CurrentEventFetchError" />
+    Task<int?> getCurrentEventId();
 
     Task<GdqEvent> getEvent(int eventId);
 
-    /// <exception cref="ProcessingException">timeout or other network IO error from GDQ servers</exception>
-    Task<GdqEvent> getCurrentEvent();
+    /// <exception cref="CalendarFactoryException.CurrentEventFetchError">timeout or other network IO error from GDQ servers</exception>
+    Task<GdqEvent?> getCurrentEvent();
 
     Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent);
 
@@ -26,30 +18,46 @@ public interface IGdqClient {
 
 }
 
-public sealed class GdqClient(HttpClient httpClient, ILogger<GdqClient> logger): IGdqClient {
+public sealed class GdqClient: IGdqClient {
 
-    private static readonly Uri        CURRENT_EVENT_REDIRECTOR = new("https://tracker.gamesdonequick.com/tracker/donate/");
-    private static readonly UrlBuilder EVENT_URL                = UrlBuilder.FromTemplate("https://tracker.gamesdonequick.com/tracker/api/v2/events/{eventId}/");
-    private static readonly Duration   MAX_SETUP_TIME           = (Hours) 17;
+    internal static readonly UrlBuilder EVENT_URL      = new("https://private.gamesdonequick.com/tracker/api/v2/events/");
+    private static readonly  Duration   MAX_SETUP_TIME = (Hours) 17;
 
-    /// <inheritdoc />
-    public async Task<int> getCurrentEventId() {
-        using HttpResponseMessage eventIdResponse          = await httpClient.Target(CURRENT_EVENT_REDIRECTOR).Head();
-        Uri?                      eventSpecificDonationUrl = eventIdResponse.RequestMessage?.RequestUri;
-        logger.Trace("Current event ID comes from {url}", eventSpecificDonationUrl);
-        return Convert.ToInt32(eventSpecificDonationUrl!.Segments[4].TrimEnd('/'));
+    private readonly HttpClient                   httpClient;
+    private readonly IList<CurrentEventIdFetcher> currentEventIdFetchers;
+
+    public GdqClient(HttpClient httpClient, IEnumerable<CurrentEventIdFetcher> currentEventIdFetchers) {
+        this.httpClient             = httpClient;
+        this.currentEventIdFetchers = currentEventIdFetchers.OrderBy(implementation => implementation.priority).ToList();
     }
 
-    public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENT_URL).ResolveTemplate("eventId", eventId).Get<GdqEvent>();
+    /// <inheritdoc />
+    public async Task<int?> getCurrentEventId() {
+        ExceptionDispatchInfo? latestException = null;
+        foreach (CurrentEventIdFetcher currentEventIdFetcher in currentEventIdFetchers) {
+            try {
+                if (await currentEventIdFetcher.getCurrentEventId() is {} currentEventId) {
+                    return currentEventId;
+                }
+            } catch (CalendarFactoryException.CurrentEventFetchError e) {
+                latestException = ExceptionDispatchInfo.Capture(e);
+            }
+        }
+
+        latestException?.Throw();
+        return null;
+    }
+
+    public async Task<GdqEvent> getEvent(int eventId) => await httpClient.Target(EVENT_URL).Path("{eventId}/").ResolveTemplate("eventId", eventId).Get<GdqEvent>();
 
     /// <inheritdoc />
-    public async Task<GdqEvent> getCurrentEvent() => await getEvent(await getCurrentEventId());
+    public async Task<GdqEvent?> getCurrentEvent() => await getCurrentEventId() is {} currentEventId ? await getEvent(currentEventId) : null;
 
     public Task<IEnumerable<GameRun>> getEventRuns(GdqEvent gdqEvent) => getEventRuns(gdqEvent.id);
 
     public async Task<IEnumerable<GameRun>> getEventRuns(int eventId) {
         List<GameRun>?  runs         = null;
-        Uri             runsUrl      = EVENT_URL.Path("runs/").ResolveTemplate("eventId", eventId);
+        Uri             runsUrl      = EVENT_URL.Path("{eventId}/runs/").ResolveTemplate("eventId", eventId);
         var             resultsCount = new ValueHolderStruct<long>();
         OffsetDateTime? tailStart    = null;
         bool            sorted       = true;

@@ -2,7 +2,6 @@ using GamesDoneQuickCalendarFactory.Data;
 using GamesDoneQuickCalendarFactory.Data.GDQ;
 using GamesDoneQuickCalendarFactory.Data.Marshal;
 using GamesDoneQuickCalendarFactory.Services;
-using Microsoft.Extensions.Logging.Abstractions;
 using NodaTime;
 using NodaTime.Text;
 using System.Net.Http.Headers;
@@ -14,21 +13,23 @@ namespace Tests;
 
 public class GdqClientTest {
 
-    private readonly UnfuckedHttpHandler httpMessageHandler = A.Fake<UnfuckedHttpHandler>(options => options.CallsBaseMethods());
-    private readonly GdqClient           gdq;
+    private readonly UnfuckedHttpHandler   httpMessageHandler    = A.Fake<UnfuckedHttpHandler>(options => options.CallsBaseMethods());
+    private readonly CurrentEventIdFetcher currentEventIdFetcher = A.Fake<CurrentEventIdFetcher>();
+    private readonly GdqClient             gdq;
 
     public GdqClientTest() {
         gdq = new GdqClient(new UnfuckedHttpClient(httpMessageHandler).Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS),
-            NullLogger<GdqClient>.Instance);
+            [currentEventIdFetcher]);
     }
 
     [Fact]
     public async Task getCurrentEvent() {
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://tracker.gamesdonequick.com/tracker/donate/"), A<CancellationToken>._))
-            .Returns(new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://tracker.gamesdonequick.com/tracker/ui/events/46/donate") });
+        A.CallTo(() => currentEventIdFetcher.getCurrentEventId()).Returns(46);
+        /*A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Head, "https://private.gamesdonequick.com/tracker/donate/"), A<CancellationToken>._))
+            .Returns(new HttpResponseMessage { RequestMessage = new HttpRequestMessage(HttpMethod.Head, "https://private.gamesdonequick.com/tracker/ui/events/46/donate") });*/
 
         await using Stream eventStream = File.OpenRead("Data/event.json");
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/"),
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://private.gamesdonequick.com/tracker/api/v2/events/46/"),
                 A<CancellationToken>._))
             .Returns(new HttpResponseMessage {
                 Content = new StreamContent(eventStream) {
@@ -38,20 +39,22 @@ public class GdqClientTest {
                 }
             });
 
-        GdqEvent actual = await gdq.getCurrentEvent();
+        GdqEvent? actual = await gdq.getCurrentEvent();
 
+        actual.Should().NotBeNull();
         actual.id.Should().Be(46);
         actual.shortName.Should().Be("AGDQ2024");
         actual.longName.Should().Be("Awesome Games Done Quick 2024");
+        actual.expectedStartTime.Should().Be(OffsetDateTimePattern.GeneralIso.Parse("2024-01-14T11:30:00-05:00").Value);
     }
 
     [Fact]
     public async Task getEventRuns() {
         await using Stream runsStream = File.OpenRead("Data/runs.json");
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/46/runs/"),
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://private.gamesdonequick.com/tracker/api/v2/events/46/runs/"),
             A<CancellationToken>._)).Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", new OffsetDateTime());
 
         IList<GameRun> actual = (await gdq.getEventRuns(gdqEvent)).ToList();
 
@@ -139,10 +142,10 @@ public class GdqClientTest {
     [Fact]
     public async Task getEventRunsWithOvernightSetupTimes() {
         await using Stream runsStream = File.OpenRead("Data/runs-with-overnight-setup-times.json");
-        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://tracker.gamesdonequick.com/tracker/api/v2/events/57/runs/"),
+        A.CallTo(() => httpMessageHandler.TestableSendAsync(An<HttpRequestMessage>.That.Matches(HttpMethod.Get, "https://private.gamesdonequick.com/tracker/api/v2/events/57/runs/"),
             A<CancellationToken>._)).Returns(new HttpResponseMessage { Content = new StreamContent(runsStream) });
 
-        GdqEvent gdqEvent = new(57, "SpeedAtPAXEast25", "Speedrun Stage @ PAX East 25");
+        GdqEvent gdqEvent = new(57, "SpeedAtPAXEast25", "Speedrun Stage @ PAX East 25", new OffsetDateTime());
 
         IList<GameRun> actual = (await gdq.getEventRuns(gdqEvent)).ToList();
 

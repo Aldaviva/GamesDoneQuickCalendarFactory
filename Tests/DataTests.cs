@@ -13,7 +13,7 @@ public class DataTests {
     public void gdqEventTest() {
         using Stream jsonStream = File.OpenRead("Data/event.json");
         GdqEvent?    actual     = JsonSerializer.Deserialize<GdqEvent>(jsonStream, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS);
-        GdqEvent     expected   = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
+        GdqEvent     expected   = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", new OffsetDateTime());
 
         actual.Should().NotBeNull();
         actual.id.Should().Be(expected.id);

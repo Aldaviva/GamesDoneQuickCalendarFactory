@@ -20,7 +20,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task downloadSchedule() {
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", new OffsetDateTime());
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
         A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 14, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
@@ -48,7 +48,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task downloadScheduleEmpty() {
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", new OffsetDateTime());
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
         A.CallTo(() => clock.GetCurrentInstant()).Returns(new LocalDateTime(2024, 1, 28, 12, 30).WithOffset(Offset.FromHours(-5)).ToInstant());
@@ -73,7 +73,17 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task missingSchedule() {
-        A.CallTo(() => gdq.getCurrentEvent()).ThrowsAsync(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null)));
+        A.CallTo(() => gdq.getCurrentEvent()).Returns<GdqEvent?>(null);
+
+        Event? actual = await eventDownloader.downloadSchedule();
+
+        actual.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task missingRuns() {
+        A.CallTo(() => gdq.getCurrentEvent()).Returns(new GdqEvent(123, "test", "Test", new OffsetDateTime()));
+        A.CallTo(() => gdq.getEventRuns(A<GdqEvent>._)).Throws(new NotFoundException(null, new HttpExceptionParams(HttpMethod.Get, null)));
 
         Event? actual = await eventDownloader.downloadSchedule();
 
@@ -82,7 +92,7 @@ public class EventDownloaderTest {
 
     [Fact]
     public async Task ignoreRuns() {
-        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024");
+        GdqEvent gdqEvent = new(46, "AGDQ2024", "Awesome Games Done Quick 2024", new OffsetDateTime());
         A.CallTo(() => gdq.getCurrentEvent()).Returns(gdqEvent);
 
         OffsetDateTime now = SystemClock.Instance.GetCurrentInstant().WithOffset(Offset.Zero);

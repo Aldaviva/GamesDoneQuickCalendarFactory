@@ -1,5 +1,3 @@
-using NodaTime;
-
 namespace GamesDoneQuickCalendarFactory.Data;
 
 public sealed record GameRun(

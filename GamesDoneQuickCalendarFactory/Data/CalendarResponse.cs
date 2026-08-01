@@ -1,6 +1,4 @@
-using Ical.Net;
 using Microsoft.Net.Http.Headers;
-using NodaTime;
 
 namespace GamesDoneQuickCalendarFactory.Data;
 

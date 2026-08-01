@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace GamesDoneQuickCalendarFactory.Data;
 
 public sealed record State {
