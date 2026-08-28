@@ -57,6 +57,7 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
     /// </summary>
     private static readonly FrozenSet<string> CONSOLE_BLACKLIST = new HashSet<string> {
         "TwitchCon",
+        "Live" // Gamescom
     }.Select(s => s.ToLowerInvariant()).ToFrozenSet();
 
     /// <inheritdoc />
