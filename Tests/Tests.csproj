@@ -15,8 +15,8 @@
         <PackageReference Include="FakeItEasy" Version="9.0.1" />
         <PackageReference Include="FluentAssertions" Version="[7.2.2,8)" />
         <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[8.0.30,9)" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="[8.0.31,9)" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
         <PackageReference Include="xunit" Version="2.9.3" />
         <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />
         <PackageReference Include="coverlet.collector" Version="[6.0.4,8)" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" />

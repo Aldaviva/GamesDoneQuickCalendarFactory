@@ -22,6 +22,7 @@ public sealed class EventDownloader(IGdqClient gdq, IClock clock): IEventDownloa
         367,  // Tech Crew
         885,  // GDQ Staff
         1434, // Interview Crew
+        1766, // GDQ Studio
         1884, // Faith (the Frame Fatales saber-toothed tiger mascot)
         1885, // Everyone!
         2071, // Frame Fatales Interstitial Team

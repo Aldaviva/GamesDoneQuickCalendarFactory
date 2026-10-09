@@ -65,12 +65,11 @@ public sealed class EventsApiCurrentEventIdFetcher(HttpClient httpClient, IClock
     public async Task<int?> getCurrentEventId(CancellationToken cancellationToken = default) {
         Instant now = clock.GetCurrentInstant();
         try {
-            var notEndedYet = (await httpClient
+            return (await httpClient
                     .Target(GdqClient.EVENT_URL)
                     .Get<ResponseEnvelope<GdqEvent>>(cancellationToken))
                 .results
-                .Where(gdqEvent => now < (gdqEvent.expectedStartTime + MAX_EVENT_DURATION).ToInstant());
-            return notEndedYet
+                .Where(gdqEvent => now < (gdqEvent.expectedStartTime + MAX_EVENT_DURATION).ToInstant())
                 .MinBy(static gdqEvent => gdqEvent.expectedStartTime.ToInstant())?
                 .id;
         } catch (HttpException e) {
