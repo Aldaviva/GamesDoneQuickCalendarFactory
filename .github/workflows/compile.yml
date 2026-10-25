@@ -96,11 +96,11 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ vars.SSH_KNOWN_HOSTS }}
         run: umask 077; mkdir -p ~/.ssh; echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts; echo "$SSH_USER_PRIVATE_KEY" > ~/.ssh/id_ed25519
         
-      - name: Stop server
+      - name: Stop service
         run: ssh ${{ vars.SSH_AUTHORITY }} Stop-Service ${{ env.ProjectName }}
 
-      - name: Upload artifact to server
+      - name: Upload executable to server
         run: scp ${{ env.ProjectName }}.exe ${{ vars.SSH_AUTHORITY }}:${{ vars.EXE_INSTALLATION_PATH }}
 
-      - name: Start server
+      - name: Start service
         run: ssh ${{ vars.SSH_AUTHORITY }} Start-Service ${{ env.ProjectName }}

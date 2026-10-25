@@ -8,17 +8,19 @@ using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using RuntimeUpgrade.Notifier;
 using RuntimeUpgrade.Notifier.Data;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
+using static Unfucked.DI.SuperRegistration;
 
 Version.PrintProgramVersionAndExitIfRequested();
 BomSquad.DefuseUtf8Bom();
 
-string[] varyHeaderValue = [HeaderNames.AcceptEncoding];
+StringValues varyHeaderValue = new[] { HeaderNames.AcceptEncoding };
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Host
@@ -29,21 +31,20 @@ builder.Logging.AddUnfuckedConsole();
 
 builder.Configuration.AlsoSearchForJsonFilesInExecutableDirectory();
 
-// GZIP response compression is handled by Apache httpd, not Kestrel, per https://learn.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-8.0#when-to-use-response-compression-middleware
 builder.Services
     .Configure<Configuration>(builder.Configuration)
     .AddOutputCache()
-    .AddSingleton<CalendarGenerator>(SuperRegistration.Interfaces)
-    .AddSingleton<EventDownloader>(SuperRegistration.Interfaces)
-    .AddSingleton<GdqClient>(SuperRegistration.Interfaces)
-    .AddSingleton<CalendarPoller>(SuperRegistration.Interfaces)
-    .AddSingleton<GoogleCalendarSynchronizer>(SuperRegistration.Interfaces)
-    .AddSingleton<DonationCurrentEventIdFetcher>(SuperRegistration.Interfaces)
-    .AddSingleton<ScheduleWebPageCurrentEventIdFetcher>(SuperRegistration.Interfaces)
-    .AddSingleton<EventsApiCurrentEventIdFetcher>(SuperRegistration.Interfaces)
-    .AddSingleton(SystemClock.Instance, SuperRegistration.Interfaces)
+    .AddSingleton<CalendarGenerator>(Interfaces)
+    .AddSingleton<EventDownloader>(Interfaces)
+    .AddSingleton<GdqClient>(Interfaces)
+    .AddSingleton<CalendarPoller>(Interfaces)
+    .AddSingleton<GoogleCalendarSynchronizer>(Interfaces)
+    .AddSingleton<DonationCurrentEventIdFetcher>(Interfaces)
+    .AddSingleton<ScheduleWebPageCurrentEventIdFetcher>(Interfaces)
+    .AddSingleton<EventsApiCurrentEventIdFetcher>(Interfaces)
+    .AddSingleton(SystemClock.Instance, Interfaces)
     .AddSingleton(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
-        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), SuperRegistration.Superclasses)
+        .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), Superclasses)
     .AddSingleton<CalendarService>(ctx => ctx.GetRequiredService<IOptions<Configuration>>().Value is
         { googleCalendarId: not null, googleServiceAccountEmailAddress: {} serviceAccount, googleServiceAccountPrivateKey: {} privateKey }
         ? new UnfuckedGoogleCalendarService(new BaseClientService.Initializer {
@@ -66,9 +67,9 @@ webApp
 
         if (await calendarPoller.mostRecentlyPolledCalendar.ExceptionToNull() is {} mostRecentlyPolledCalendar) {
             responseHeaders.CacheControl               = new CacheControlHeaderValue { Public = true, MaxAge = calendarPoller.getPollingInterval() }; // longer cache when no event running
-            context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
             responseHeaders.ETag                       = mostRecentlyPolledCalendar.etag;
             responseHeaders.LastModified               = mostRecentlyPolledCalendar.dateModified.ToDateTimeOffset();
+            context.Response.Headers[HeaderNames.Vary] = varyHeaderValue;
         }
         await next();
     });

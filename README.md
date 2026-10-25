@@ -13,7 +13,7 @@ All future GDQ events will also appear in this exact same ICS file when their sc
 
 The calendar is updated once per minute while a GDQ event is running, and less frequently the rest of the year.
 
-You can either use my hosted service with the instructions below, or host this webapp yourself on any server with [ASP.NET Core Runtime](https://dotnet.microsoft.com/en-us/download) 8 or later.
+You can either connect to my hosted service with the instructions below (recommended), or run [this webapp](https://github.com/Aldaviva/GamesDoneQuickCalendarFactory/releases/latest) yourself on any server with [ASP.NET Core Runtime](https://dotnet.microsoft.com/download) 8 or later.
 
 ![AGDQ 2023 schedule in Vivaldi](https://pbs.twimg.com/media/Fl2xjasaEAATpQC?format=jpg&name=large)
 
@@ -39,9 +39,9 @@ You can either use my hosted service with the instructions below, or host this w
 1. Subscribe to the iCalendar URL [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics). No authentication is required.
 
 ### Vivaldi
-1. Open [Vivaldi Settings](https://help.vivaldi.com/article/settings/)
+1. In Vivaldi, go to [Settings](https://help.vivaldi.com/article/settings/)
 1. Go to the 📅 Calendar section
-1. In the Calendar Accounts section, click **+**
+1. In the Calendar Accounts area, click **+**
 1. Select [**Web Calendar**](https://help.vivaldi.com/calendar/calendar-get-started/add-and-manage-calendar-accounts/#Online_accounts), then click **Continue**
 1. Choose a Name, such as `Games Done Quick` or `GDQ`
 1. Set the Address to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
@@ -61,7 +61,7 @@ You can either use my hosted service with the instructions below, or host this w
 ### Microsoft Outlook
 
 #### Outlook for Windows
-1. Go to the Outlook 📅 Calendar section
+1. In Outlook, go to the 📅 Calendar section
 1. Open the **+ Add** or **+ Open Calendar** menu
 1. Select 🌐 **From Internet…**
 1. Set the URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click **OK**
@@ -86,8 +86,8 @@ You can either use my hosted service with the instructions below, or host this w
 1. Follow the [Outlook on the web subscription instructions](#outlook-on-the-web)
 
 ### Mozilla Thunderbird
-1. Go to the Thunderbird 📅 Calendar space
-1. Click ☰ (Thunderbird Menu) › + New › Calendar…
+1. In Thunderbird, go to the 📅 Calendar space
+1. Click ☰ (Thunderbird Menu) › + New › **Calendar…**
 1. Choose **On the Network**, then click **Next**
 1. Set the Location to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics)
 1. Check **This location doesn't require credentials**
@@ -95,7 +95,7 @@ You can either use my hosted service with the instructions below, or host this w
 1. Click **Subscribe**
 
 ### Apple Calendar
-1. In Calendar, click File › New Calendar Subscription…
+1. In Calendar, click File › **New Calendar Subscription…**
 1. Set the Calendar URL to [`https://aldaviva.com/docs/gdq.ics`](https://aldaviva.com/docs/gdq.ics), then click **Subscribe**
 1. Choose a name, such as `Games Done Quick` or `GDQ`
 1. Check Auto-refresh to change the update frequency, because GDQ schedules are updated often during events as run durations differ from estimates

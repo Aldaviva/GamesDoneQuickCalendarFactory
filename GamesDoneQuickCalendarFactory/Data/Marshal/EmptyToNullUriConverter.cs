@@ -10,7 +10,7 @@ public sealed class EmptyToNullUriConverter: JsonConverter<Uri> {
     public override Uri? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
         if (reader.TokenType != JsonTokenType.String || reader.GetString() is not {} jsonString) {
             throw new InvalidOperationException($"JSON token type must be {nameof(JsonTokenType.String)} to parse as {nameof(Uri)}, but was {reader.TokenType}.");
-        } else if (string.IsNullOrWhiteSpace(jsonString)) {
+        } else if (!jsonString.HasText) {
             return null;
         }
 
@@ -22,7 +22,7 @@ public sealed class EmptyToNullUriConverter: JsonConverter<Uri> {
     }
 
     public override void Write(Utf8JsonWriter writer, Uri value, JsonSerializerOptions options) {
-        writer.WriteStringValue(value.OriginalString);
+        writer.WriteStringValue(value.AbsoluteUri);
     }
 
 }

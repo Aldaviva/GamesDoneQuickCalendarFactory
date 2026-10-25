@@ -112,7 +112,7 @@ public class MarshalTests {
         JsonSerializerOptions options = new() { Converters = { new EmptyToNullUriConverter() } };
 
         string actual = JsonSerializer.Serialize(new Uri("https://aldaviva.com"), options);
-        actual.Should().Be("\"https://aldaviva.com\"");
+        actual.Should().Be("\"https://aldaviva.com/\"");
 
         JsonSerializer.Serialize<Uri?>(null, options).Should().Be("null");
     }
