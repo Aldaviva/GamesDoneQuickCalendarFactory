@@ -1,4 +1,5 @@
 using Bom.Squad;
+using GamesDoneQuickCalendarFactory.Data.Shields;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Http;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using RuntimeUpgrade.Notifier;
 using RuntimeUpgrade.Notifier.Data;
+using System.Globalization;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -43,7 +45,7 @@ builder.Services
     .AddSingleton<ScheduleWebPageCurrentEventIdFetcher>(Interfaces)
     .AddSingleton<EventsApiCurrentEventIdFetcher>(Interfaces)
     .AddSingleton(SystemClock.Instance, Interfaces)
-    .AddSingleton(new UnfuckedHttpClient(new SocketsHttpHandler { PooledConnectionLifetime = (Minutes) 15 }) { Timeout = (Seconds) 15 }
+    .AddSingleton(new UnfuckedHttpClient()
         .Property(PropertyKey.JsonSerializerOptions, JsonSerializerGlobalOptions.JSON_SERIALIZER_OPTIONS), Superclasses)
     .AddSingleton<CalendarService>(ctx => ctx.GetRequiredService<IOptions<Configuration>>().Value is
         { googleCalendarId: not null, googleServiceAccountEmailAddress: {} serviceAccount, googleServiceAccountPrivateKey: {} privateKey }
@@ -51,7 +53,7 @@ builder.Services
             HttpClientInitializer = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceAccount) {
                 Scopes = [CalendarService.Scope.CalendarEvents]
             }.FromPrivateKey(privateKey)),
-            ApplicationName                 = "Aldaviva/GamesDoneQuickCalendarFactory",
+            ApplicationName                 = $"Aldaviva/{nameof(GamesDoneQuickCalendarFactory)}",
             DefaultExponentialBackOffPolicy = ExponentialBackOffPolicy.RecommendedOrDefault
         }) : null!)
     .AddSingleton(await State.load(filename: ((IEnumerable<string>) [builder.Environment.ContentRootPath, "."]).Select(static dir => Path.Combine(dir, "state.json")).MaxBy(File.Exists)!));
@@ -95,17 +97,17 @@ await eventDownloader.downloadSchedule() is {} schedule
     ? new ShieldsBadgeResponse(
         label: getBadgeName(schedule.shortTitle),
         message: $"{schedule.runs.Count} {(schedule.runs.Count == 1 ? "run" : "runs")}",
-        color: "success",
+        color: ShieldsBadgeColorKeyword.SUCCESS,
         logoSvg: Resources.gdqDpadBadgeLogo)
-    : new ShieldsBadgeResponse("gdq", "no event now", "inactive", false, Resources.gdqDpadBadgeLogo));
+    : new ShieldsBadgeResponse("gdq", "no event now", ShieldsBadgeColorKeyword.INACTIVE, false, Resources.gdqDpadBadgeLogo));
 
 // #84: don't await, because Windows will time out this service startup if the Internet connection is down (server won boot race against modem and router), so the service will be stopped with no retry
 _ = webApp.Services.GetRequiredService<IGoogleCalendarSynchronizer>().start();
 
 /*
- * Only useful on Linux.
+ * Only useful on Linux, or on Windows when running without IIS or a service.
  * On Windows, the ASP.NET Core Runtime installer will automatically restart services that were using it, without needing RuntimeUpgradeNotifier.
- * If this fails on Windows, install the .NET Hosting Bundle rather than separately installing the ASP.NET Core Runtime and the .NET Runtime, for more atomic upgrades.
+ * If this fails on Windows, install the .NET Hosting Bundle rather than separately installing the ASP.NET Core Runtime and the .NET Runtime, for atomic upgrades.
  */
 using IRuntimeUpgradeNotifier runtimeUpgradeNotifier = new RuntimeUpgradeNotifier {
     RestartStrategy = RestartStrategy.AutoRestartService,
@@ -122,7 +124,7 @@ internal sealed partial class Program {
     /// <summary>add spaces to abbreviation between CamelCase words or numbers</summary>
     /// <param name="eventShortName">e.g. <c>SGDQ2026</c></param>
     /// <returns>e.g. <c>sgdq 2026</c></returns>
-    public static string getBadgeName(string eventShortName) => shortNamePattern().Replace(eventShortName, " ").ToLower();
+    public static string getBadgeName(string eventShortName) => shortNamePattern().Replace(eventShortName, " ").ToLower(CultureInfo.CurrentCulture);
 
     [GeneratedRegex(@"(?<=\D)(?=\d)|(?<=[a-z])(?=[A-Z])")]
     private static partial Regex shortNamePattern();

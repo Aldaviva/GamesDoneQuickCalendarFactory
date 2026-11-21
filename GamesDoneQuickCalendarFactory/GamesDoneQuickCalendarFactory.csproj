@@ -29,19 +29,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bom.Squad" Version="0.3.0" />
-        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.77.0.4285" />
-        <PackageReference Include="Ical.Net" Version="5.2.3" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="8.0.*" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.*" />
-        <PackageReference Include="NodaTime" Version="3.3.6" />
+        <PackageReference Include="Bom.Squad" Version="0.4.0" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.78.0.4320" />
+        <PackageReference Include="Ical.Net" Version="5.2.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="[8.0.*,9)" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="[8.0.*,9)" />
+        <PackageReference Include="NodaTime" Version="3.3.7" />
         <PackageReference Include="RuntimeUpgradeNotifier" Version="1.2.0" />
         <PackageReference Include="ThrottleDebounce" Version="3.0.0" />
-        <PackageReference Include="Unfucked" Version="0.0.1-beta.59" />
+        <PackageReference Include="Unfucked" Version="0.0.1-beta.64" />
         <PackageReference Include="Unfucked.DateTime" Version="0.0.1-beta.7" />
-        <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.19" />
-        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.37" />
-        <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.4" />
+        <PackageReference Include="Unfucked.DI" Version="0.0.1-beta.22" />
+        <PackageReference Include="Unfucked.HTTP" Version="0.0.1-beta.43" />
+        <PackageReference Include="Unfucked.ICS" Version="0.0.1-beta.5" />
     </ItemGroup>
 
     <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))">

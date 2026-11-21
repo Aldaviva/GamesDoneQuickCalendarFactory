@@ -2,6 +2,7 @@ using Google.Apis.Calendar.v3.Data;
 using Ical.Net.DataTypes;
 using Ical.Net.Proxies;
 using System.Diagnostics.Contracts;
+using System.Drawing;
 using Calendar = Ical.Net.Calendar;
 using Event = Google.Apis.Calendar.v3.Data.Event;
 
@@ -63,5 +64,20 @@ public static class Extensions {
         a.Description == b.Description &&
         a.DtStart!.Value.Equals(b.DtStart!.Value) &&
         a.Duration!.Value.Equals(b.Duration!.Value, fucked: false);
+
+    extension(KnownColor knownColor) {
+
+        public bool isCssColor => knownColor is >= KnownColor.Transparent and <= KnownColor.YellowGreen or KnownColor.RebeccaPurple;
+
+    }
+
+    extension(Color color) {
+
+        public string asRgbHexString =>
+            color.R % 11 == 0 && color.G % 11 == 0 && color.B % 11 == 0
+                ? $"{color.R / 0x11:x1}{color.G / 0x11:x1}{color.B / 0x11:x1}"
+                : $"{color.R:x2}{color.G:x2}{color.B:x2}";
+
+    }
 
 }

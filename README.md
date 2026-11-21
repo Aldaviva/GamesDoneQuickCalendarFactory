@@ -100,4 +100,4 @@ You can either connect to my hosted service with the instructions below (recomme
 1. Choose a name, such as `Games Done Quick` or `GDQ`
 1. Check Auto-refresh to change the update frequency, because GDQ schedules are updated often during events as run durations differ from estimates
 1. To optionally preserve the default reminders, uncheck **Remove Alerts**
-1. ClicK **OK**
+1. Click **OK**

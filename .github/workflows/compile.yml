@@ -24,11 +24,14 @@ jobs:
       - name: Unfuck Git
         run: git config set --global core.autocrlf false
 
+      - name: Standardize editorconfig
+        run: curl https://raw.githubusercontent.com/Aldaviva/.github/refs/heads/master/.editorconfig -o ../.editorconfig
+
       - name: Clone
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7.0.1
           
       - name: Initialize test reporting
-        uses: testspace-com/setup-testspace@5fc620521eddeba83c1c0dd58f5a524adf474c93
+        uses: testspace-com/setup-testspace@v1.0.8
         with:
           domain: ${{github.repository_owner}}
       
@@ -54,7 +57,7 @@ jobs:
         run: testspace Tests/TestResults/TestResults.xml
 
       - name: Upload coverage report
-        uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b
+        uses: coverallsapp/github-action@v2.3.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           file: Tests/TestResults/coverage.info
@@ -64,7 +67,7 @@ jobs:
         run: exit ${{ env.TEST_EXIT_CODE }}
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: ${{ env.ProjectName }}-${{ matrix.targetPlatform }}
           path: |
@@ -86,7 +89,7 @@ jobs:
 
     steps:
       - name: Download build artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v8.0.2
         with:
           name: ${{ env.ProjectName }}-win-x64
 
